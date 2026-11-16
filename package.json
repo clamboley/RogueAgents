@@ -1,0 +1,49 @@
+{
+  "name": "rogue-agents",
+  "version": "0.1.0",
+  "description": "An endless pixel-art dungeon your OpenCode agents fight through: every token they spend strikes the monster. A GUI plugin for the OpenCode desktop app.",
+  "keywords": [
+    "opencode",
+    "opencode-plugin",
+    "game",
+    "pixel-art",
+    "idle-game"
+  ],
+  "license": "MIT",
+  "author": "clamboley",
+  "homepage": "https://github.com/clamboley/RogueAgents#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/clamboley/RogueAgents.git"
+  },
+  "bugs": {
+    "url": "https://github.com/clamboley/RogueAgents/issues"
+  },
+  "type": "module",
+  "exports": {
+    "./gui-experimental": "./dist/gui-experimental.cjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "watch": "vite build --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "npm run typecheck && npm run format:check && npm test"
+  },
+  "devDependencies": {
+    "@opencode/plugin": "2.3.0",
+    "effect": "4.1.0",
+    "playwright-core": "^1.56.1",
+    "prettier": "3.10.1",
+    "solid-js": "1.9.17",
+    "typescript": "5.9.3",
+    "vite": "7.3.7",
+    "vite-plugin-solid": "2.11.10",
+    "vitest": "5.1.0"
+  }
+}

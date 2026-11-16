@@ -1,0 +1,469 @@
+/* Rogue Agents panel: the game screen, its painted HUD and the talent menu. Sizes are in cqi, so the whole HUD scales
+   with the stage. */
+
+.ra-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.ra-tab img {
+  width: 14px;
+  height: 14px;
+  image-rendering: pixelated;
+}
+
+/* The panel is the game screen: the stage fills it at 1.6:1, letterboxed in the dungeon's own black. */
+.ra {
+  container-type: size;
+  height: 100%;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #0b0a0e;
+}
+
+/* ── The dungeon ── */
+.ra-stage {
+  /* One art pixel at the world's density: the stage is 480 world pixels wide. */
+  --u: calc(100cqi / 480);
+  position: relative;
+  container-type: inline-size;
+  width: min(100cqw, 160cqh);
+  overflow: hidden;
+  background: #17161b;
+  color: #f3e6cf;
+  font-family: "RogueAgents Text", var(--font-family-sans, sans-serif);
+  font-size: 2.3cqi;
+  line-height: 1.1;
+}
+.ra-stage canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 480 / 300;
+}
+.ra-stage img {
+  image-rendering: pixelated;
+  -webkit-user-drag: none;
+}
+
+/* A stone plaque, stretched to its text by its plain middle: 6×14 art pixels of border at each end. */
+.ra-plaque {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  gap: 1cqi;
+  box-sizing: border-box;
+  height: calc(35 * var(--u));
+  padding: 0 0.6cqi;
+  border: solid transparent;
+  border-width: calc(6 * var(--u)) calc(14 * var(--u));
+  border-image: var(--ra-plaque) 6 14 fill / calc(6 * var(--u)) calc(14 * var(--u));
+  image-rendering: pixelated;
+  white-space: nowrap;
+  text-shadow: 0 0.2cqi 0 #0b0a0e;
+  pointer-events: none;
+}
+.ra-where {
+  top: 1.6cqi;
+  left: 1.6cqi;
+  pointer-events: auto;
+  cursor: default;
+}
+.ra-where-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15cqi;
+}
+.ra-where strong,
+.ra-foe-name {
+  font-family: "RogueAgents Title", serif;
+  font-weight: 800;
+  font-size: 2.2cqi;
+  letter-spacing: 0.03em;
+  color: #ffd86b;
+}
+.ra-where-text > span {
+  font-size: 2cqi;
+  color: rgba(243, 230, 207, 0.8);
+}
+.ra-status-gem {
+  width: 2.6cqi;
+  pointer-events: auto;
+}
+.ra-status-gem[data-status="live"] {
+  filter: hue-rotate(75deg) saturate(1.2);
+}
+.ra-status-gem[data-status="offline"] {
+  filter: hue-rotate(-40deg) saturate(1.6);
+}
+.ra-status-gem[data-status="connecting"] {
+  animation: ra-blink 1s steps(2) infinite;
+}
+.ra-status-gem[data-status="demo"] {
+  filter: hue-rotate(225deg) saturate(1.3);
+}
+@keyframes ra-blink {
+  50% {
+    opacity: 0.4;
+  }
+}
+
+/* The monster: name plaque over an iron bar whose groove sits 4 art pixels inside its frame. */
+.ra-foe {
+  position: absolute;
+  top: 1.6cqi;
+  right: 1.6cqi;
+  display: grid;
+  gap: 0.3cqi;
+  min-width: 30cqi;
+  max-width: 46cqi;
+  pointer-events: none;
+}
+.ra-foe-name {
+  position: static;
+  justify-content: center;
+}
+.ra-foe-name span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ra-foe:not([data-boss]) .ra-foe-name {
+  color: #f3e6cf;
+}
+.ra-crown {
+  width: 4cqi;
+}
+.ra-bar {
+  position: relative;
+  box-sizing: border-box;
+  height: calc(18 * var(--u));
+  border: solid transparent;
+  border-width: calc(4 * var(--u)) calc(6 * var(--u));
+  border-image: var(--ra-bar) 4 6 fill / calc(4 * var(--u)) calc(6 * var(--u));
+  image-rendering: pixelated;
+}
+.ra-bar-fill {
+  position: absolute;
+  inset: 0 calc(-2 * var(--u));
+  overflow: hidden;
+}
+.ra-bar-fill i {
+  display: block;
+  height: 100%;
+  /* Pixel bands: a light top edge, the body, a dark underside. */
+  background: linear-gradient(#ff9a7a 0 20%, #d23c28 20% 70%, #8c1f16 70%);
+  transition: width 0.25s ease-out;
+}
+.ra-foe[data-boss] .ra-bar-fill i {
+  background: linear-gradient(#fff0a8 0 20%, #e9b44c 20% 70%, #9a6a1c 70%);
+}
+.ra-bar-text {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 1.8cqi;
+  line-height: 1;
+  color: #fff;
+  text-shadow:
+    0 0.2cqi 0 #000,
+    0 0 0.5cqi #000;
+}
+
+/* The stone buttons, bottom right; the talents one wears the points medallion. */
+.ra-actions {
+  position: absolute;
+  right: 1.6cqi;
+  bottom: 1.6cqi;
+  display: flex;
+  align-items: flex-end;
+  /* Room for the medallion that overhangs the talents button. */
+  gap: 1.4cqi;
+}
+.ra-actions .ra-art-button {
+  width: 7.5cqi;
+  height: 7.5cqi;
+}
+.ra-small-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3cqi;
+}
+.ra-actions .ra-small-buttons .ra-art-button {
+  width: 3.6cqi;
+  height: 3.6cqi;
+}
+/* The demo button stays lit while the demo runs. */
+.ra-actions .ra-art-button.ra-on,
+.ra-actions .ra-art-button.ra-on:hover {
+  filter: brightness(1.3) drop-shadow(0 0 0.6cqi rgba(255, 216, 107, 1)) drop-shadow(0 0 1.6cqi rgba(255, 160, 60, 0.7));
+}
+.ra-talents-button {
+  position: relative;
+}
+/* Scoped to the actions, so the menu's own medallion size does not apply. */
+.ra-actions .ra-badge {
+  position: absolute;
+  top: -1.7cqi;
+  right: -1.3cqi;
+  width: 3.6cqi;
+  height: 3.6cqi;
+  padding-top: 0.2cqi;
+  font-size: 1.8cqi;
+  pointer-events: none;
+}
+
+/* Each new floor: its number on the crimson ribbon, the biome under it. */
+.ra-banner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6cqi;
+  pointer-events: none;
+  animation: ra-banner 2.8s ease-out forwards;
+}
+.ra-banner .ra-ribbon {
+  display: block;
+  width: 52cqi;
+  height: calc(52cqi * 51 / 240);
+  padding-top: 0.9cqi;
+  font-size: 4.4cqi;
+  line-height: 6cqi;
+}
+.ra-banner em {
+  font-style: normal;
+  font-family: "RogueAgents Title", serif;
+  font-weight: 700;
+  font-size: 2.2cqi;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #f3e6cf;
+  text-shadow:
+    0 0.25cqi 0 #000,
+    0 0 1.2cqi #000;
+}
+@keyframes ra-banner {
+  0% {
+    opacity: 0;
+    transform: scale(1.15);
+  }
+  12%,
+  70% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.ra-menu {
+  /* Everything is painted art at the stage's 1.6:1, so sizes are in cqi (hundredths of the stage width) and the
+     layout keeps to the frame at any size. The menu is 62.5cqi tall. */
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 0.6cqi;
+  padding: 1.2cqi 7cqi 1.4cqi;
+  color: #3a2414;
+  font-family: "RogueAgents Text", var(--font-family-sans, sans-serif);
+  font-size: 2.3cqi;
+  line-height: 1.1;
+  background: #262c40 center / 100% 100% no-repeat;
+  image-rendering: pixelated;
+  animation: ra-menu-in 0.18s ease-out;
+}
+.ra-menu img {
+  image-rendering: pixelated;
+  -webkit-user-drag: none;
+}
+@keyframes ra-menu-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+.ra-menu button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+/* The banner across the top, the points medallion on its left and the close button on its right. */
+.ra-menu-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2cqi;
+}
+.ra-ribbon {
+  width: 44cqi;
+  height: 9.35cqi;
+  margin: 0;
+  padding-top: 0.7cqi;
+  background: center / 100% 100% no-repeat;
+  font-family: "RogueAgents Title", serif;
+  font-weight: 800;
+  font-size: 3.6cqi;
+  line-height: 5.1cqi;
+  letter-spacing: 0.05em;
+  text-align: center;
+  color: #ffd86b;
+  text-shadow: 0 0.3cqi 0 #3a0c10;
+}
+.ra-medallion {
+  display: grid;
+  place-items: center;
+  width: 6cqi;
+  height: 6cqi;
+  background: center / 100% 100% no-repeat;
+  font-family: "RogueAgents Title", serif;
+  font-weight: 800;
+  padding-top: 0.35cqi;
+  font-size: 2.8cqi;
+  line-height: 1;
+  color: rgba(243, 230, 207, 0.45);
+  cursor: default;
+}
+.ra-medallion[data-free] {
+  color: #ffd86b;
+  animation: ra-medallion 1.8s ease-in-out infinite;
+}
+@keyframes ra-medallion {
+  50% {
+    filter: drop-shadow(0 0 0.8cqi rgba(255, 216, 107, 0.8));
+  }
+}
+.ra-art-button {
+  display: block;
+  width: 5.5cqi;
+  height: 5.5cqi;
+  transition:
+    filter 0.12s,
+    transform 0.08s;
+}
+.ra-art-button img {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.ra-art-button:not(:disabled):hover {
+  filter: brightness(1.2) drop-shadow(0 0 0.6cqi rgba(255, 216, 107, 0.6));
+}
+.ra-art-button:not(:disabled):active {
+  transform: translateY(0.2cqi);
+}
+.ra-art-button:disabled {
+  filter: grayscale(0.85) brightness(0.65);
+  cursor: default;
+}
+
+/* The eight branches. */
+.ra-menu-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 0.6cqi 2cqi;
+  min-height: 0;
+  margin: 0 5cqi;
+}
+.ra-talent {
+  display: grid;
+  /* The icon row grows up to its size and shrinks when space runs out; the gems stay right under it. */
+  grid-template-rows: minmax(0, 15cqi) auto;
+  align-content: center;
+  justify-items: center;
+  gap: 0.5cqi;
+  min-height: 0;
+}
+.ra-talent > img {
+  height: 100%;
+  max-width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+  transition: filter 0.15s;
+}
+.ra-talent:not([data-active]) > img {
+  filter: saturate(0.5) brightness(0.75);
+}
+.ra-talent:hover > img {
+  filter: brightness(1.1);
+}
+/* The chosen talent glows from behind, without growing over its neighbours. */
+.ra-talent[data-chosen] > img {
+  filter: drop-shadow(0 0 0.5cqi rgba(255, 216, 107, 0.9)) drop-shadow(0 0 1.6cqi rgba(255, 160, 60, 0.55));
+  animation: ra-aura 2.4s ease-in-out infinite;
+}
+@keyframes ra-aura {
+  50% {
+    filter: drop-shadow(0 0 0.7cqi rgba(255, 216, 107, 1)) drop-shadow(0 0 2.4cqi rgba(255, 160, 60, 0.7));
+  }
+}
+.ra-gems {
+  display: flex;
+  gap: 0.15cqi;
+}
+.ra-gems img {
+  width: 2.2cqi;
+  height: auto;
+}
+
+/* The scroll: the chosen talent's name, style and effect in ink, its buttons on the right. The parchment runs from
+   23% to 77% of the scroll's height, between rolls that take its outer 7%. */
+.ra-scroll {
+  display: flex;
+  align-items: center;
+  gap: 1.5cqi;
+  width: 66cqi;
+  height: 18cqi;
+  margin: 0 auto;
+  padding: 4cqi 6.5cqi;
+  background: center / 100% 100% no-repeat;
+}
+.ra-scroll-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3cqi;
+}
+.ra-scroll-text strong {
+  font-family: "RogueAgents Title", serif;
+  font-weight: 800;
+  font-size: 3cqi;
+  line-height: 1;
+  color: #7a1a12;
+}
+.ra-scroll-text em {
+  margin-left: 1cqi;
+  font-family: "RogueAgents Text", sans-serif;
+  font-style: normal;
+  font-size: 2.3cqi;
+  color: #7a5534;
+}
+.ra-scroll-text [data-preview] {
+  color: #7a5534;
+}
+.ra-scroll-buttons {
+  display: flex;
+  gap: 0.6cqi;
+}
+.ra-scroll-buttons .ra-art-button {
+  width: 5cqi;
+  height: 5cqi;
+}
+.ra-scroll-title {
+  display: flex;
+  align-items: baseline;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

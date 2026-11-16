@@ -1,0 +1,43 @@
+// A scripted tour for scripts/drive.mjs: the panel at rest, the demo, then the talent menu, wide and narrow.
+// Opens the panel through the command palette when it is not shown yet.
+export default async function (page) {
+  page.setDefaultTimeout(5000)
+  if (!(await page.locator(".ra").count())) {
+    await page.locator('[contenteditable="true"]').first().click()
+    await page.keyboard.press("Control+Shift+P")
+    await page.waitForTimeout(500)
+    await page.keyboard.type("Rogue Agents")
+    await page.waitForTimeout(500)
+    await page.keyboard.press("Enter")
+    await page.waitForTimeout(2500)
+  }
+  await page.locator(".ra").evaluate((el) => (el.scrollTop = 0))
+  await page.locator(".ra-stage").screenshot({ path: "out/g-rest.png" })
+  await page.waitForTimeout(150)
+  await page.locator(".ra-stage").screenshot({ path: "out/g-rest2.png" })
+  await page.getByRole("button", { name: /^(Demo|Démo)$/ }).click()
+  await page.waitForTimeout(2500)
+  await page.locator(".ra-stage").screenshot({ path: "out/g-champion.png" })
+  await page.screenshot({ path: "out/g-panel.png" })
+  await page.getByRole("button", { name: /^Talents$/ }).click()
+  await page.waitForTimeout(400)
+  await page.locator(".ra-talent").nth(5).click()
+  for (let i = 0; i < 3; i++) await page.getByRole("button", { name: /Add a point|Ajouter un point/ }).click()
+  await page.locator(".ra-talent").nth(0).click()
+  await page.getByRole("button", { name: /Add a point|Ajouter un point/ }).click()
+  await page.waitForTimeout(300)
+  await page.locator(".ra-stage").screenshot({ path: "out/g-menu.png" })
+  await page.locator(".ra-talent").nth(4).click()
+  await page.waitForTimeout(200)
+  await page.locator(".ra-stage").screenshot({ path: "out/g-menu-phoenix.png" })
+  await page.setViewportSize({ width: 1000, height: 900 })
+  await page.waitForTimeout(500)
+  await page.locator(".ra-stage").screenshot({ path: "out/g-menu-narrow.png" })
+  await page.setViewportSize({ width: 1500, height: 950 })
+  await page.keyboard.press("Escape")
+  await page
+    .locator(".ra-menu-close")
+    .click()
+    .catch(() => {})
+  await page.getByRole("button", { name: /^(Stop demo|Arrêter la démo)$/ }).click()
+}

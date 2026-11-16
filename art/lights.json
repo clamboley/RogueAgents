@@ -1,0 +1,40 @@
+{
+  "_comment": "Light sources per background, in world pixels (480x300). Overrides the automatic flame detection.",
+  "bg-crystal-1.png": [
+    [112, 97],
+    [370, 98]
+  ],
+  "bg-crystal-2.png": [[112, 98]],
+  "bg-fungal-1.png": [
+    [51, 118],
+    [425, 115]
+  ],
+  "bg-fungal-2.png": [
+    [52, 118],
+    [425, 115]
+  ],
+  "bg-forge-1.png": [
+    [101, 104],
+    [377, 103]
+  ],
+  "bg-forge-2.png": [
+    [106, 105],
+    [378, 103]
+  ],
+  "bg-abyss-1.png": [
+    [108, 109],
+    [376, 115]
+  ],
+  "bg-abyss-2.png": [
+    [109, 111],
+    [376, 115]
+  ],
+  "bg-celestial-1.png": [
+    [110, 110],
+    [367, 108]
+  ],
+  "bg-celestial-2.png": [
+    [110, 110],
+    [367, 106]
+  ]
+}

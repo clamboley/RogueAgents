@@ -1,0 +1,11 @@
+node_modules/
+
+# Art pipeline inputs and intermediates: the raw generated images are large and stay local
+# (see art/README.md); the game ships the exported sprites in src/assets.
+art/raw/
+art/processed/
+
+# Screenshots from scripts/drive.mjs
+out/
+
+.DS_Store

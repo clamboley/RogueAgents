@@ -9,19 +9,19 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
       - run: npm ci
       - run: npm run check
-      - run: npm run build
+      - run: npm run bundle
       # OpenCode installs plugins from GitHub without running build scripts, so the bundle is committed: it must match
       # the sources.
       - name: Committed bundle is up to date
         run: |
           if ! git diff --exit-code -- dist; then
-            echo "::error::dist/ is stale. Run npm run build and commit it."
+            echo "::error::dist/ is stale. Run npm run bundle and commit it."
             exit 1
           fi

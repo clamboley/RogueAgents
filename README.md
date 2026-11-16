@@ -58,7 +58,7 @@ totals. It sends nothing anywhere. Progress is saved in the app's local storage.
 git clone https://github.com/clamboley/RogueAgents.git
 cd RogueAgents
 npm install
-npm run build
+npm run bundle
 ```
 
 Point your OpenCode config at the clone instead of GitHub (`"plugins": ["/path/to/RogueAgents"]`) and run
@@ -66,13 +66,14 @@ Point your OpenCode config at the clone instead of GitHub (`"plugins": ["/path/t
 
 | Command          | Does                                                    |
 | ---------------- | ------------------------------------------------------- |
-| `npm run build`  | Bundles the plugin into `dist/gui-experimental.cjs`.    |
+| `npm run bundle` | Bundles the plugin into `dist/gui-experimental.cjs`.    |
 | `npm run watch`  | Rebuilds on every change.                               |
 | `npm run check`  | Typecheck, formatting check and unit tests, as CI does. |
 | `npm run format` | Formats everything with Prettier.                       |
 
-OpenCode installs plugins from GitHub without running build scripts, so **`dist/` is committed**: rebuild and commit
-it with your changes. CI fails when it is stale.
+OpenCode installs plugins from GitHub as they are, without building them, so **`dist/` is committed**: rebuild and
+commit it with your changes (CI fails when it is stale). The script is named `bundle` rather than `build` on purpose:
+npm treats a git package with a `build` script as one to prepare, which fails inside OpenCode.
 
 ### Layout
 

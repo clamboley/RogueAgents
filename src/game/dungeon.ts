@@ -25,11 +25,16 @@ import {
   costBefore,
   multiplier,
   position,
+  rawTokens,
+  settle,
   spentPoints,
   talentPoints,
+  weightedTokens,
+  WEIGHT,
   type Branch,
   type Talents,
   type TokenKind,
+  type Usage,
 } from "./progress"
 import { drawSprite, drawText, shortNumber, textWidth, type SpriteName } from "./sprites"
 
@@ -51,10 +56,14 @@ const CHARS_PER_TOKEN = 4
 /** What the dungeon saves between runs. */
 export interface Saved {
   damage: number
+  /** Tokens spent since the guild was founded, every kind at face value, as the share line counts them. */
   tokens: number
   talents: Talents
-  /** Whether the server's lifetime totals have been read once, so the history before the first launch counts. */
+  /** Whether the server's lifetime totals have been read once; that first reading only marks where the guild starts. */
   synced: boolean
+  /** The server's lifetime totals already accounted for, raw and weighted, so a later reading adds only what is new. */
+  seenTokens: number
+  seenWeighted: number
 }
 
 export const freshSave = (): Saved => ({
@@ -62,6 +71,8 @@ export const freshSave = (): Saved => ({
   tokens: 0,
   talents: emptyTalents(),
   synced: false,
+  seenTokens: 0,
+  seenWeighted: 0,
 })
 
 export type Translate = (key: string, params?: Record<string, string | number>) => string
@@ -69,7 +80,7 @@ export type Status = "idle" | "connecting" | "live" | "offline" | "demo"
 export type TownEvent = { readonly type: string; readonly data?: unknown }
 
 export interface LifetimeStats {
-  tokens: { input: number; output: number; reasoning: number; cache: { read: number; write: number } }
+  tokens: Usage
 }
 
 interface Unit {
@@ -355,7 +366,7 @@ export function createDungeon(options: {
   }
   const queue = (u: Unit, kind: TokenKind, tokens: number, big = false) => {
     if (tokens <= 0) return
-    const dmg = tokens * multiplier(state.talents, context(u, kind))
+    const dmg = tokens * WEIGHT[kind] * multiplier(state.talents, context(u, kind))
     if (big) u.queuedBig += dmg
     if (!big) u.queued += dmg
   }
@@ -485,7 +496,15 @@ export function createDungeon(options: {
         queue(u, "cacheWrite", tk.cache?.write ?? 0, true)
         u.estimate = { output: 0, reasoning: 0 }
         u.charge = undefined
-        state.tokens += (tk.input ?? 0) + output + reasoning + (tk.cache?.read ?? 0) + (tk.cache?.write ?? 0)
+        const step: Usage = {
+          input: tk.input ?? 0,
+          output,
+          reasoning,
+          cache: { read: tk.cache?.read ?? 0, write: tk.cache?.write ?? 0 },
+        }
+        state.tokens += rawTokens(step)
+        state.seenTokens += rawTokens(step)
+        state.seenWeighted += weightedTokens(step)
         break
       }
       case "session.compaction.ended": {
@@ -537,18 +556,16 @@ export function createDungeon(options: {
     counts()
   }
 
-  /** Lifetime totals from the server: the first time, the whole history; later, what happened while away. */
-  function applyStats(s: LifetimeStats, first: boolean) {
+  /** Lifetime totals from the server: the first reading marks where the guild starts; later ones catch up on what
+   * the live events missed, such as work done while the app was closed. */
+  function applyStats(s: LifetimeStats) {
     if (state !== real) return
-    const total = s.tokens.input + s.tokens.output + s.tokens.reasoning + s.tokens.cache.read + s.tokens.cache.write
-    // Tokens the live events did not count: the history before the first launch, or work done while the app was closed.
-    // They count at face value, without talents.
-    const missing = total - real.tokens
-    const wasSynced = real.synced
-    if (missing > 0) {
-      real.damage += missing
-      real.tokens = total
-    }
+    const seen = real.synced ? { tokens: real.seenTokens, weighted: real.seenWeighted } : undefined
+    const { mark, damage, tokens } = settle(seen, s.tokens)
+    real.damage += damage
+    real.tokens += tokens
+    real.seenTokens = mark.tokens
+    real.seenWeighted = mark.weighted
     real.synced = true
     refresh()
     persist()

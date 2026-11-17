@@ -8,7 +8,7 @@ Ta guilde descend un donjon infini. Chaque session OpenCode active envoie un ave
 invoque un petit familier, et **chaque token consommé frappe le monstre en face**. Le jeu se joue tout seul ; toi, tu
 choisis de temps en temps des talents qui orientent la guilde selon ta façon de vibecoder.
 
-« J'ai dépensé 5 M de tokens, je suis au boss de l'étage 21. Et toi ? »
+« J'ai dépensé 90 M de tokens, je suis au boss de l'étage 21. Et toi ? »
 
 ## Principes
 
@@ -28,10 +28,10 @@ choisis de temps en temps des talents qui orientent la guilde selon ta façon de
   volcanique (Roi de la forge) · abysses (Léviathan) · palais céleste (Archonte). Ensuite, les biomes reviennent en
   version « corrompue », plus sombre. Sur les autres étages, le boss est un monstre « champion », deux fois plus grand
   et couronné.
-- **Les points de vie se comptent en tokens.** L'étage n coûte `50 000 × 1,15^(n−1)` tokens. La progression est
-  rapide au début, puis se mérite, et il n'y a pas de fin :
+- **Les points de vie se comptent en dégâts.** L'étage n coûte `50 000 × 1,15^(n−1)` points de dégâts. La
+  progression est rapide au début, puis se mérite, et il n'y a pas de fin :
 
-  | Boss vaincu                | Tokens cumulés |
+  | Boss vaincu                | Dégâts cumulés |
   | -------------------------- | -------------- |
   | Étage 10 : Roi-Liche       | ~1 M           |
   | Étage 20 : Colosse         | ~5 M           |
@@ -40,13 +40,20 @@ choisis de temps en temps des talents qui orientent la guilde selon ta façon de
   | Étage 50 : Léviathan       | ~360 M         |
   | Étage 60 : Archonte        | ~1,5 milliard  |
 
-- **L'historique compte.** Au premier lancement, les tokens déjà dépensés (statistiques du serveur OpenCode) sont
-  convertis en progression : on démarre directement à l'étage mérité. Le travail fait pendant que l'app était fermée
-  est rattrapé de la même façon.
+  Au rythme d'un gros utilisateur (~25 M de tokens par jour, surtout du contexte, soit ~1,5 M de dégâts) : étage 10
+  en une demi-journée, 30 en deux semaines, 40 en deux mois, 50 en sept mois.
+
+- **On part de zéro.** Au premier lancement, la guilde démarre à l'étage 1 : l'historique OpenCode d'avant
+  l'installation ne compte pas. Ensuite, le travail fait pendant que l'app était fermée est rattrapé à l'ouverture
+  (statistiques du serveur OpenCode).
 
 ## Le combat
 
-- **1 token = 1 point de dégât**, quel que soit son type (entrée, sortie, raisonnement, cache), avant talents.
+- **Les tokens générés frappent en entier, le contexte à 5 %.** Sortie et raisonnement : 1 token = 1 point de dégât.
+  Entrée, lecture et écriture de cache : 1 token = 0,05 point, avant talents. Chaque étape d'un agent relit tout son
+  contexte, qui s'accumule une vingtaine de fois plus vite que la sortie : compté en entier, il ferait tout le jeu.
+  Entrée et cache pèsent pareil, pour qu'un fournisseur qui met en cache et un qui ne le fait pas progressent au même
+  rythme.
 - **En direct.** Les tokens de sortie et de raisonnement frappent pendant le streaming, estimés d'après le texte reçu
   (~4 caractères par token). À la fin de chaque étape, le chiffre exact du serveur corrige l'estimation.
 - **L'attaque chargée.** Les tokens d'entrée et de cache ne sont connus qu'en fin d'étape : pendant l'étape,
@@ -68,7 +75,7 @@ choisis de temps en temps des talents qui orientent la guilde selon ta façon de
 ## Les talents
 
 - **1 point de talent tous les 2 étages vaincus.** Les points restent rares pour que l'arbre soit un vrai choix :
-  5 points vers 1 M de tokens, 15 vers 22 M, 30 seulement après l'Archonte, et les 40 qui remplissent tout l'arbre
+  5 points vers 1 M de dégâts, 15 vers 22 M, 30 seulement après l'Archonte, et les 40 qui remplissent tout l'arbre
   au-delà de 20 milliards.
 - **Une branche par style de vibecoding**, 5 rangs chacune :
 
@@ -90,7 +97,7 @@ choisis de temps en temps des talents qui orientent la guilde selon ta façon de
 ## Le partage
 
 Le bouton « Copier ma progression » copie par exemple :
-`Rogue Agents · Étage 21 (Forêt fongique) · 5,2 M tokens · Essaim 5 / Marathon 3`
+`Rogue Agents · Étage 21 (Forêt fongique) · 90,4 M tokens · Essaim 5 / Marathon 3`
 
 ## L'interface
 
@@ -107,6 +114,6 @@ Le bouton « Copier ma progression » copie par exemple :
 
 - L'API des plugins d'interface d'OpenCode est expérimentale ; une mise à jour d'OpenCode peut demander d'adapter le
   plugin.
-- La progression est sauvegardée par machine (stockage de l'app desktop). Les tokens passés se recalculent depuis le
-  serveur, mais pas les choix de talents.
+- La progression est sauvegardée par machine (stockage de l'app desktop) : sur un nouvel ordinateur, la guilde
+  repart de l'étage 1.
 - L'estimation en direct est approximative ; seul le chiffre de fin d'étape fait foi.

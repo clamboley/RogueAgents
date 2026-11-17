@@ -489,6 +489,22 @@ function position(damage) {
   return { floor, room: BOSS_ROOM, boss: true, hp: cost * ROOM_SHARES[BOSS_ROOM], dealt: 0 };
 }
 const biomeOf = (floor) => Math.floor((floor - 1) / FLOORS_PER_BIOME);
+const CONTEXT_WEIGHT = 0.05;
+const WEIGHT = {
+  output: 1,
+  reasoning: 1,
+  input: CONTEXT_WEIGHT,
+  cacheRead: CONTEXT_WEIGHT,
+  cacheWrite: CONTEXT_WEIGHT
+};
+const rawTokens = (u) => u.input + u.output + u.reasoning + u.cache.read + u.cache.write;
+const weightedTokens = (u) => u.output * WEIGHT.output + u.reasoning * WEIGHT.reasoning + u.input * WEIGHT.input + u.cache.read * WEIGHT.cacheRead + u.cache.write * WEIGHT.cacheWrite;
+function settle(mark, lifetime) {
+  const next = { tokens: rawTokens(lifetime), weighted: weightedTokens(lifetime) };
+  const missing = mark ? next.weighted - mark.weighted : 0;
+  if (!mark || missing <= 0) return { mark: next, damage: 0, tokens: 0 };
+  return { mark: next, damage: missing, tokens: Math.max(0, next.tokens - mark.tokens) };
+}
 const BRANCHES = ["swarm", "legion", "lone", "marathon", "phoenix", "scholar", "thrift", "artisan"];
 const MAX_RANK = 5;
 const emptyTalents = () => ({
@@ -690,7 +706,9 @@ const freshSave = () => ({
   damage: 0,
   tokens: 0,
   talents: emptyTalents(),
-  synced: false
+  synced: false,
+  seenTokens: 0,
+  seenWeighted: 0
 });
 const TOOL_KINDS = {
   read: "lore",
@@ -887,7 +905,7 @@ function createDungeon(options) {
   }
   const queue = (u, kind, tokens, big = false) => {
     if (tokens <= 0) return;
-    const dmg = tokens * multiplier(state.talents, context(u, kind));
+    const dmg = tokens * WEIGHT[kind] * multiplier(state.talents, context(u, kind));
     if (big) u.queuedBig += dmg;
     if (!big) u.queued += dmg;
   };
@@ -1004,7 +1022,15 @@ function createDungeon(options) {
         queue(u, "cacheWrite", tk.cache?.write ?? 0, true);
         u.estimate = { output: 0, reasoning: 0 };
         u.charge = void 0;
-        state.tokens += (tk.input ?? 0) + output + reasoning + (tk.cache?.read ?? 0) + (tk.cache?.write ?? 0);
+        const step = {
+          input: tk.input ?? 0,
+          output,
+          reasoning,
+          cache: { read: tk.cache?.read ?? 0, write: tk.cache?.write ?? 0 }
+        };
+        state.tokens += rawTokens(step);
+        state.seenTokens += rawTokens(step);
+        state.seenWeighted += weightedTokens(step);
         break;
       }
       case "session.compaction.ended": {
@@ -1050,15 +1076,14 @@ function createDungeon(options) {
     }
     counts();
   }
-  function applyStats(s, first) {
+  function applyStats(s) {
     if (state !== real) return;
-    const total = s.tokens.input + s.tokens.output + s.tokens.reasoning + s.tokens.cache.read + s.tokens.cache.write;
-    const missing = total - real.tokens;
-    real.synced;
-    if (missing > 0) {
-      real.damage += missing;
-      real.tokens = total;
-    }
+    const seen = real.synced ? { tokens: real.seenTokens, weighted: real.seenWeighted } : void 0;
+    const { mark, damage, tokens } = settle(seen, s.tokens);
+    real.damage += damage;
+    real.tokens += tokens;
+    real.seenTokens = mark.tokens;
+    real.seenWeighted = mark.weighted;
     real.synced = true;
     refresh();
     persist();
@@ -2500,7 +2525,9 @@ const Guild = effect.Schema.Struct({
     thrift: N,
     artisan: N
   }),
-  synced: effect.Schema.Boolean
+  synced: effect.Schema.Boolean,
+  seenTokens: N,
+  seenWeighted: N
 });
 const EVENTS = ["session.created", "session.deleted", "session.execution.started", "session.execution.succeeded", "session.execution.failed", "session.execution.interrupted", "session.step.started", "session.step.ended", "session.reasoning.delta", "session.text.delta", "session.tool.input.started", "session.tool.input.delta", "session.tool.success", "session.tool.failed", "session.compaction.ended"];
 const gui = gui$1.Plugin.define({
@@ -2508,11 +2535,12 @@ const gui = gui$1.Plugin.define({
     en,
     fr
   },
+  // `guild2`: saves from before the guild started on floor 1 (it used to import the whole history) are left behind.
   stores: {
-    guild: gui$1.Store.global(Guild, freshSave())
+    guild2: gui$1.Store.global(Guild, freshSave())
   },
   setup(ctx) {
-    const stored = ctx.stores.guild.value;
+    const stored = ctx.stores.guild2.value;
     let client;
     const dungeon = createDungeon({
       t: (key, params) => ctx.t(key, params),
@@ -2522,9 +2550,11 @@ const gui = gui$1.Plugin.define({
         talents: {
           ...stored.talents
         },
-        synced: stored.synced
+        synced: stored.synced,
+        seenTokens: stored.seenTokens,
+        seenWeighted: stored.seenWeighted
       },
-      save: (saved) => void ctx.stores.guild.set(saved),
+      save: (saved) => void ctx.stores.guild2.set(saved),
       resolve: async (sessionID) => {
         const info = await client?.session.get({
           sessionID
@@ -2629,18 +2659,17 @@ ${css}`);
       });
     }
     async function follow(client2, signal) {
-      let first = true;
       let backoff = 1e3;
       let sync;
       signal.addEventListener("abort", () => clearTimeout(sync));
-      const stats = async (initial) => {
+      const stats = async () => {
         const life = await client2.experimental.session.stats({
           from: 0,
           tools: "none"
         }, {
           signal
         }).catch(() => void 0);
-        if (life && !signal.aborted) dungeon.applyStats(life, initial);
+        if (life && !signal.aborted) dungeon.applyStats(life);
       };
       const running = async () => {
         const list = await client2.session.list({
@@ -2667,14 +2696,13 @@ ${css}`);
               dungeon.setStatus("live");
               backoff = 1e3;
               void running();
-              void stats(first);
-              first = false;
+              void stats();
               continue;
             }
             dungeon.onEvent(event);
             if (event.type.startsWith("session.execution.") && event.type !== "session.execution.started") {
               clearTimeout(sync);
-              sync = setTimeout(() => void stats(false), 2e3);
+              sync = setTimeout(() => void stats(), 2e3);
             }
           }
         } catch {

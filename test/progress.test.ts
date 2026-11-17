@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 import {
   BRANCHES,
+  CONTEXT_WEIGHT,
   MAX_RANK,
   ROOM_SHARES,
   biomeOf,
@@ -9,10 +10,14 @@ import {
   floorCost,
   multiplier,
   position,
+  rawTokens,
+  settle,
   spentPoints,
   talentPoints,
+  weightedTokens,
   type Context,
   type Talents,
+  type Usage,
 } from "../src/game/progress"
 
 const base: Context = { kind: "output", familiar: false, adventurers: 1, sessionAgeMs: 0, phoenix: false, tools: 0 }
@@ -106,5 +111,50 @@ describe("multiplier", () => {
       tools: 12,
     }
     expect(multiplier(full(), best)).toBeCloseTo(3)
+  })
+})
+
+const usage = (output: number, context: number): Usage => ({
+  input: context / 4,
+  output,
+  reasoning: 0,
+  cache: { read: (context * 3) / 4, write: 0 },
+})
+
+describe("tokens", () => {
+  it("counts generated tokens in full and context at its weight", () => {
+    const u: Usage = { input: 1000, output: 200, reasoning: 100, cache: { read: 9000, write: 400 } }
+    expect(rawTokens(u)).toBe(10_700)
+    expect(weightedTokens(u)).toBeCloseTo(300 + 10_400 * CONTEXT_WEIGHT)
+  })
+
+  it("weighs a context the same whether the provider caches it or not", () => {
+    const cached: Usage = { input: 500, output: 0, reasoning: 0, cache: { read: 9500, write: 0 } }
+    const uncached: Usage = { input: 10_000, output: 0, reasoning: 0, cache: { read: 0, write: 0 } }
+    expect(weightedTokens(cached)).toBeCloseTo(weightedTokens(uncached))
+  })
+})
+
+describe("settle", () => {
+  it("starts the guild at zero, whatever its history", () => {
+    const history = usage(16e6, 1.5e9)
+    const first = settle(undefined, history)
+    expect(first).toMatchObject({ damage: 0, tokens: 0 })
+    expect(first.mark).toEqual({ tokens: rawTokens(history), weighted: weightedTokens(history) })
+  })
+
+  it("catches up on what happened since the mark, and only that", () => {
+    const before = settle(undefined, usage(1000, 100_000)).mark
+    const after = settle(before, usage(3000, 300_000))
+    expect(after.damage).toBeCloseTo(2000 + 200_000 * CONTEXT_WEIGHT)
+    expect(after.tokens).toBe(202_000)
+    expect(settle(after.mark, usage(3000, 300_000))).toMatchObject({ damage: 0, tokens: 0 })
+  })
+
+  it("moves the mark down when sessions are deleted, so later work still counts", () => {
+    const high = settle(undefined, usage(10_000, 1e6)).mark
+    const low = settle(high, usage(100, 1000))
+    expect(low.damage).toBe(0)
+    expect(settle(low.mark, usage(600, 1000)).damage).toBeCloseTo(500)
   })
 })

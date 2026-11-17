@@ -7,7 +7,7 @@ familiar, and the guild goes deeper as you work.
 ![The guild fighting the Forge King](docs/screenshots/fight.png)
 
 It plays itself. Now and then you spend talent points on the branches that suit the way you work, and you compare
-depths with your colleagues: _"5 M tokens, I'm at the floor 21 boss. You?"_
+depths with your colleagues: _"90 M tokens, I'm at the floor 21 boss. You?"_
 
 ## Install
 
@@ -25,16 +25,20 @@ Add it to the `plugins` list of your OpenCode config, `~/.config/opencode/openco
 Restart the desktop app, then open the dungeon from the command palette (**Open Rogue Agents**) or from a session's
 panel menu. To pin a version, use a tag: `"github:clamboley/RogueAgents#v0.1.0"`.
 
-On first launch, your OpenCode history counts: the tokens you already spent take you straight to the floor you earned.
+Your guild starts on floor 1: the OpenCode history from before you installed it does not count. From then on, the
+work your agents do while the app is closed is caught up when it opens.
 
 ## How it plays
 
-- **Floors and biomes.** Each floor holds four monsters and a boss, with health counted in tokens. Every ten floors
+- **Floors and biomes.** Each floor holds four monsters and a boss, with health counted in damage. Every ten floors
   the dungeon changes biome (crypts, crystal caves, fungal forest, volcanic forge, abyss, celestial palace) and ends
   with a biome boss; after floor 60 the biomes return, corrupted. Each floor costs 15 % more than the last, and there
-  is no end: about 1 M tokens clears the crypts, 1.5 billion the whole first cycle.
-- **Live damage.** Output and reasoning tokens strike while they stream; the context a step reads lands as a charged
-  attack when the step ends. Nothing depends on whether a task succeeds, only on what your agents spend.
+  is no end: about 1 M damage clears the crypts, 1.5 billion the whole first cycle. At a heavy user's pace (some 25 M
+  tokens a day, mostly context), the crypts take half a day, floor 30 two weeks, floor 40 two months.
+- **Live damage.** Output and reasoning tokens strike in full while they stream. The context a step reads (input and
+  cache) lands as a charged attack when the step ends, at 5 % of its size: an agent reads its whole context again at
+  every step, so at full weight it would be the whole game. Nothing depends on whether a task succeeds, only on what
+  your agents spend.
 - **Talents.** One point every two floors, to spend in eight branches, one per way of working: many subagents, many
   sessions, a single session, long sessions, frequent compactions, heavy reasoning, heavy caching, many tool calls.
   Points stay scarce, so the tree is a choice; resetting it is free.
@@ -42,7 +46,7 @@ On first launch, your OpenCode history counts: the tokens you already spent take
   ![The talent menu](docs/screenshots/talents.png)
 
 - **Share** (the quill button) copies a line such as
-  `Rogue Agents · Floor 21 (Fungal forest) · 5.2 M tokens · Swarm 5 / Marathon 3`.
+  `Rogue Agents · Floor 21 (Fungal forest) · 90.4 M tokens · Swarm 5 / Marathon 3`.
 - **Demo** (the play button) shows a made-up guild fighting in a random biome, without touching your progress.
 
 The full design, in French, is in [docs/DESIGN.md](docs/DESIGN.md).

@@ -34,6 +34,8 @@ const Guild = Schema.Struct({
   tokens: N,
   talents: Schema.Struct({ swarm: N, legion: N, lone: N, marathon: N, phoenix: N, scholar: N, thrift: N, artisan: N }),
   synced: Schema.Boolean,
+  seenTokens: N,
+  seenWeighted: N,
 })
 
 // Server events the dungeon reacts to; everything else stays off the wire.
@@ -57,9 +59,10 @@ const EVENTS = [
 
 export default Plugin.define({
   i18n: { en, fr },
-  stores: { guild: Store.global(Guild, freshSave()) },
+  // `guild2`: saves from before the guild started on floor 1 (it used to import the whole history) are left behind.
+  stores: { guild2: Store.global(Guild, freshSave()) },
   setup(ctx) {
-    const stored = ctx.stores.guild.value
+    const stored = ctx.stores.guild2.value
     // The client of the app's own server while connected; sessions the dungeon has not seen start are looked up there.
     let client: ServerRef["client"] | undefined
     const dungeon = createDungeon({
@@ -69,8 +72,10 @@ export default Plugin.define({
         tokens: stored.tokens,
         talents: { ...stored.talents },
         synced: stored.synced,
+        seenTokens: stored.seenTokens,
+        seenWeighted: stored.seenWeighted,
       },
-      save: (saved) => void ctx.stores.guild.set(saved),
+      save: (saved) => void ctx.stores.guild2.set(saved),
       resolve: async (sessionID) => {
         const info = await client?.session.get({ sessionID }).catch(() => undefined)
         return info ? { parentID: info.parentID, created: info.time.created } : undefined
@@ -179,15 +184,14 @@ export default Plugin.define({
       )
     }
     async function follow(client: ServerRef["client"], signal: AbortSignal) {
-      let first = true
       let backoff = 1000
       let sync: ReturnType<typeof setTimeout> | undefined
       signal.addEventListener("abort", () => clearTimeout(sync))
-      const stats = async (initial: boolean) => {
+      const stats = async () => {
         const life = await client.experimental.session
           .stats({ from: 0, tools: "none" }, { signal })
           .catch(() => undefined)
-        if (life && !signal.aborted) dungeon.applyStats(life, initial)
+        if (life && !signal.aborted) dungeon.applyStats(life)
       }
       // A session runs while its last `busy` is newer than its last `idle`.
       const running = async () => {
@@ -207,15 +211,14 @@ export default Plugin.define({
               dungeon.setStatus("live")
               backoff = 1000
               void running()
-              void stats(first)
-              first = false
+              void stats()
               continue
             }
             dungeon.onEvent(event)
             // A finished run settles the server's totals; read them again so nothing is missed.
             if (event.type.startsWith("session.execution.") && event.type !== "session.execution.started") {
               clearTimeout(sync)
-              sync = setTimeout(() => void stats(false), 2000)
+              sync = setTimeout(() => void stats(), 2000)
             }
           }
         } catch {

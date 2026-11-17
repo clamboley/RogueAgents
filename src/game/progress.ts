@@ -1,6 +1,6 @@
 // The dungeon's math: where a cumulative amount of damage stands, and what talents add. Pure functions only.
 
-/** Tokens the first floor costs, and how much more each next floor costs. */
+/** Damage the first floor costs, and how much more each next floor costs. */
 export const FLOOR_BASE = 50_000
 export const FLOOR_GROWTH = 1.15
 /** Each floor: four monsters, then its boss, as shares of the floor's cost. */
@@ -16,7 +16,7 @@ export interface Position {
   floor: number
   room: number
   boss: boolean
-  /** The current monster's health, in tokens. */
+  /** The current monster's health, in damage. */
   hp: number
   /** Damage already dealt to it. */
   dealt: number
@@ -43,6 +43,56 @@ export function position(damage: number): Position {
 /** The biome of a floor: 0 for floors 1–10, 1 for 11–20, and so on. */
 export const biomeOf = (floor: number) => Math.floor((floor - 1) / FLOORS_PER_BIOME)
 
+// ───────── Tokens ─────────
+
+/** What a token of context (input, cache read or cache write) weighs against a generated one. Each step of an agent
+ * reads its whole context again, so context piles up some twenty times faster than output: at full weight it would be
+ * the whole game. Input and cache weigh the same, so a provider that caches and one that does not progress alike. */
+export const CONTEXT_WEIGHT = 0.05
+
+/** Damage per token of each kind, before talents. */
+export const WEIGHT: Record<TokenKind, number> = {
+  output: 1,
+  reasoning: 1,
+  input: CONTEXT_WEIGHT,
+  cacheRead: CONTEXT_WEIGHT,
+  cacheWrite: CONTEXT_WEIGHT,
+}
+
+/** Token counts as the server reports them, for a step or for a whole history. */
+export interface Usage {
+  input: number
+  output: number
+  reasoning: number
+  cache: { read: number; write: number }
+}
+
+export const rawTokens = (u: Usage) => u.input + u.output + u.reasoning + u.cache.read + u.cache.write
+/** The damage a usage is worth, before talents. */
+export const weightedTokens = (u: Usage) =>
+  u.output * WEIGHT.output +
+  u.reasoning * WEIGHT.reasoning +
+  u.input * WEIGHT.input +
+  u.cache.read * WEIGHT.cacheRead +
+  u.cache.write * WEIGHT.cacheWrite
+
+/** The server's lifetime totals the dungeon has accounted for; `undefined` until it first reads them. */
+export interface Mark {
+  tokens: number
+  weighted: number
+}
+
+/** Settles a reading of the server's lifetime totals against the mark. The first reading only sets the mark: the
+ * guild starts on floor 1, whatever its history. Later readings return what the live events missed, such as work
+ * done while the app was closed; it counts at face value, without talents. The mark always moves to the reading, so a
+ * lower one (sessions deleted) does not hold back the work that follows. */
+export function settle(mark: Mark | undefined, lifetime: Usage) {
+  const next: Mark = { tokens: rawTokens(lifetime), weighted: weightedTokens(lifetime) }
+  const missing = mark ? next.weighted - mark.weighted : 0
+  if (!mark || missing <= 0) return { mark: next, damage: 0, tokens: 0 }
+  return { mark: next, damage: missing, tokens: Math.max(0, next.tokens - mark.tokens) }
+}
+
 // ───────── Talents ─────────
 
 export const BRANCHES = ["swarm", "legion", "lone", "marathon", "phoenix", "scholar", "thrift", "artisan"] as const
@@ -62,7 +112,7 @@ export const emptyTalents = (): Talents => ({
 })
 
 /** One talent point every two floors cleared: points stay scarce, so a tree is a choice. The 30th comes with the
- * Archon at the end of the first cycle (floor 60, ~1.3 billion tokens); the 40 that fill every branch, past 20 billion. */
+ * Archon at the end of the first cycle (floor 60, ~1.3 billion damage); the 40 that fill every branch, past 20 billion. */
 export const talentPoints = (floor: number) => Math.floor((floor - 1) / 2)
 export const spentPoints = (t: Talents) => BRANCHES.reduce((sum, b) => sum + t[b], 0)
 

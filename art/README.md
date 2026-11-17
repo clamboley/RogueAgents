@@ -38,6 +38,7 @@ pure magenta is background, for sprites with pink glows), `--despill` (removes t
 move the body; `--hang` lets the attacks it names keep what hangs below the body (a bolt) under the feet line.
 `--glass` turns a large wall of pale light into see-through cyan glass, kept as a partly transparent palette entry, and
 `--unmix` turns a glow painted over the magenta back into see-through light of the colour it names.
+`--body-anchor` anchors a sprite on its largest piece, so frames of an animation stay in place.
 
 ## Adding art
 

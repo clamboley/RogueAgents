@@ -135,6 +135,11 @@ def main():
         "--unmix",
         help="hex colour of a glow painted over the magenta (e.g. bff6ff): pink-cast pixels become that glow, see-through",
     )
+    p.add_argument(
+        "--body-anchor",
+        action="store_true",
+        help="anchor each sprite on the box of its largest piece, so a halo or sparkles around it do not shift it",
+    )
     p.add_argument("--drop-far", type=int, help="drop pieces farther than this (source pixels) from the largest one")
     args = p.parse_args()
     global STRICT
@@ -196,6 +201,12 @@ def main():
             mask &= fg
             ys, xs = np.nonzero(mask)
             y0, y1, x0, x1 = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
+            # The body: the cell's largest piece, in source pixels.
+            body_id = max(members, key=lambda i: area[np.nonzero(ids == i)[0][0]])
+            body = np.zeros_like(fg)
+            up = (labels == body_id).repeat(STEP, axis=0).repeat(STEP, axis=1)
+            body[: up.shape[0], : up.shape[1]] = up
+            bys, bxs = np.nonzero(body & mask)
             # Despill: translucent parts drawn over magenta keep a pink-violet cast; pull red and blue back towards green.
             cell = src[y0:y1, x0:x1].astype(int)
             # How much magenta shows through each pixel, measured before any despill.
@@ -233,15 +244,25 @@ def main():
                 see = (np.asarray(cell_glass.resize((w, h), Image.Resampling.BOX)) > 127) & solid
                 out[see] = (*GLASS_RGB, round(255 * args.glass))
             ys, xs = np.nonzero(solid)
+            top, left = ys.min(), xs.min()
             out = out[ys.min() : ys.max() + 1, xs.min() : xs.max() + 1]
             solid = solid[ys.min() : ys.max() + 1, xs.min() : xs.max() + 1]
-            if args.flip or name in args.flip_only.split(","):
+            flip = args.flip or name in args.flip_only.split(",")
+            if flip:
                 out = out[:, ::-1]
                 solid = solid[:, ::-1]
             low = solid[int(solid.shape[0] * 0.88) :]
             fx = float(np.nonzero(low)[1].mean()) if low.any() else solid.shape[1] / 2
+            below = 0
+            if args.body_anchor:
+                fx = ((bxs.min() + bxs.max() + 1) / 2 - x0) * w / img.width - left
+                if flip:
+                    fx = solid.shape[1] - fx
+                below = max(0, solid.shape[0] - round((bys.max() + 1 - y0) * h / img.height - top))
             Image.fromarray(out, "RGBA").save(os.path.join(args.outdir, f"{name}.png"))
-            meta[name] = {"w": int(out.shape[1]), "h": int(out.shape[0]), "ax": round(fx, 1)}
+            meta[name] = {"w": int(out.shape[1]), "h": int(out.shape[0]), "ax": round(float(fx), 1)}
+            if below:
+                meta[name]["below"] = int(below)
             images[name] = out
             print(f"{name}: {out.shape[1]}x{out.shape[0]} anchor {fx:.1f}")
     if args.pair_anchor:

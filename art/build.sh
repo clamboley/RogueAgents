@@ -88,6 +88,8 @@ $S raw/ultra-contextwindow.jpeg processed/monsters-ultra-contextwindow --grid 1x
 # The Architect, drawn facing right; its glows were painted over the magenta, --unmix turns them back to cyan light.
 $S raw/ultra-architect.jpeg processed/monsters-ultra-architect --grid 1x1 --scale 6.8 --colors 48 --despill \
   --drop-far 40 --flip --unmix bff6ff --names architect
+# Its three orbs, dim to blazing; --body-anchor keeps the sphere still while its halo and sparkles come and go.
+$S raw/orb.jpeg processed/orb --grid 1x4 --scale 20 --colors 32 --unmix bff6ff --body-anchor --names orb-0,orb-1,orb-2,orb-3
 
 # Props.
 $S raw/crown.jpeg processed/crown --grid 1x1 --scale 22 --colors 24 --names crown

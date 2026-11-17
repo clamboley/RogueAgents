@@ -162,6 +162,10 @@ import monsters_void_voidwalker from "./monsters-void/voidwalker.png"
 import monsters_void_riftcrawler from "./monsters-void/riftcrawler.png"
 import monsters_void_nulleye from "./monsters-void/nulleye.png"
 import monsters_void_stareater from "./monsters-void/stareater.png"
+import orb_orb_0 from "./orb/orb-0.png"
+import orb_orb_1 from "./orb/orb-1.png"
+import orb_orb_2 from "./orb/orb-2.png"
+import orb_orb_3 from "./orb/orb-3.png"
 import talents_talent_swarm from "./talents/talent-swarm.png"
 import talents_talent_legion from "./talents/talent-legion.png"
 import talents_talent_lone from "./talents/talent-lone.png"
@@ -352,6 +356,10 @@ export const SPRITES: Record<string, SpriteAsset> = {
   "riftcrawler": { url: monsters_void_riftcrawler, w: 73, h: 52, ax: 36.5 },
   "nulleye": { url: monsters_void_nulleye, w: 63, h: 63, ax: 31.5 },
   "stareater": { url: monsters_void_stareater, w: 59, h: 69, ax: 29.5 },
+  "orb-0": { url: orb_orb_0, w: 21, h: 21, ax: 10.5 },
+  "orb-1": { url: orb_orb_1, w: 20, h: 21, ax: 10.0 },
+  "orb-2": { url: orb_orb_2, w: 20, h: 21, ax: 10.0 },
+  "orb-3": { url: orb_orb_3, w: 26, h: 23, ax: 14.9 },
   "talent-swarm": { url: talents_talent_swarm, w: 74, h: 74, ax: 36.4 },
   "talent-legion": { url: talents_talent_legion, w: 74, h: 74, ax: 36.5 },
   "talent-lone": { url: talents_talent_lone, w: 74, h: 74, ax: 36.5 },

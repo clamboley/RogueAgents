@@ -7,6 +7,7 @@ import {
   RANGED,
   biome,
   familiarFor,
+  familiarPool,
   hash,
   lookFor,
   rng,
@@ -194,6 +195,9 @@ export function createDungeon(options: {
   let shake = 0
 
   const now = () => Date.now()
+  /** The familiars the guild can summon on `floor` (by default, the current one). */
+  const pool = (floor = position(state.damage).floor) =>
+    familiarPool(biomeOf(floor), (species) => !!spriteSize(`${species}-idle`))
   const pos0 = position(state.damage)
   const [ui, setUi] = createStore({
     floor: pos0.floor,
@@ -211,7 +215,7 @@ export function createDungeon(options: {
     cleared: pos0.cleared,
     status: "idle" as Status,
     demo: false,
-    banner: { floor: 0, at: 0, cleared: false },
+    banner: { floor: 0, at: 0, cleared: false, familiars: [] as string[] },
   })
 
   // ───────── Saving and the panel's view ─────────
@@ -251,8 +255,13 @@ export function createDungeon(options: {
   function refresh() {
     const p = position(state.damage)
     const mon = monsterOf(p.floor, p.room, p.boss)
-    if (p.floor !== ui.floor && ui.floor) setUi("banner", { floor: p.floor, at: now(), cleared: false })
-    if (p.cleared && !ui.cleared && ui.floor) setUi("banner", { floor: p.floor, at: now(), cleared: true })
+    if (p.floor !== ui.floor && ui.floor) {
+      // Entering a new biome announces the familiars it unlocks (not in the demo, which unlocks nothing).
+      const fresh = state === real && biomeOf(p.floor) > biomeOf(ui.floor) ? pool(p.floor).fresh : []
+      setUi("banner", { floor: p.floor, at: now(), cleared: false, familiars: fresh.map((s) => t(`species.${s}`)) })
+    }
+    if (p.cleared && !ui.cleared && ui.floor)
+      setUi("banner", { floor: p.floor, at: now(), cleared: true, familiars: [] })
     if (p.cleared && state === real && !real.clearedAt) real.clearedAt = now()
     setUi({
       floor: p.floor,
@@ -299,7 +308,7 @@ export function createDungeon(options: {
       parent: undefined,
       familiar: false,
       look: lookFor(seed),
-      pet: familiarFor(seed),
+      pet: familiarFor(seed, pool()),
       createdAt: now(),
       lastActive: now(),
       executing: false,

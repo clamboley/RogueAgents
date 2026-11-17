@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest"
-import { BIOMES, FINALE, biome } from "../src/game/art"
+import { BASE_FAMILIARS, BIOMES, FINALE, biome, familiarFor, familiarPool } from "../src/game/art"
 import {
   BRANCHES,
   CONTEXT_WEIGHT,
@@ -190,5 +190,35 @@ describe("settle", () => {
     const low = settle(high, usage(100, 1000))
     expect(low.damage).toBe(0)
     expect(settle(low.mark, usage(600, 1000)).damage).toBeCloseTo(500)
+  })
+})
+
+describe("familiars", () => {
+  const everything = () => true
+
+  it("starts with the base familiars and unlocks each biome's on reaching it, for good", () => {
+    expect(familiarPool(0, everything)).toEqual({ all: BASE_FAMILIARS, fresh: [] })
+    const crystal = familiarPool(1, everything)
+    expect(crystal.fresh).toEqual(BIOMES[1]!.familiars)
+    expect(crystal.all).toEqual([...BASE_FAMILIARS, ...BIOMES[1]!.familiars!])
+    const last = familiarPool(BIOMES.length - 1, everything)
+    expect(last.all).toHaveLength(BASE_FAMILIARS.length + 2 * (BIOMES.length - 1))
+    expect(new Set(last.all).size).toBe(last.all.length)
+    expect(familiarPool(BIOMES.length, everything)).toEqual({ all: last.all, fresh: [] })
+  })
+
+  it("leaves out species without art", () => {
+    const noArt = familiarPool(3, (s) => BASE_FAMILIARS.includes(s))
+    expect(noArt).toEqual({ all: BASE_FAMILIARS, fresh: [] })
+  })
+
+  it("draws a newcomer about half the time, and the same familiar for the same seed", () => {
+    const pool = familiarPool(4, everything)
+    const draws = Array.from({ length: 4000 }, (_, i) => familiarFor(i * 7919, pool).species)
+    expect(draws.every((d) => pool.all.includes(d))).toBe(true)
+    const fresh = draws.filter((d) => pool.fresh.includes(d)).length / draws.length
+    expect(fresh).toBeGreaterThan(0.45)
+    expect(fresh).toBeLessThan(0.65)
+    expect(familiarFor(42, pool)).toEqual(familiarFor(42, pool))
   })
 })

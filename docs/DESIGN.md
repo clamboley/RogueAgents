@@ -80,6 +80,11 @@ seul ; toi, tu choisis de temps en temps des talents qui orientent la guilde sel
   l'identifiant de la session, avec une couleur de vêtements au hasard : un même aventurier pour toute la session.
 - **Un sous-agent = un familier** (chat, chouette, dragonnet, slime, feu follet, renard, grenouille, champignon) qui
   suit l'aventurier de sa session parente et combat avec les tokens du sous-agent.
+- **Chaque biome débloque deux familiers à son image**, pour de bon : golem de quartz et luciole de cristal dans les
+  grottes, spore sauteuse et escargot dans la forêt, et ainsi de suite jusqu'à l'œil flottant et la petite ombre du
+  néant, soit 26 espèces au bout du compte. Une bannière les annonce à l'entrée du biome. Pour qu'on les voie malgré
+  le nombre, un sous-agent sur deux tire son familier parmi les nouveaux venus du biome en cours, l'autre parmi tous
+  ceux débloqués. Un familier sans art n'est pas encore tiré.
 - **Pas de limite de taille.** Au-delà d'une dizaine d'unités, l'écran montre les plus récemment actives.
 - **Au repos** (aucune session ne travaille), la guilde campe autour d'un feu.
 

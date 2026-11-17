@@ -241,3 +241,62 @@ Done: `bg-heart-1`, `bg-heart-2`, `ultra-ratelimiter`, `ultra-hallucination`, `u
 > weapons of adventurers stuck in its shell. No metal, no machine parts. The largest and most menacing of all, about
 > four times as tall as the skeleton, full body, facing LEFT, centred with plenty of empty magenta around. Crisp
 > pixels, no anti-aliasing, no text.
+
+## Familiars (two per biome after the crypts)
+
+Each sheet holds 4 familiars, one per row: at rest on the left, attacking on the right, like the first familiar
+sheets (`--grid 4x2` in `build.sh`). Familiars fight beside the adventurers, so they face RIGHT, towards the monster.
+They are drawn tiny in the game: the prompts ask for bold, readable silhouettes.
+
+`familiars-3.jpeg`: crystal caves and fungal forest
+
+> Same style and scale as the familiars sheet you made. Perfectly flat solid magenta background (#FF00FF), a grid of
+> 4 rows and 2 columns, one small familiar per row, plenty of space between them, all facing RIGHT: in the left column
+> the familiar at rest, in the right column the same familiar attacking. Small cute companions with bold, simple,
+> readable silhouettes. Avoid pink and magenta tones in the familiars themselves. Row 1) quartz golem, a tiny golem
+> made of clear and pale blue quartz crystals, attacking with a punch. Row 2) crystal firefly, a small glowing firefly
+> with crystal wings, flying, attacking with a beam of light. Row 3) spore hopper, a small round mushroom-cap creature
+> with stubby legs, attacking by hopping and puffing a cloud of spores. Row 4) snail, a snail with a glowing mushroom
+> growing on its shell, attacking by spitting slime. Crisp pixels, no anti-aliasing, no text.
+
+`familiars-4.jpeg`: volcanic forge and abyss
+
+> Same style and scale as the familiars sheet you made. Perfectly flat solid magenta background (#FF00FF), a grid of
+> 4 rows and 2 columns, one small familiar per row, plenty of space between them, all facing RIGHT: in the left column
+> the familiar at rest, in the right column the same familiar attacking. Small cute companions with bold, simple,
+> readable silhouettes. Avoid pink and magenta tones in the familiars themselves. Row 1) salamander, a small orange
+> salamander with little flames along its back, attacking by breathing fire. Row 2) ember golem, a tiny golem of black
+> rock with glowing lava cracks, attacking with a punch. Row 3) octopus, a small teal octopus, attacking by squirting
+> ink. Row 4) seahorse, a small golden seahorse floating upright, attacking by shooting a bubble. Crisp pixels, no
+> anti-aliasing, no text.
+
+`familiars-5.jpeg`: frozen citadel and storm peaks
+
+> Same style and scale as the familiars sheet you made. Perfectly flat solid magenta background (#FF00FF), a grid of
+> 4 rows and 2 columns, one small familiar per row, plenty of space between them, all facing RIGHT: in the left column
+> the familiar at rest, in the right column the same familiar attacking. Small cute companions with bold, simple,
+> readable silhouettes. Avoid pink and magenta tones in the familiars themselves. Row 1) snow fox, a small white fox
+> with an icy blue tail, attacking by breathing frost. Row 2) penguin, a small penguin with frost on its head,
+> attacking by sliding on its belly. Row 3) griffin chick, a small fluffy griffin chick with tiny wings, attacking by
+> pecking. Row 4) storm cloud, a small dark grey cloud with angry eyes, floating, attacking with a bolt of yellow
+> lightning. Crisp pixels, no anti-aliasing, no text.
+
+`familiars-6.jpeg`: celestial palace and outer space
+
+> Same style and scale as the familiars sheet you made. Perfectly flat solid magenta background (#FF00FF), a grid of
+> 4 rows and 2 columns, one small familiar per row, plenty of space between them, all facing RIGHT: in the left column
+> the familiar at rest, in the right column the same familiar attacking. Small cute companions with bold, simple,
+> readable silhouettes. Avoid pink and magenta tones in the familiars themselves. Row 1) cherub, a small winged
+> golden-haired cherub, floating, attacking with a tiny bow of light. Row 2) unicorn, a small white unicorn with a
+> golden horn, attacking by charging horn first. Row 3) little comet, a small blazing white-blue comet with a face,
+> flying, attacking by dashing forward. Row 4) moon moth, a pale silver moth with moon-shaped patterns on its wings,
+> flying, attacking with a puff of glowing dust. Crisp pixels, no anti-aliasing, no text.
+
+`familiars-7.jpeg`: the void (two familiars only)
+
+> Same style and scale as the familiars sheet you made. Perfectly flat solid magenta background (#FF00FF), a grid of
+> 2 rows and 2 columns, one small familiar per row, plenty of space between them, all facing RIGHT: in the left column
+> the familiar at rest, in the right column the same familiar attacking. Small cute companions with bold, simple,
+> readable silhouettes. Avoid pink and magenta tones in the familiars themselves. Row 1) floating eye, a small violet
+> eye with tiny dark tentacles, floating, attacking with a beam. Row 2) shadeling, a small blob of living shadow with
+> two glowing white eyes, attacking by stretching a shadowy claw. Crisp pixels, no anti-aliasing, no text.

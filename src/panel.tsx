@@ -147,6 +147,9 @@ function Stage(props: {
             {ui.banner.cleared ? t("banner.cleared") : t("banner.floor", { floor: ui.banner.floor })}
           </span>
           <em>{ui.banner.cleared ? t("hud.cleared") : ui.biome}</em>
+          <Show when={ui.banner.familiars.length}>
+            <small>{t("banner.familiars", { names: ui.banner.familiars.join(", ") })}</small>
+          </Show>
         </div>
       </Show>
       <Show when={menu()}>

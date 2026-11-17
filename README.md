@@ -39,6 +39,8 @@ work your agents do while the app is closed is caught up when it opens.
 - **Pace.** Each floor costs 10 % more than the last: about 5 M damage clears the crypts, 900 M the first six biomes,
   41 billion the last one and 67 billion the whole dungeon. For a heavy user of one agent at a time (some 75 M damage
   a day), that is under two weeks for the first six biomes, a year and a half to floor 100, two years to the end.
+- **Familiars.** Each subagent fights as a familiar beside its parent's adventurer. Eight species to start with; every
+  biome after the crypts unlocks two more of its own, announced by a banner and summoned often while they are new.
 - **Live damage.** Output and reasoning tokens strike in full while they stream. The context a step reads (input and
   cache) lands as a charged attack when the step ends, at 5 % of its size: an agent reads its whole context again at
   every step, so at full weight it would be the whole game. Nothing depends on whether a task succeeds, only on what

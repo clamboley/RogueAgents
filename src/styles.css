@@ -246,6 +246,13 @@
     0 0.25cqi 0 #000,
     0 0 1.2cqi #000;
 }
+.ra-banner small {
+  font-size: 1.8cqi;
+  color: #9fe8ff;
+  text-shadow:
+    0 0.25cqi 0 #000,
+    0 0 1.2cqi #000;
+}
 @keyframes ra-banner {
   0% {
     opacity: 0;

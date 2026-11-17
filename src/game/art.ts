@@ -45,6 +45,8 @@ export interface Biome {
   boss: MonsterDef
   /** The final biome's ultra bosses, one per floor after the last biome. */
   ultras?: MonsterDef[]
+  /** The familiars a guild unlocks on reaching this biome, for good. */
+  familiars?: string[]
 }
 
 const CRYPT_MONSTERS = (keys: [string, string, string, string]): MonsterDef[] => [
@@ -67,6 +69,7 @@ const OWN: Biome[] = [
   {
     key: "crystal",
     art: "crystal",
+    familiars: ["quartzling", "glowfly"],
     filter: "",
     light: "#7cf0ff",
     monsters: [
@@ -80,6 +83,7 @@ const OWN: Biome[] = [
   {
     key: "fungal",
     art: "fungal",
+    familiars: ["sporehopper", "snail"],
     filter: "",
     light: "#b8ff6b",
     monsters: [
@@ -93,6 +97,7 @@ const OWN: Biome[] = [
   {
     key: "forge",
     art: "forge",
+    familiars: ["salamander", "emberling"],
     filter: "",
     light: "#ff7a2f",
     monsters: [
@@ -106,6 +111,7 @@ const OWN: Biome[] = [
   {
     key: "abyss",
     art: "abyss",
+    familiars: ["octopus", "seahorse"],
     filter: "",
     light: "#5cf0d0",
     monsters: [
@@ -119,6 +125,7 @@ const OWN: Biome[] = [
   {
     key: "frost",
     art: "frost",
+    familiars: ["snowfox", "penguin"],
     filter: "",
     light: "#8fd8ff",
     monsters: [
@@ -132,6 +139,7 @@ const OWN: Biome[] = [
   {
     key: "storm",
     art: "storm",
+    familiars: ["griffonling", "stormcloud"],
     filter: "",
     light: "#9fc8ff",
     monsters: [
@@ -145,6 +153,7 @@ const OWN: Biome[] = [
   {
     key: "celestial",
     art: "celestial",
+    familiars: ["cherub", "unicorn"],
     filter: "",
     light: "#ffe9a0",
     monsters: [
@@ -158,6 +167,7 @@ const OWN: Biome[] = [
   {
     key: "space",
     art: "space",
+    familiars: ["cometling", "moonmoth"],
     filter: "",
     light: "#bfe6ff",
     monsters: [
@@ -171,6 +181,7 @@ const OWN: Biome[] = [
   {
     key: "void",
     art: "void",
+    familiars: ["floateye", "shadeling"],
     filter: "",
     light: "#c69bff",
     monsters: [
@@ -252,20 +263,48 @@ export function lookFor(seed: number): Look {
 
 // ───────── Familiars ─────────
 
-/** Familiar species with art; each has `<species>-idle` and `-attack` sprites. */
-export const SPECIES = ["cat", "owl", "dragon", "slime", "wisp", "fox", "frog", "mushroom"] as const
-export type Species = (typeof SPECIES)[number]
+/** The familiars every guild starts with; each biome after the crypts unlocks two more (`Biome.familiars`). A species
+ * has `<species>-idle` and `-attack` sprites. */
+export const BASE_FAMILIARS = ["cat", "owl", "dragon", "slime", "wisp", "fox", "frog", "mushroom"]
 /** Species that float above the floor, and by how much. */
-export const HOVER: Partial<Record<Species, number>> = { wisp: 12 }
+export const HOVER: Record<string, number> = {
+  wisp: 12,
+  glowfly: 14,
+  seahorse: 10,
+  stormcloud: 14,
+  cherub: 12,
+  cometling: 14,
+  moonmoth: 14,
+  floateye: 12,
+}
 const SPARKS = ["#7cf0ff", "#ffd86b", "#ff8a3d", "#b8ff6b", "#ff9ae0", "#c8a8ff"]
 
 export interface FamiliarLook {
-  species: Species
+  species: string
   /** The colour of its projectiles. */
   accent: string
 }
 
-export function familiarFor(seed: number): FamiliarLook {
+/** The familiars a guild can summon: every one unlocked so far, and the current biome's newcomers. */
+export interface FamiliarPool {
+  all: string[]
+  fresh: string[]
+}
+
+/** The pool once the guild has reached biome `index` (the finale unlocks none), keeping only species with art, so a
+ * biome's familiars appear only once their sprites exist. */
+export function familiarPool(index: number, hasArt: (species: string) => boolean): FamiliarPool {
+  const reached = BIOMES.slice(1, Math.min(index, BIOMES.length - 1) + 1)
+  return {
+    all: [...BASE_FAMILIARS, ...reached.flatMap((b) => b.familiars ?? [])].filter(hasArt),
+    fresh: (BIOMES[index]?.familiars ?? []).filter(hasArt),
+  }
+}
+
+/** A familiar drawn from a seed: half the time one of the current biome's newcomers, so they show up often among the
+ * many unlocked before them. */
+export function familiarFor(seed: number, pool: FamiliarPool): FamiliarLook {
   const r = rng(seed ^ 0x5bd1e995)
-  return { species: pick(SPECIES, r), accent: pick(SPARKS, r) }
+  const fresh = pool.fresh.length > 0 && r() < 0.5
+  return { species: pick(fresh ? pool.fresh : pool.all, r), accent: pick(SPARKS, r) }
 }

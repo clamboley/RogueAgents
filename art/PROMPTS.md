@@ -174,8 +174,9 @@ white, smooth and curved, like porcelain and mother-of-pearl: no screens, no mac
 take on a red cavern, then a futuristic lab, were dropped: the lab looked like a human spaceship.) The ultra bosses
 are a little taller than the biome bosses.
 
-Done: `bg-heart-1`, `bg-heart-2`, `ultra-ratelimiter`, `ultra-hallucination`, `ultra-infiniteloop`. A first Context
-Window, a porcelain mirror frame holding an eye, was dropped.
+Done: `bg-heart-1`, `bg-heart-2`, `ultra-ratelimiter`, `ultra-hallucination`, `ultra-infiniteloop`. Two first Context
+Windows were dropped: a porcelain mirror frame holding an eye, then a jellyfish holding memories. It is a hard limit:
+the warden of the edge of the world.
 
 `bg-heart-1.jpeg`
 
@@ -227,12 +228,13 @@ Window, a porcelain mirror frame holding an eye, was dropped.
 `ultra-contextwindow.jpeg`
 
 > Same pixel art style and level of detail as the boss sprites you made. A single huge ultra boss on a perfectly flat
-> solid magenta background (#FF00FF). Not humanoid. The Context Window, a colossal floating alien jellyfish with a
-> huge translucent pearly white bell, and inside the bell, frozen like memories, small dark silhouettes of the
-> dungeon's monsters and adventurers it has swallowed. Long curved white tentacles hang from it and fade into drifting
-> pale cyan dust at their tips, as if forgetting. No metal, no machine parts. Menacing and epic. About three and a half
-> times as tall as the skeleton, full body, facing LEFT, centred with plenty of empty magenta around. Crisp pixels, no
-> anti-aliasing, no text.
+> solid magenta background (#FF00FF). Not humanoid. The Context Window, the warden of the edge of the world: a colossal
+> alien sentinel with a seamless smooth pearly white body, standing on four long curved legs, a long curved neck and a
+> smooth blank head with a single horizontal slit of pale cyan light. Its two great curved arms spread wide and hold up
+> a translucent wall of pale cyan light behind it, with a perfectly straight, hard edge: beyond it there is nothing.
+> At its feet, small creatures that tried to pass dissolve into scattered pixels. No metal, no machine parts.
+> Immovable, menacing and epic. About three and a half times as tall as the skeleton, full body, facing LEFT, centred
+> with plenty of empty magenta around. Crisp pixels, no anti-aliasing, no text.
 
 `ultra-devourer.jpeg`
 

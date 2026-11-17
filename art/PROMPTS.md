@@ -176,7 +176,8 @@ are a little taller than the biome bosses.
 
 Done: `bg-heart-1`, `bg-heart-2`, `ultra-ratelimiter`, `ultra-hallucination`, `ultra-infiniteloop`. Two first Context
 Windows were dropped: a porcelain mirror frame holding an eye, then a jellyfish holding memories. It is a hard limit:
-the warden of the edge of the world.
+the keeper of the world's boundary. (Gemini refused a prompt calling it a warden or a sentinel, likely as too close
+to existing creatures.)
 
 `bg-heart-1.jpeg`
 
@@ -228,8 +229,8 @@ the warden of the edge of the world.
 `ultra-contextwindow.jpeg`
 
 > Same pixel art style and level of detail as the boss sprites you made. A single huge ultra boss on a perfectly flat
-> solid magenta background (#FF00FF). Not humanoid. The Context Window, the warden of the edge of the world: a colossal
-> alien sentinel with a seamless smooth pearly white body, standing on four long curved legs, a long curved neck and a
+> solid magenta background (#FF00FF). Not humanoid. An original alien creature that keeps the boundary of the world: a
+> colossal being with a seamless smooth pearly white body, standing on four long curved legs, a long curved neck and a
 > smooth blank head with a single horizontal slit of pale cyan light. Its two great curved arms spread wide and hold up
 > a translucent wall of pale cyan light behind it, with a perfectly straight, hard edge: beyond it there is nothing.
 > At its feet, small creatures that tried to pass dissolve into scattered pixels. No metal, no machine parts.

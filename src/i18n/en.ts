@@ -126,7 +126,7 @@ export default {
   "monster.hallucination": "The Hallucination",
   "monster.infiniteloop": "The Infinite Loop",
   "monster.contextwindow": "The Context Window",
-  "monster.devourer": "The Token Devourer",
+  "monster.architect": "The Architect",
 
   "class.knight": "knight",
   "class.dwarf": "dwarf",

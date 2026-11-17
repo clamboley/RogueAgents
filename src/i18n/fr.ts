@@ -128,7 +128,7 @@ export default {
   "monster.hallucination": "L'Hallucination",
   "monster.infiniteloop": "La Boucle infinie",
   "monster.contextwindow": "La Fenêtre de contexte",
-  "monster.devourer": "Le Dévoreur de tokens",
+  "monster.architect": "L'Architecte",
 
   "class.knight": "chevalier",
   "class.dwarf": "nain",

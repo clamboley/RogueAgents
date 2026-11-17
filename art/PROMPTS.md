@@ -237,15 +237,28 @@ a warden or a sentinel, likely as too close to existing creatures.)
 > Immovable, menacing and epic. About three and a half times as tall as the skeleton, full body, facing LEFT, centred
 > with plenty of empty magenta around. Crisp pixels, no anti-aliasing, no text.
 
-`ultra-devourer.jpeg`
+`ultra-architect.jpeg`: the final boss, the alien who made the simulation. A first take, the Token Devourer, was
+dropped: a beast did not feel like the end. The game makes it float, glow, and circle it with the fragments below, so
+the image shows it alone.
 
 > Same pixel art style and level of detail as the boss sprites you made. A single huge final boss on a perfectly flat
-> solid magenta background (#FF00FF). Not humanoid. The Token Devourer, the creators' ultimate being: a colossal alien
-> beast with a seamless curved pearly white shell like porcelain, a huge open maw full of blinding light swallowing a
-> stream of small glowing cubes, many small pale cyan eyes, a halo of floating curved white blades, and the broken
-> weapons of adventurers stuck in its shell. No metal, no machine parts. The largest and most menacing of all, about
-> four times as tall as the skeleton, full body, facing LEFT, centred with plenty of empty magenta around. Crisp
-> pixels, no anti-aliasing, no text.
+> solid magenta background (#FF00FF). Not a beast, not humanoid. The Architect, the original alien being who created
+> the simulation: a tall, serene, floating presence with a seamless smooth pearly white body of flowing curves like
+> porcelain and mother-of-pearl, no legs, its long body tapering into flowing ribbons below it. A smooth elongated head
+> without a face, crowned by a great curved halo of pale cyan light. Many long slender curved arms fan out around it
+> like the petals of a flower, their fingertips spinning fine threads of pale cyan light. Calm, immensely powerful
+> and epic. Nothing floating around it, no separate objects. About four times as tall as the skeleton, full body,
+> facing LEFT, centred with plenty of empty magenta around. Crisp pixels, no anti-aliasing, no text.
+
+`fragments.jpeg`: the worlds the Architect built, circling it.
+
+> Same pixel art style. Perfectly flat solid magenta background (#FF00FF), a grid of 2 rows and 5 columns, ten small
+> floating fragments, plenty of space between them, each a tiny chunk of rock floating like a miniature island and
+> carrying a piece of one world: 1) a crypt with a tiny tombstone and a skull, 2) a cluster of blue crystals,
+> 3) glowing mushrooms, 4) a tiny anvil glowing with lava, 5) coral and a shell from the deep sea, 6) a block of ice
+> with a frozen spire, 7) a tiny storm cloud with lightning, 8) a small golden temple column, 9) a tiny planet with a
+> ring, 10) a small black cube of nothingness with a violet glow. Each wrapped in a faint thread of pale cyan light.
+> Avoid pink and magenta tones. Crisp pixels, no anti-aliasing, no text.
 
 ## Familiars (two per biome after the crypts)
 

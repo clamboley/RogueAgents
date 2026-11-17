@@ -792,7 +792,11 @@ export function createDungeon(options: {
       const y = monsterAt(mon.def, mon.scale)
       // A wide boss slides left just enough to stay inside the frame.
       const mx = monsterBox().x
+      const ring = orbiting(mon.def, mx + offset, y, time)
+      if (ring.length) aura(c, mx + offset, y, mon.def, time, mon.biome.light)
+      for (const o of ring) if (o.behind) drawArt(c, o.sprite, o.x, o.y, { alpha: 0.8 })
       const height = drawArt(c, mon.def.sprite, mx + offset, y, { scale: mon.scale, filter: mon.filter })
+      for (const o of ring) if (!o.behind) drawArt(c, o.sprite, o.x, o.y)
       // A hit veils the monster in white for a moment; it stays visible underneath, so a big boss never blinks out.
       if (flashUntil > at && !transition)
         drawArt(c, mon.def.sprite, mx + offset, y, { scale: mon.scale, flash: true, alpha: 0.5 })
@@ -868,6 +872,37 @@ export function createDungeon(options: {
       c.globalAlpha = 1
     }
     for (const u of list) if (u.emote && u.emote.until > at) bubble(c, u)
+  }
+
+  /** Where the pieces circling a monster are: a slow tilted ring around its middle, each piece bobbing on its own. */
+  function orbiting(def: MonsterDef, x: number, y: number, time: number) {
+    const size = spriteSize(def.sprite)
+    if (!def.orbit || !size) return []
+    const n = def.orbit.length
+    return def.orbit.map((sprite, i) => {
+      const a = time * 0.35 + (i / n) * Math.PI * 2
+      return {
+        sprite,
+        x: x + Math.cos(a) * size.w * 0.5,
+        y: y - size.h * 0.4 + Math.sin(a) * size.h * 0.14 + Math.round(Math.sin(time * 1.6 + i * 1.3) * 2),
+        behind: Math.sin(a) < 0,
+      }
+    })
+  }
+
+  /** A slow, breathing light behind a monster of power. */
+  function aura(c: CanvasRenderingContext2D, x: number, y: number, def: MonsterDef, time: number, light: string) {
+    const size = spriteSize(def.sprite)
+    if (!size) return
+    const cy = y - size.h * 0.55
+    const r = size.h * (0.75 + Math.sin(time * 1.2) * 0.06)
+    const glow = c.createRadialGradient(x, cy, 4, x, cy, r)
+    glow.addColorStop(0, `${light}${Math.round(70 + Math.sin(time * 1.2) * 20).toString(16)}`)
+    glow.addColorStop(1, `${light}00`)
+    c.globalCompositeOperation = "lighter"
+    c.fillStyle = glow
+    c.fillRect(x - r, cy - r, r * 2, r * 2)
+    c.globalCompositeOperation = "source-over"
   }
 
   /** A soft, flickering glow over a painted torch flame. */

@@ -29,6 +29,8 @@ export interface MonsterDef {
   key: string
   sprite: string
   hover?: number
+  /** Sprites that circle the monster on a tilted ring, passing behind it on the far side; it also glows. */
+  orbit?: string[]
   /** A biome boss's scale: 1 for its own art, 3 for a borrowed monster sprite. */
   scale?: number
 }
@@ -202,21 +204,33 @@ export const BIOMES: Biome[] = [
   ...["crypt", "crystal", "fungal", "forge", "abyss", "frost", "storm", "celestial", "space", "void"].map(byKey),
 ]
 
+/** The last ultra boss: the alien who made the simulation, floating among fragments of the worlds it built, one per
+ * biome. TODO: it borrows the celestial boss's sprite until it has its own. */
+const ARCHITECT: MonsterDef = {
+  key: "architect",
+  sprite: "archon",
+  hover: 6,
+  scale: 1,
+  orbit: ["crypt", "crystal", "fungal", "forge", "abyss", "frost", "storm", "celestial", "space", "void"].map(
+    (biome) => `fragment-${biome}`,
+  ),
+}
+
 /** Floors 101–105: outside the simulation. The guild has escaped the dungeon and meets the alien beings who made it;
- * five ultra bosses wait alone, one per floor. TODO: the last one still borrows a biome boss's sprite. */
+ * five ultra bosses wait alone, one per floor. */
 export const FINALE: Biome = {
   key: "heart",
   art: "heart",
   filter: "",
   light: "#bff6ff",
   monsters: [],
-  boss: { key: "devourer", sprite: "archon", scale: 1 },
+  boss: ARCHITECT,
   ultras: [
     { key: "ratelimiter", sprite: "ratelimiter", scale: 1 },
     { key: "hallucination", sprite: "hallucination", scale: 1 },
     { key: "infiniteloop", sprite: "infiniteloop", scale: 1 },
     { key: "contextwindow", sprite: "contextwindow", scale: 1 },
-    { key: "devourer", sprite: "archon", scale: 1 },
+    ARCHITECT,
   ],
 }
 

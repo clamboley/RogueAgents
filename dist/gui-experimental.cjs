@@ -162,19 +162,28 @@ const byKey = (key) => OWN.find((b) => b.key === key);
 const BIOMES = [
   ...["crypt", "crystal", "fungal", "forge", "abyss", "frost", "storm", "celestial", "space", "void"].map(byKey)
 ];
+const ARCHITECT = {
+  key: "architect",
+  sprite: "archon",
+  hover: 6,
+  scale: 1,
+  orbit: ["crypt", "crystal", "fungal", "forge", "abyss", "frost", "storm", "celestial", "space", "void"].map(
+    (biome2) => `fragment-${biome2}`
+  )
+};
 const FINALE = {
   key: "heart",
   art: "heart",
   filter: "",
   light: "#bff6ff",
   monsters: [],
-  boss: { key: "devourer", sprite: "archon", scale: 1 },
+  boss: ARCHITECT,
   ultras: [
     { key: "ratelimiter", sprite: "ratelimiter", scale: 1 },
     { key: "hallucination", sprite: "hallucination", scale: 1 },
     { key: "infiniteloop", sprite: "infiniteloop", scale: 1 },
     { key: "contextwindow", sprite: "contextwindow", scale: 1 },
-    { key: "devourer", sprite: "archon", scale: 1 }
+    ARCHITECT
   ]
 };
 const biome = (index) => BIOMES[index] ?? FINALE;
@@ -1491,7 +1500,11 @@ function createDungeon(options) {
     if (!ui.cleared && (!dying || transition)) {
       const y = monsterAt(mon.def, mon.scale);
       const mx = monsterBox().x;
+      const ring = orbiting(mon.def, mx + offset, y, time);
+      if (ring.length) aura(c, mx + offset, y, mon.def, time, mon.biome.light);
+      for (const o of ring) if (o.behind) drawArt(c, o.sprite, o.x, o.y, { alpha: 0.8 });
       const height = drawArt(c, mon.def.sprite, mx + offset, y, { scale: mon.scale, filter: mon.filter });
+      for (const o of ring) if (!o.behind) drawArt(c, o.sprite, o.x, o.y);
       if (flashUntil > at && !transition)
         drawArt(c, mon.def.sprite, mx + offset, y, { scale: mon.scale, flash: true, alpha: 0.5 });
       if (mon.crown && height)
@@ -1554,6 +1567,33 @@ function createDungeon(options) {
       c.globalAlpha = 1;
     }
     for (const u of list) if (u.emote && u.emote.until > at) bubble(c, u);
+  }
+  function orbiting(def, x, y, time) {
+    const size = spriteSize(def.sprite);
+    if (!def.orbit || !size) return [];
+    const n = def.orbit.length;
+    return def.orbit.map((sprite, i) => {
+      const a = time * 0.35 + i / n * Math.PI * 2;
+      return {
+        sprite,
+        x: x + Math.cos(a) * size.w * 0.5,
+        y: y - size.h * 0.4 + Math.sin(a) * size.h * 0.14 + Math.round(Math.sin(time * 1.6 + i * 1.3) * 2),
+        behind: Math.sin(a) < 0
+      };
+    });
+  }
+  function aura(c, x, y, def, time, light) {
+    const size = spriteSize(def.sprite);
+    if (!size) return;
+    const cy = y - size.h * 0.55;
+    const r = size.h * (0.75 + Math.sin(time * 1.2) * 0.06);
+    const glow = c.createRadialGradient(x, cy, 4, x, cy, r);
+    glow.addColorStop(0, `${light}${Math.round(70 + Math.sin(time * 1.2) * 20).toString(16)}`);
+    glow.addColorStop(1, `${light}00`);
+    c.globalCompositeOperation = "lighter";
+    c.fillStyle = glow;
+    c.fillRect(x - r, cy - r, r * 2, r * 2);
+    c.globalCompositeOperation = "source-over";
   }
   function torchGlow(c, x, y, time, light) {
     const flicker = 0.75 + Math.sin(time * 9 + x) * 0.12 + Math.sin(time * 23 + x * 0.3) * 0.08;
@@ -1842,7 +1882,7 @@ const en = {
   "monster.hallucination": "The Hallucination",
   "monster.infiniteloop": "The Infinite Loop",
   "monster.contextwindow": "The Context Window",
-  "monster.devourer": "The Token Devourer",
+  "monster.architect": "The Architect",
   "class.knight": "knight",
   "class.dwarf": "dwarf",
   "class.archer": "archer",
@@ -2008,7 +2048,7 @@ const fr = {
   "monster.hallucination": "L'Hallucination",
   "monster.infiniteloop": "La Boucle infinie",
   "monster.contextwindow": "La Fenêtre de contexte",
-  "monster.devourer": "Le Dévoreur de tokens",
+  "monster.architect": "L'Architecte",
   "class.knight": "chevalier",
   "class.dwarf": "nain",
   "class.archer": "archer",

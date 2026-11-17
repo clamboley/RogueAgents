@@ -55,14 +55,18 @@ def save_indexed(src: str, dest: str) -> None:
     and the file shrinks several times. Transparent pixels share palette index 0."""
     a = np.asarray(Image.open(src).convert("RGBA"))
     opaque = a[..., 3] > 0
-    colors, inverse = np.unique(a[..., :3][opaque].reshape(-1, 3), axis=0, return_inverse=True)
+    colors, inverse = np.unique(a[opaque].reshape(-1, 4), axis=0, return_inverse=True)
     if len(colors) > 255:
         Image.open(src).save(dest, optimize=True)
         return
     index = np.zeros(a.shape[:2], dtype=np.uint8)
     index[opaque] = inverse.reshape(-1) + 1
     img = Image.fromarray(index, "P")
-    img.putpalette([0, 0, 0, *colors.reshape(-1).tolist()])
+    img.putpalette([0, 0, 0, *colors[:, :3].reshape(-1).tolist()])
+    if (colors[:, 3] < 255).any():
+        # See-through colours, such as a wall of glass: an alpha for each palette entry.
+        img.save(dest, optimize=True, transparency=bytes([0, *colors[:, 3].tolist()]))
+        return
     if not opaque.all():
         img.info["transparency"] = 0
         img.save(dest, optimize=True, transparency=0)

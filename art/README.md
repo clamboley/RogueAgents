@@ -36,6 +36,7 @@ pure magenta is background, for sprites with pink glows), `--despill` (removes t
 `--flip` (mirrors a whole sheet), `--flip-only` (mirrors the sprites it names) and `--drop-far`. For familiars,
 `--pair-anchor` sets each `-attack` sprite's anchor by laying its `-idle` pose over it, so a breath or a beam does not
 move the body; `--hang` lets the attacks it names keep what hangs below the body (a bolt) under the feet line.
+`--glass` turns a large wall of pale light into see-through cyan glass, kept as a partly transparent palette entry.
 
 ## Adding art
 

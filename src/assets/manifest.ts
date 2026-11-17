@@ -153,6 +153,7 @@ import monsters_storm_stormknight from "./monsters-storm/stormknight.png"
 import monsters_storm_tempestharpy from "./monsters-storm/tempestharpy.png"
 import monsters_storm_windwraith from "./monsters-storm/windwraith.png"
 import monsters_storm_thunderwyvern from "./monsters-storm/thunderwyvern.png"
+import monsters_ultra_contextwindow_contextwindow from "./monsters-ultra-contextwindow/contextwindow.png"
 import monsters_ultra_hallucination_hallucination from "./monsters-ultra-hallucination/hallucination.png"
 import monsters_ultra_infiniteloop_infiniteloop from "./monsters-ultra-infiniteloop/infiniteloop.png"
 import monsters_ultra_ratelimiter_ratelimiter from "./monsters-ultra-ratelimiter/ratelimiter.png"
@@ -341,6 +342,7 @@ export const SPRITES: Record<string, SpriteAsset> = {
   "tempestharpy": { url: monsters_storm_tempestharpy, w: 48, h: 60, ax: 24.0 },
   "windwraith": { url: monsters_storm_windwraith, w: 55, h: 68, ax: 27.5 },
   "thunderwyvern": { url: monsters_storm_thunderwyvern, w: 67, h: 72, ax: 33.5 },
+  "contextwindow": { url: monsters_ultra_contextwindow_contextwindow, w: 263, h: 186, ax: 131.5 },
   "hallucination": { url: monsters_ultra_hallucination_hallucination, w: 291, h: 196, ax: 145.5 },
   "infiniteloop": { url: monsters_ultra_infiniteloop_infiniteloop, w: 297, h: 195, ax: 148.5 },
   "ratelimiter": { url: monsters_ultra_ratelimiter_ratelimiter, w: 285, h: 203, ax: 142.5 },

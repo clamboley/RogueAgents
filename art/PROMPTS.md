@@ -174,10 +174,10 @@ white, smooth and curved, like porcelain and mother-of-pearl: no screens, no mac
 take on a red cavern, then a futuristic lab, were dropped: the lab looked like a human spaceship.) The ultra bosses
 are a little taller than the biome bosses.
 
-Done: `bg-heart-1`, `bg-heart-2`, `ultra-ratelimiter`, `ultra-hallucination`, `ultra-infiniteloop`. Two first Context
-Windows were dropped: a porcelain mirror frame holding an eye, then a jellyfish holding memories. It is a hard limit:
-the keeper of the world's boundary. (Gemini refused a prompt calling it a warden or a sentinel, likely as too close
-to existing creatures.)
+Done: `bg-heart-1`, `bg-heart-2`, `ultra-ratelimiter`, `ultra-hallucination`, `ultra-infiniteloop`,
+`ultra-contextwindow`. Two first Context Windows were dropped: a porcelain mirror frame holding an eye, then a
+jellyfish holding memories. It is a hard limit: the keeper of the world's boundary. (Gemini refused a prompt calling it
+a warden or a sentinel, likely as too close to existing creatures.)
 
 `bg-heart-1.jpeg`
 

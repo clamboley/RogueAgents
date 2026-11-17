@@ -51,6 +51,25 @@ def place(idle: np.ndarray, attack: np.ndarray) -> tuple[int, int]:
     return at
 
 
+GLASS_RGB = (191, 246, 255)
+
+
+def glass_mask(src: np.ndarray) -> np.ndarray:
+    """Large areas of pale, cool light: a wall of light that Gemini drew see-through over the magenta, so it came out
+    lavender. Small bits of the same colour, like a glowing eye, stay solid."""
+    r, g, b = (src[..., i].astype(int) for i in range(3))
+    cool = (b - r > 40) & (b > 200) & (g > 150) & (r > 150)
+    H, W = cool.shape
+    small = cool[: H - H % STEP, : W - W % STEP].reshape(H // STEP, STEP, W // STEP, STEP).sum(axis=(1, 3)) >= 12
+    labels, _ = label(small)
+    sizes = np.bincount(labels.ravel())
+    sizes[0] = 0
+    big = np.isin(labels, np.nonzero(sizes > small.size * 0.0004)[0])
+    full = np.zeros_like(cool)
+    full[: big.shape[0] * STEP, : big.shape[1] * STEP] = big.repeat(STEP, axis=0).repeat(STEP, axis=1)
+    return full & cool
+
+
 def label(mask: np.ndarray) -> tuple[np.ndarray, int]:
     """8-connected component labels of a boolean mask."""
     labels = np.zeros(mask.shape, dtype=np.int32)
@@ -107,6 +126,11 @@ def main():
         default="",
         help="with --pair-anchor, these attacks keep what hangs below their body under the feet line, like a bolt",
     )
+    p.add_argument(
+        "--glass",
+        type=float,
+        help="turn large areas of pale cool light (a wall of light) into pale cyan glass of this opacity, e.g. 0.4",
+    )
     p.add_argument("--drop-far", type=int, help="drop pieces farther than this (source pixels) from the largest one")
     args = p.parse_args()
     global STRICT
@@ -114,6 +138,7 @@ def main():
     rows, cols = (int(v) for v in args.grid.lower().split("x"))
 
     src = np.asarray(Image.open(args.sheet).convert("RGB"))
+    glass = glass_mask(src) if args.glass else None
     fg = ~magenta_mask(src)
     H, W = fg.shape
     small = fg[: H - H % STEP, : W - W % STEP].reshape(H // STEP, STEP, W // STEP, STEP).sum(axis=(1, 3)) >= 3
@@ -183,6 +208,10 @@ def main():
                 colors=args.colors, method=Image.Quantize.LIBIMAGEQUANT, dither=Image.Dither.NONE
             )
             out = np.dstack([np.asarray(rgb.convert("RGB")), np.where(solid, 255, 0).astype(np.uint8)])
+            if glass is not None:
+                cell_glass = Image.fromarray((glass[y0:y1, x0:x1] & mask[y0:y1, x0:x1]).astype(np.uint8) * 255, "L")
+                see = (np.asarray(cell_glass.resize((w, h), Image.Resampling.BOX)) > 127) & solid
+                out[see] = (*GLASS_RGB, round(255 * args.glass))
             ys, xs = np.nonzero(solid)
             out = out[ys.min() : ys.max() + 1, xs.min() : xs.max() + 1]
             solid = solid[ys.min() : ys.max() + 1, xs.min() : xs.max() + 1]

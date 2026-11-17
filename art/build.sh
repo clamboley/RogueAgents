@@ -82,6 +82,9 @@ $S raw/ultra-hallucination.jpeg processed/monsters-ultra-hallucination --grid 1x
   --drop-far 40 --names hallucination
 $S raw/ultra-infiniteloop.jpeg processed/monsters-ultra-infiniteloop --grid 1x1 --scale 7.8 --colors 48 --despill \
   --drop-far 40 --names infiniteloop
+# The Context Window holds up a wall of light, drawn see-through over the magenta: --glass makes it pale cyan glass.
+$S raw/ultra-contextwindow.jpeg processed/monsters-ultra-contextwindow --grid 1x1 --scale 7.8 --colors 48 --despill \
+  --drop-far 40 --glass 0.5 --names contextwindow
 
 # Props.
 $S raw/crown.jpeg processed/crown --grid 1x1 --scale 22 --colors 24 --names crown

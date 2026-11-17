@@ -31,8 +31,8 @@ work your agents do while the app is closed is caught up when it opens.
 ## How it plays
 
 - **Floors and biomes.** Each floor holds four monsters and a boss, with health counted in damage. Every ten floors
-  the dungeon changes biome (crypts, crystal caves, fungal forest, volcanic forge, abyss, celestial palace, frozen
-  citadel, clockwork depths, arcane library, the void) and ends with a biome boss.
+  the dungeon changes biome (crypts, crystal caves, fungal forest, volcanic forge, abyss, frozen citadel, cloud
+  kingdom, celestial palace, outer space, the void) and ends with a biome boss.
 - **The heart of the dungeon.** Below floor 100 wait five ultra bosses, one per floor, alone. When the fifth falls,
   the dungeon is cleared, and the share line says how many days it took.
 - **Pace.** Each floor costs 10 % more than the last: about 5 M damage clears the crypts, 900 M the first six biomes,

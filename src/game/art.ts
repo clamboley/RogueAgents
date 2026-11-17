@@ -54,7 +54,8 @@ const CRYPT_MONSTERS = (keys: [string, string, string, string]): MonsterDef[] =>
   { key: keys[3], sprite: "bat", hover: 26 },
 ]
 
-export const BIOMES: Biome[] = [
+/** The biomes with their own art; `BIOMES` puts them in the order the guild meets them. */
+const OWN: Biome[] = [
   {
     key: "crypt",
     art: "crypt",
@@ -116,6 +117,19 @@ export const BIOMES: Biome[] = [
     boss: { key: "leviathan", sprite: "leviathan", scale: 1 },
   },
   {
+    key: "frost",
+    art: "frost",
+    filter: "",
+    light: "#8fd8ff",
+    monsters: [
+      { key: "icebound", sprite: "icebound" },
+      { key: "frostwolf", sprite: "frostwolf" },
+      { key: "rimewisp", sprite: "rimewisp", hover: 14 },
+      { key: "snowowl", sprite: "snowowl", hover: 26 },
+    ],
+    boss: { key: "frostwyrm", sprite: "frostwyrm", scale: 1 },
+  },
+  {
     key: "celestial",
     art: "celestial",
     filter: "",
@@ -137,15 +151,17 @@ const placeholder = (key: string, from: Biome, filter: string, light: string): B
   filter,
   light,
 })
-const byKey = (key: string) => BIOMES.find((b) => b.key === key)!
+const byKey = (key: string) => OWN.find((b) => b.key === key)!
 
-// Floors 61–100. TODO: their own art (rooms, monsters, biome boss); until then they borrow an earlier biome's.
-BIOMES.push(
-  placeholder("frost", byKey("crystal"), "saturate(0.35) brightness(1.25) hue-rotate(-20deg)", "#d4f1ff"),
-  placeholder("clockwork", byKey("forge"), "sepia(0.7) saturate(0.9) hue-rotate(-10deg)", "#ffc46b"),
-  placeholder("library", byKey("crypt"), "hue-rotate(230deg) saturate(1.2)", "#c9a6ff"),
+/** The ten biomes, one per ten floors: down to the abyss, then up through the ice and the sky, out into space and the
+ * void. TODO: the clouds, space and the void still borrow recoloured art. */
+export const BIOMES: Biome[] = [
+  ...["crypt", "crystal", "fungal", "forge", "abyss", "frost"].map(byKey),
+  placeholder("clouds", byKey("celestial"), "saturate(0.6) brightness(1.15) hue-rotate(-25deg)", "#fff4d6"),
+  byKey("celestial"),
+  placeholder("space", byKey("abyss"), "hue-rotate(50deg) saturate(0.7) brightness(0.8)", "#9fb8ff"),
   placeholder("void", byKey("abyss"), "hue-rotate(80deg) saturate(0.8) brightness(0.65)", "#b77cff"),
-)
+]
 
 /** Floors 101–105: the heart of the dungeon, where five ultra bosses wait alone, one per floor. TODO: their own art. */
 export const FINALE: Biome = {

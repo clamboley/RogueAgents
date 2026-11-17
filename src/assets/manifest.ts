@@ -9,6 +9,8 @@ import bg_crystal_1 from "./bg/crystal-1.png"
 import bg_crystal_2 from "./bg/crystal-2.png"
 import bg_forge_1 from "./bg/forge-1.png"
 import bg_forge_2 from "./bg/forge-2.png"
+import bg_frost_1 from "./bg/frost-1.png"
+import bg_frost_2 from "./bg/frost-2.png"
 import bg_fungal_1 from "./bg/fungal-1.png"
 import bg_fungal_2 from "./bg/fungal-2.png"
 import campfire_campfire_0 from "./campfire/campfire-0.png"
@@ -70,6 +72,7 @@ import monsters_boss_celestial_archon from "./monsters-boss-celestial/archon.png
 import monsters_boss_crypt_lich from "./monsters-boss-crypt/lich.png"
 import monsters_boss_crystal_prism from "./monsters-boss-crystal/prism.png"
 import monsters_boss_forge_forgeking from "./monsters-boss-forge/forgeking.png"
+import monsters_boss_frost_frostwyrm from "./monsters-boss-frost/frostwyrm.png"
 import monsters_boss_fungal_mycelord from "./monsters-boss-fungal/mycelord.png"
 import monsters_celestial_sentinel from "./monsters-celestial/sentinel.png"
 import monsters_celestial_griffin from "./monsters-celestial/griffin.png"
@@ -87,6 +90,10 @@ import monsters_forge_ashwraith from "./monsters-forge/ashwraith.png"
 import monsters_forge_cinderhound from "./monsters-forge/cinderhound.png"
 import monsters_forge_ember from "./monsters-forge/ember.png"
 import monsters_forge_magmaw from "./monsters-forge/magmaw.png"
+import monsters_frost_icebound from "./monsters-frost/icebound.png"
+import monsters_frost_frostwolf from "./monsters-frost/frostwolf.png"
+import monsters_frost_rimewisp from "./monsters-frost/rimewisp.png"
+import monsters_frost_snowowl from "./monsters-frost/snowowl.png"
 import monsters_fungal_mossbones from "./monsters-fungal/mossbones.png"
 import monsters_fungal_boar from "./monsters-fungal/boar.png"
 import monsters_fungal_sporeling from "./monsters-fungal/sporeling.png"
@@ -129,6 +136,7 @@ export const BACKGROUNDS: Record<string, Background[]> = {
   crypt: [{ url: bg_crypt_1, torches: [[98, 70], [381, 70]] }, { url: bg_crypt_2, torches: [[110, 87], [369, 87]] }],
   crystal: [{ url: bg_crystal_1, torches: [[112, 97], [370, 98]] }, { url: bg_crystal_2, torches: [[112, 98]] }],
   forge: [{ url: bg_forge_1, torches: [[101, 104], [377, 103]] }, { url: bg_forge_2, torches: [[106, 105], [378, 103]] }],
+  frost: [{ url: bg_frost_1, torches: [[80, 159], [398, 160]] }, { url: bg_frost_2, torches: [[81, 158], [399, 159]] }],
   fungal: [{ url: bg_fungal_1, torches: [[51, 118], [425, 115]] }, { url: bg_fungal_2, torches: [[52, 118], [425, 115]] }],
 }
 
@@ -192,6 +200,7 @@ export const SPRITES: Record<string, SpriteAsset> = {
   "lich": { url: monsters_boss_crypt_lich, w: 154, h: 177, ax: 77.0 },
   "prism": { url: monsters_boss_crystal_prism, w: 172, h: 175, ax: 86.0 },
   "forgeking": { url: monsters_boss_forge_forgeking, w: 203, h: 181, ax: 101.5 },
+  "frostwyrm": { url: monsters_boss_frost_frostwyrm, w: 239, h: 181, ax: 119.5 },
   "mycelord": { url: monsters_boss_fungal_mycelord, w: 190, h: 181, ax: 95.0 },
   "sentinel": { url: monsters_celestial_sentinel, w: 75, h: 61, ax: 37.5 },
   "griffin": { url: monsters_celestial_griffin, w: 56, h: 65, ax: 28.0 },
@@ -209,6 +218,10 @@ export const SPRITES: Record<string, SpriteAsset> = {
   "cinderhound": { url: monsters_forge_cinderhound, w: 74, h: 67, ax: 37.0 },
   "ember": { url: monsters_forge_ember, w: 48, h: 50, ax: 24.0 },
   "magmaw": { url: monsters_forge_magmaw, w: 72, h: 71, ax: 36.0 },
+  "icebound": { url: monsters_frost_icebound, w: 56, h: 64, ax: 28.0 },
+  "frostwolf": { url: monsters_frost_frostwolf, w: 78, h: 43, ax: 39.0 },
+  "rimewisp": { url: monsters_frost_rimewisp, w: 41, h: 44, ax: 20.5 },
+  "snowowl": { url: monsters_frost_snowowl, w: 54, h: 54, ax: 27.0 },
   "mossbones": { url: monsters_fungal_mossbones, w: 63, h: 66, ax: 31.5 },
   "boar": { url: monsters_fungal_boar, w: 71, h: 55, ax: 35.5 },
   "sporeling": { url: monsters_fungal_sporeling, w: 50, h: 66, ax: 25.0 },

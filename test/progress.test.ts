@@ -1,7 +1,10 @@
 import { describe, expect, it } from "vitest"
+import { BIOMES, FINALE, biome } from "../src/game/art"
 import {
   BRANCHES,
   CONTEXT_WEIGHT,
+  DUNGEON_COST,
+  FINAL_FLOOR,
   MAX_RANK,
   ROOM_SHARES,
   biomeOf,
@@ -33,7 +36,7 @@ describe("floors", () => {
   })
 
   it("lands exactly on the start of every floor, despite float rounding", () => {
-    for (let f = 1; f <= 120; f++) {
+    for (let f = 1; f <= FINAL_FLOOR; f++) {
       expect(position(costBefore(f)).floor).toBe(f)
       expect(position(costBefore(f + 1) - 1).floor).toBe(f)
     }
@@ -55,14 +58,45 @@ describe("floors", () => {
   })
 
   it("keeps the comparison points the docs promise", () => {
-    expect(costBefore(11) / 1e6).toBeCloseTo(1.0, 0)
-    expect(costBefore(61) / 1e9).toBeCloseTo(1.5, 0)
+    expect(costBefore(11) / 1e6).toBeCloseTo(4.8, 1)
+    expect(costBefore(61) / 1e6).toBeCloseTo(910, -1)
+    expect(costBefore(101) / 1e9).toBeCloseTo(41, 0)
+    expect(DUNGEON_COST / 1e9).toBeCloseTo(67, 0)
+  })
+
+  it("gives each floor after the last biome to one ultra boss, alone", () => {
+    for (let f = 101; f <= FINAL_FLOOR; f++) {
+      expect(position(costBefore(f) + 1)).toMatchObject({ floor: f, boss: true, hp: floorCost(f), cleared: false })
+      expect(position(costBefore(f + 1) - 1)).toMatchObject({ floor: f, cleared: false })
+    }
+  })
+
+  it("ends when the last ultra boss falls, and stays there", () => {
+    for (const d of [DUNGEON_COST, DUNGEON_COST * 10]) {
+      const p = position(d)
+      expect(p).toMatchObject({ floor: FINAL_FLOOR, boss: true, cleared: true })
+      expect(p.dealt).toBe(p.hp)
+    }
+  })
+})
+
+describe("biomes", () => {
+  it("has ten biomes for floors 1–100, then the finale with one ultra boss per floor", () => {
+    expect(BIOMES).toHaveLength(10)
+    expect(biome(biomeOf(100))).toBe(BIOMES[9])
+    expect(biome(biomeOf(101))).toBe(FINALE)
+    expect(biome(biomeOf(FINAL_FLOOR))).toBe(FINALE)
+    expect(FINALE.ultras).toHaveLength(FINAL_FLOOR - 100)
   })
 })
 
 describe("talent points", () => {
-  it("gives one point every two floors cleared", () => {
-    expect([1, 2, 3, 4, 5, 61, 81].map(talentPoints)).toEqual([0, 0, 1, 1, 2, 30, 40])
+  it("gives one point every five floors cleared, 20 at the end of the last biome and no more", () => {
+    expect([1, 5, 6, 10, 11, 51, 100, 101, 105].map(talentPoints)).toEqual([0, 0, 1, 1, 2, 10, 19, 20, 20])
+  })
+
+  it("never fills more than half of the tree", () => {
+    expect(talentPoints(FINAL_FLOOR) * 2).toBe(BRANCHES.length * MAX_RANK)
   })
 
   it("counts what a tree spends", () => {

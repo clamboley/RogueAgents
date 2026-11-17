@@ -97,17 +97,32 @@ const BIOMES = [
     boss: { key: "archon", sprite: "archon", scale: 1 }
   }
 ];
-function biome(index) {
-  const base = BIOMES[index % BIOMES.length];
-  const corrupted = index >= BIOMES.length;
-  if (!corrupted) return { ...base, corrupted };
-  return {
-    ...base,
-    corrupted,
-    filter: `${base.filter} hue-rotate(45deg) saturate(1.3) brightness(0.7)`.trim(),
-    light: "#ff5cc8"
-  };
-}
+const placeholder = (key, from, filter, light) => ({
+  ...from,
+  key,
+  filter,
+  light
+});
+const byKey = (key) => BIOMES.find((b) => b.key === key);
+BIOMES.push(
+  placeholder("frost", byKey("crystal"), "saturate(0.35) brightness(1.25) hue-rotate(-20deg)", "#d4f1ff"),
+  placeholder("clockwork", byKey("forge"), "sepia(0.7) saturate(0.9) hue-rotate(-10deg)", "#ffc46b"),
+  placeholder("library", byKey("crypt"), "hue-rotate(230deg) saturate(1.2)", "#c9a6ff"),
+  placeholder("void", byKey("abyss"), "hue-rotate(80deg) saturate(0.8) brightness(0.65)", "#b77cff")
+);
+const FINALE = {
+  ...placeholder("heart", byKey("celestial"), "hue-rotate(250deg) saturate(1.4) brightness(0.55)", "#ff6b9a"),
+  monsters: [],
+  boss: { key: "devourer", sprite: "archon", scale: 1 },
+  ultras: [
+    { key: "ratelimiter", sprite: "forgeking", scale: 1 },
+    { key: "hallucination", sprite: "mycelord", scale: 1 },
+    { key: "infiniteloop", sprite: "leviathan", scale: 1 },
+    { key: "contextwindow", sprite: "prism", scale: 1 },
+    { key: "devourer", sprite: "archon", scale: 1 }
+  ]
+};
+const biome = (index) => BIOMES[index] ?? FINALE;
 const CLASSES = ["knight", "dwarf", "archer", "wizard", "rogue", "cleric", "barbarian", "necromancer"];
 const RANGED = ["archer", "wizard", "necromancer"];
 const CLOTHES = [
@@ -466,27 +481,36 @@ function background(set, seed, filter) {
   const canvas = filter ? filtered(name, bg.url, filter) : variant(name, bg.url, (c, img) => c.drawImage(img, 0, 0));
   return { canvas, torches: bg.torches };
 }
-const FLOOR_BASE = 5e4;
-const FLOOR_GROWTH = 1.15;
+const FLOOR_BASE = 3e5;
+const FLOOR_GROWTH = 1.1;
 const ROOM_SHARES = [0.15, 0.15, 0.15, 0.15, 0.4];
 const BOSS_ROOM = ROOM_SHARES.length - 1;
 const FLOORS_PER_BIOME = 10;
+const LAST_BIOME_FLOOR = 100;
+const FINAL_FLOOR = 105;
 const floorCost = (floor) => FLOOR_BASE * FLOOR_GROWTH ** (floor - 1);
 const costBefore = (floor) => FLOOR_BASE * (FLOOR_GROWTH ** (floor - 1) - 1) / (FLOOR_GROWTH - 1);
+const DUNGEON_COST = costBefore(FINAL_FLOOR + 1);
+const isUltra = (floor) => floor > LAST_BIOME_FLOOR;
 function position(damage) {
   const d = Math.max(0, damage);
+  if (d >= DUNGEON_COST) {
+    const hp = floorCost(FINAL_FLOOR);
+    return { floor: FINAL_FLOOR, room: BOSS_ROOM, boss: true, hp, dealt: hp, cleared: true };
+  }
   let floor = Math.max(1, Math.floor(Math.log(1 + d * (FLOOR_GROWTH - 1) / FLOOR_BASE) / Math.log(FLOOR_GROWTH)) + 1);
   while (floor > 1 && costBefore(floor) > d) floor -= 1;
   while (costBefore(floor + 1) <= d) floor += 1;
   const cost = floorCost(floor);
   let within = d - costBefore(floor);
+  if (isUltra(floor)) return { floor, room: BOSS_ROOM, boss: true, hp: cost, dealt: within, cleared: false };
   for (let room = 0; room < ROOM_SHARES.length; room++) {
     const hp = cost * ROOM_SHARES[room];
     if (within < hp || room === BOSS_ROOM)
-      return { floor, room, boss: room === BOSS_ROOM, hp, dealt: Math.min(within, hp) };
+      return { floor, room, boss: room === BOSS_ROOM, hp, dealt: Math.min(within, hp), cleared: false };
     within -= hp;
   }
-  return { floor, room: BOSS_ROOM, boss: true, hp: cost * ROOM_SHARES[BOSS_ROOM], dealt: 0 };
+  return { floor, room: BOSS_ROOM, boss: true, hp: cost * ROOM_SHARES[BOSS_ROOM], dealt: 0, cleared: false };
 }
 const biomeOf = (floor) => Math.floor((floor - 1) / FLOORS_PER_BIOME);
 const CONTEXT_WEIGHT = 0.05;
@@ -517,7 +541,7 @@ const emptyTalents = () => ({
   thrift: 0,
   artisan: 0
 });
-const talentPoints = (floor) => Math.floor((floor - 1) / 2);
+const talentPoints = (floor) => Math.floor((Math.min(floor, LAST_BIOME_FLOOR + 1) - 1) / 5);
 const spentPoints = (t) => BRANCHES.reduce((sum, b) => sum + t[b], 0);
 const PER_RANK = {
   swarm: 6,
@@ -708,7 +732,9 @@ const freshSave = () => ({
   talents: emptyTalents(),
   synced: false,
   seenTokens: 0,
-  seenWeighted: 0
+  seenWeighted: 0,
+  startedAt: 0,
+  clearedAt: 0
 });
 const TOOL_KINDS = {
   read: "lore",
@@ -767,9 +793,10 @@ function createDungeon(options) {
     points: talentPoints(pos0.floor),
     talents: { ...state.talents },
     resting: true,
+    cleared: pos0.cleared,
     status: "idle",
     demo: false,
-    banner: { floor: 0, at: 0 }
+    banner: { floor: 0, at: 0, cleared: false }
   });
   function persist() {
     if (state !== real) return;
@@ -779,8 +806,9 @@ function createDungeon(options) {
   function monsterOf(floor, room2, boss) {
     const b = biome(biomeOf(floor));
     const r = rng(floor * 31 + room2);
-    const bigBoss = boss && floor % 10 === 0;
-    const def = bigBoss ? b.boss : b.monsters[Math.floor(r() * b.monsters.length)];
+    const ultra = isUltra(floor);
+    const bigBoss = boss && (ultra || floor % 10 === 0);
+    const def = ultra ? b.ultras?.[floor - LAST_BIOME_FLOOR - 1] ?? b.boss : bigBoss ? b.boss : b.monsters[Math.floor(r() * b.monsters.length)];
     const name = bigBoss ? t(`monster.${def.key}`) : boss ? t("monster.champion", { name: t(`monster.${def.key}`) }) : t(`monster.${def.key}`);
     return {
       def,
@@ -794,7 +822,9 @@ function createDungeon(options) {
   function refresh() {
     const p = position(state.damage);
     const mon = monsterOf(p.floor, p.room, p.boss);
-    if (p.floor !== ui.floor && ui.floor) setUi("banner", { floor: p.floor, at: now() });
+    if (p.floor !== ui.floor && ui.floor) setUi("banner", { floor: p.floor, at: now(), cleared: false });
+    if (p.cleared && !ui.cleared && ui.floor) setUi("banner", { floor: p.floor, at: now(), cleared: true });
+    if (p.cleared && state === real && !real.clearedAt) real.clearedAt = now();
     setUi({
       floor: p.floor,
       room: p.room,
@@ -802,7 +832,8 @@ function createDungeon(options) {
       hp: p.hp,
       dealt: p.dealt,
       monster: mon.name,
-      biome: t(`biome.${mon.biome.key}`) + (mon.biome.corrupted ? ` · ${t("biome.corrupted")}` : ""),
+      biome: t(`biome.${mon.biome.key}`),
+      cleared: p.cleared,
       tokens: state.tokens,
       nextFloorIn: costBefore(p.floor + 1) - state.damage,
       points: talentPoints(p.floor),
@@ -880,7 +911,7 @@ function createDungeon(options) {
   function counts() {
     const active = [...units.values()].filter((u) => now() - u.lastActive < ACTIVE_MS);
     shownUnits();
-    setUi({ resting: !active.some((u) => u.executing) });
+    setUi({ resting: position(state.damage).cleared || !active.some((u) => u.executing) });
   }
   function shownUnits() {
     const adventurers = activeAdventurers().sort((a, b) => b.lastActive - a.lastActive).slice(0, MAX_SHOWN).sort((a, b) => a.joined - b.joined);
@@ -1080,6 +1111,7 @@ function createDungeon(options) {
     if (state !== real) return;
     const seen = real.synced ? { tokens: real.seenTokens, weighted: real.seenWeighted } : void 0;
     const { mark, damage, tokens } = settle(seen, s.tokens);
+    if (!real.synced) real.startedAt = now();
     real.damage += damage;
     real.tokens += tokens;
     real.seenTokens = mark.tokens;
@@ -1106,6 +1138,11 @@ function createDungeon(options) {
       }
       const pending = u.queued + u.queuedBig;
       if (pending <= 0 || at < u.nextAttack) continue;
+      if (ui.cleared) {
+        u.queued = 0;
+        u.queuedBig = 0;
+        continue;
+      }
       const big = u.queuedBig > 0;
       const amount = pending;
       u.queued = 0;
@@ -1238,7 +1275,7 @@ function createDungeon(options) {
         alpha: 1 - dk
       });
     }
-    if (!dying || transition) {
+    if (!ui.cleared && (!dying || transition)) {
       const y = monsterAt(mon.def, mon.scale);
       const mx = monsterBox().x;
       const height = drawArt(c, mon.def.sprite, mx + offset, y, { scale: mon.scale, filter: mon.filter });
@@ -1443,9 +1480,10 @@ function createDungeon(options) {
     const p = position(state.damage);
     const b = biome(biomeOf(p.floor));
     const top = BRANCHES.filter((br) => state.talents[br] > 0).sort((a, b2) => state.talents[b2] - state.talents[a]).slice(0, 3).map((br) => `${t(`branch.${br}`)} ${state.talents[br]}`);
+    const days = Math.max(1, Math.round((state.clearedAt - state.startedAt) / 864e5));
     return [
       "Rogue Agents",
-      t("share.floor", { floor: p.floor, biome: t(`biome.${b.key}`) }),
+      p.cleared && state.startedAt && state.clearedAt ? t("share.cleared", { days }) : p.cleared ? t("share.clearedPlain") : t("share.floor", { floor: p.floor, biome: t(`biome.${b.key}`) }),
       t("share.tokens", { tokens: formatTokens(state.tokens) }),
       ...top.length ? [top.join(" / ")] : []
     ].join(" · ");
@@ -1473,7 +1511,7 @@ const en = {
   title: "Rogue Agents",
   tagline: "every token strikes the dungeon",
   "command.open": "Open Rogue Agents",
-  "command.description": "An endless dungeon your tokens fight through",
+  "command.description": "A dungeon your tokens fight through, down to its heart",
   "menu.open": "Rogue Agents",
   "status.idle": "Not connected",
   "status.connecting": "Connecting…",
@@ -1484,9 +1522,11 @@ const en = {
   "hud.room": "Room {{room}}/4",
   "hud.boss": "Boss",
   "hud.tokens": "{{tokens}} tokens spent",
-  "hud.next": "Next floor in {{tokens}} tokens",
-  "hud.hp": "{{left}} / {{total}} tokens",
+  "hud.next": "Next floor in {{tokens}} damage",
+  "hud.cleared": "Dungeon cleared",
+  "hud.hp": "{{left}} / {{total}} HP",
   "banner.floor": "Floor {{floor}}",
+  "banner.cleared": "Victory!",
   "tab.talents": "Talents",
   "talents.title": "Guild talents",
   "talents.banner": "Talents",
@@ -1528,7 +1568,11 @@ const en = {
   "biome.forge": "Volcanic forge",
   "biome.abyss": "The abyss",
   "biome.celestial": "Celestial palace",
-  "biome.corrupted": "corrupted",
+  "biome.frost": "Frozen citadel",
+  "biome.clockwork": "Clockwork depths",
+  "biome.library": "Arcane library",
+  "biome.void": "The void",
+  "biome.heart": "Heart of the dungeon",
   "monster.champion": "{{name}} champion",
   "monster.skeleton": "Skeleton",
   "monster.rat": "Crypt rat",
@@ -1560,6 +1604,11 @@ const en = {
   "monster.sentinel": "Sentinel",
   "monster.starbat": "Star bat",
   "monster.archon": "The Archon",
+  "monster.ratelimiter": "The Rate Limiter",
+  "monster.hallucination": "The Hallucination",
+  "monster.infiniteloop": "The Infinite Loop",
+  "monster.contextwindow": "The Context Window",
+  "monster.devourer": "The Token Devourer",
   "class.knight": "knight",
   "class.dwarf": "dwarf",
   "class.archer": "archer",
@@ -1578,6 +1627,8 @@ const en = {
   "species.wisp": "wisp",
   "share.floor": "Floor {{floor}} ({{biome}})",
   "share.tokens": "{{tokens}} tokens",
+  "share.cleared": "Dungeon cleared in {{days}} days",
+  "share.clearedPlain": "Dungeon cleared",
   share: "Copy my progress",
   "share.done": "Progress copied",
   "demo.on": "Demo",
@@ -1587,7 +1638,7 @@ const fr = {
   title: "Rogue Agents",
   tagline: "chaque token frappe le donjon",
   "command.open": "Ouvrir Rogue Agents",
-  "command.description": "Un donjon infini que tes tokens affrontent",
+  "command.description": "Un donjon que tes tokens affrontent, jusqu'à son cœur",
   "menu.open": "Rogue Agents",
   "status.idle": "Non connecté",
   "status.connecting": "Connexion…",
@@ -1598,9 +1649,11 @@ const fr = {
   "hud.room": "Salle {{room}}/4",
   "hud.boss": "Boss",
   "hud.tokens": "{{tokens}} tokens dépensés",
-  "hud.next": "Étage suivant dans {{tokens}} tokens",
-  "hud.hp": "{{left}} / {{total}} tokens",
+  "hud.next": "Étage suivant dans {{tokens}} dégâts",
+  "hud.cleared": "Donjon vaincu",
+  "hud.hp": "{{left}} / {{total}} PV",
   "banner.floor": "Étage {{floor}}",
+  "banner.cleared": "Victoire !",
   "tab.talents": "Talents",
   "talents.title": "Talents de la guilde",
   "talents.banner": "Talents",
@@ -1642,7 +1695,11 @@ const fr = {
   "biome.forge": "Forge volcanique",
   "biome.abyss": "Abysses",
   "biome.celestial": "Palais céleste",
-  "biome.corrupted": "corrompu",
+  "biome.frost": "Citadelle gelée",
+  "biome.clockwork": "Profondeurs mécaniques",
+  "biome.library": "Bibliothèque arcanique",
+  "biome.void": "Le néant",
+  "biome.heart": "Cœur du donjon",
   "monster.champion": "{{name}} champion",
   "monster.skeleton": "Squelette",
   "monster.rat": "Rat des cryptes",
@@ -1674,6 +1731,11 @@ const fr = {
   "monster.sentinel": "Sentinelle",
   "monster.starbat": "Chauve-souris stellaire",
   "monster.archon": "L'Archonte",
+  "monster.ratelimiter": "Le Limiteur de débit",
+  "monster.hallucination": "L'Hallucination",
+  "monster.infiniteloop": "La Boucle infinie",
+  "monster.contextwindow": "La Fenêtre de contexte",
+  "monster.devourer": "Le Dévoreur de tokens",
   "class.knight": "chevalier",
   "class.dwarf": "nain",
   "class.archer": "archer",
@@ -1692,12 +1754,14 @@ const fr = {
   "species.wisp": "feu follet",
   "share.floor": "Étage {{floor}} ({{biome}})",
   "share.tokens": "{{tokens}} tokens",
+  "share.cleared": "Donjon vaincu en {{days}} jours",
+  "share.clearedPlain": "Donjon vaincu",
   share: "Copier ma progression",
   "share.done": "Progression copiée",
   "demo.on": "Démo",
   "demo.off": "Arrêter la démo"
 };
-var _tmpl$$1 = /* @__PURE__ */ web.template(`<div class=ra>`), _tmpl$2 = /* @__PURE__ */ web.template(`<img class=ra-crown alt>`), _tmpl$3 = /* @__PURE__ */ web.template(`<span class="ra-medallion ra-badge"data-free>`), _tmpl$4 = /* @__PURE__ */ web.template(`<div class=ra-banner><span class=ra-ribbon></span><em>`), _tmpl$5 = /* @__PURE__ */ web.template(`<div class=ra-stage><canvas></canvas><div class="ra-plaque ra-where"><img class=ra-status-gem><span class=ra-where-text><strong> · </strong><span></span></span></div><div class=ra-foe><div class="ra-plaque ra-foe-name"><span></span></div><div class=ra-bar><span class=ra-bar-fill><i></i></span><span class=ra-bar-text></span></div></div><div class=ra-actions><span class=ra-talents-button></span><span class=ra-small-buttons>`), _tmpl$6 = /* @__PURE__ */ web.template(`<button><img alt>`), _tmpl$7 = /* @__PURE__ */ web.template(`<div class=ra-menu role=dialog><header class=ra-menu-head><span class=ra-medallion></span><h2 class=ra-ribbon></h2></header><div class=ra-menu-grid></div><footer class=ra-scroll><div class=ra-scroll-text><div class=ra-scroll-title><strong></strong><em></em></div><span> </span></div><div class=ra-scroll-buttons>`), _tmpl$8 = /* @__PURE__ */ web.template(`<button class=ra-talent><img alt><span class=ra-gems>`), _tmpl$9 = /* @__PURE__ */ web.template(`<img alt>`);
+var _tmpl$$1 = /* @__PURE__ */ web.template(`<div class=ra>`), _tmpl$2 = /* @__PURE__ */ web.template(`<img class=ra-crown alt>`), _tmpl$3 = /* @__PURE__ */ web.template(`<div class=ra-foe><div class="ra-plaque ra-foe-name"><span></span></div><div class=ra-bar><span class=ra-bar-fill><i></i></span><span class=ra-bar-text>`), _tmpl$4 = /* @__PURE__ */ web.template(`<span class="ra-medallion ra-badge"data-free>`), _tmpl$5 = /* @__PURE__ */ web.template(`<div class=ra-banner><span class=ra-ribbon></span><em>`), _tmpl$6 = /* @__PURE__ */ web.template(`<div class=ra-stage><canvas></canvas><div class="ra-plaque ra-where"><img class=ra-status-gem><span class=ra-where-text><strong></strong><span></span></span></div><div class=ra-actions><span class=ra-talents-button></span><span class=ra-small-buttons>`), _tmpl$7 = /* @__PURE__ */ web.template(`<button><img alt>`), _tmpl$8 = /* @__PURE__ */ web.template(`<div class=ra-menu role=dialog><header class=ra-menu-head><span class=ra-medallion></span><h2 class=ra-ribbon></h2></header><div class=ra-menu-grid></div><footer class=ra-scroll><div class=ra-scroll-text><div class=ra-scroll-title><strong></strong><em></em></div><span> </span></div><div class=ra-scroll-buttons>`), _tmpl$9 = /* @__PURE__ */ web.template(`<button class=ra-talent><img alt><span class=ra-gems>`), _tmpl$0 = /* @__PURE__ */ web.template(`<img alt>`);
 const BRANCH_ICONS = {
   swarm: "swarm",
   legion: "people",
@@ -1760,57 +1824,81 @@ function Stage(props) {
   const left = () => Math.max(0, ui.hp - ui.dealt);
   const free = () => Math.max(0, ui.points - spentPoints(ui.talents));
   return (() => {
-    var _el$2 = _tmpl$5(), _el$3 = _el$2.firstChild, _el$4 = _el$3.nextSibling, _el$5 = _el$4.firstChild, _el$6 = _el$5.nextSibling, _el$7 = _el$6.firstChild, _el$8 = _el$7.firstChild, _el$9 = _el$7.nextSibling, _el$0 = _el$4.nextSibling, _el$1 = _el$0.firstChild, _el$11 = _el$1.firstChild, _el$12 = _el$1.nextSibling, _el$13 = _el$12.firstChild, _el$14 = _el$13.firstChild, _el$15 = _el$13.nextSibling, _el$16 = _el$0.nextSibling, _el$17 = _el$16.firstChild, _el$19 = _el$17.nextSibling;
+    var _el$2 = _tmpl$6(), _el$3 = _el$2.firstChild, _el$4 = _el$3.nextSibling, _el$5 = _el$4.firstChild, _el$6 = _el$5.nextSibling, _el$7 = _el$6.firstChild, _el$8 = _el$7.nextSibling, _el$15 = _el$4.nextSibling, _el$16 = _el$15.firstChild, _el$18 = _el$16.nextSibling;
     _el$2.$$keydown = (e) => e.key === "Escape" && setMenu(false);
     web.use(setCanvas, _el$3);
     web.setAttribute(_el$3, "width", W * 2);
     web.setAttribute(_el$3, "height", H * 2);
-    web.insert(_el$7, () => t("hud.floor", {
-      floor: ui.floor
-    }), _el$8);
-    web.insert(_el$7, (() => {
-      var _c$ = web.memo(() => !!ui.boss);
-      return () => _c$() ? t("hud.boss") : t("hud.room", {
-        room: ui.room + 1
-      });
-    })(), null);
-    web.insert(_el$9, () => t("hud.tokens", {
-      tokens: formatTokens(ui.tokens)
-    }));
-    web.insert(_el$1, web.createComponent(solidJs.Show, {
+    web.insert(_el$7, web.createComponent(solidJs.Show, {
       get when() {
-        return ui.boss;
+        return !ui.cleared;
+      },
+      get fallback() {
+        return t("hud.cleared");
       },
       get children() {
-        var _el$10 = _tmpl$2();
-        web.effect(() => web.setAttribute(_el$10, "src", art("crown")));
-        return _el$10;
+        return [web.memo(() => t("hud.floor", {
+          floor: ui.floor
+        })), " · ", web.memo(() => web.memo(() => !!ui.boss)() ? t("hud.boss") : t("hud.room", {
+          room: ui.room + 1
+        }))];
       }
-    }), _el$11);
-    web.insert(_el$11, () => ui.monster);
-    web.insert(_el$15, () => t("hud.hp", {
-      left: formatTokens(left()),
-      total: formatTokens(ui.hp)
     }));
-    web.insert(_el$17, web.createComponent(ArtButton, {
+    web.insert(_el$8, () => t("hud.tokens", {
+      tokens: formatTokens(ui.tokens)
+    }));
+    web.insert(_el$2, web.createComponent(solidJs.Show, {
+      get when() {
+        return !ui.cleared;
+      },
+      get children() {
+        var _el$9 = _tmpl$3(), _el$0 = _el$9.firstChild, _el$10 = _el$0.firstChild, _el$11 = _el$0.nextSibling, _el$12 = _el$11.firstChild, _el$13 = _el$12.firstChild, _el$14 = _el$12.nextSibling;
+        web.insert(_el$0, web.createComponent(solidJs.Show, {
+          get when() {
+            return ui.boss;
+          },
+          get children() {
+            var _el$1 = _tmpl$2();
+            web.effect(() => web.setAttribute(_el$1, "src", art("crown")));
+            return _el$1;
+          }
+        }), _el$10);
+        web.insert(_el$10, () => ui.monster);
+        web.insert(_el$14, () => t("hud.hp", {
+          left: formatTokens(left()),
+          total: formatTokens(ui.hp)
+        }));
+        web.effect((_p$) => {
+          var _v$ = ui.boss || void 0, _v$2 = `${left() / ui.hp * 100}%`;
+          _v$ !== _p$.e && web.setAttribute(_el$9, "data-boss", _p$.e = _v$);
+          _v$2 !== _p$.t && web.setStyleProperty(_el$13, "width", _p$.t = _v$2);
+          return _p$;
+        }, {
+          e: void 0,
+          t: void 0
+        });
+        return _el$9;
+      }
+    }), _el$15);
+    web.insert(_el$16, web.createComponent(ArtButton, {
       name: "hud-talents",
       get label() {
         return t("tab.talents");
       },
       onClick: () => setMenu(true)
     }), null);
-    web.insert(_el$17, web.createComponent(solidJs.Show, {
+    web.insert(_el$16, web.createComponent(solidJs.Show, {
       get when() {
         return free() > 0;
       },
       get children() {
-        var _el$18 = _tmpl$3();
-        web.insert(_el$18, free);
-        web.effect((_$p) => web.setStyleProperty(_el$18, "background-image", `url(${art("ui-medallion")})`));
-        return _el$18;
+        var _el$17 = _tmpl$4();
+        web.insert(_el$17, free);
+        web.effect((_$p) => web.setStyleProperty(_el$17, "background-image", `url(${art("ui-medallion")})`));
+        return _el$17;
       }
     }), null);
-    web.insert(_el$19, web.createComponent(ArtButton, {
+    web.insert(_el$18, web.createComponent(ArtButton, {
       name: "hud-demo",
       get label() {
         return web.memo(() => !!ui.demo)() ? t("demo.off") : t("demo.on");
@@ -1820,7 +1908,7 @@ function Stage(props) {
       },
       onClick: () => d.setDemo(!ui.demo)
     }), null);
-    web.insert(_el$19, web.createComponent(ArtButton, {
+    web.insert(_el$18, web.createComponent(ArtButton, {
       name: "hud-share",
       get label() {
         return t("share");
@@ -1835,13 +1923,19 @@ function Stage(props) {
       },
       keyed: true,
       get children() {
-        var _el$20 = _tmpl$4(), _el$21 = _el$20.firstChild, _el$22 = _el$21.nextSibling;
-        web.insert(_el$21, () => t("banner.floor", {
-          floor: ui.banner.floor
-        }));
-        web.insert(_el$22, () => ui.biome);
-        web.effect((_$p) => web.setStyleProperty(_el$21, "background-image", `url(${art("ui-banner")})`));
-        return _el$20;
+        var _el$19 = _tmpl$5(), _el$20 = _el$19.firstChild, _el$21 = _el$20.nextSibling;
+        web.insert(_el$20, (() => {
+          var _c$ = web.memo(() => !!ui.banner.cleared);
+          return () => _c$() ? t("banner.cleared") : t("banner.floor", {
+            floor: ui.banner.floor
+          });
+        })());
+        web.insert(_el$21, (() => {
+          var _c$2 = web.memo(() => !!ui.banner.cleared);
+          return () => _c$2() ? t("hud.cleared") : ui.biome;
+        })());
+        web.effect((_$p) => web.setStyleProperty(_el$20, "background-image", `url(${art("ui-banner")})`));
+        return _el$19;
       }
     }), null);
     web.insert(_el$2, web.createComponent(solidJs.Show, {
@@ -1856,18 +1950,16 @@ function Stage(props) {
       }
     }), null);
     web.effect((_p$) => {
-      var _v$ = `url(${art("hud-plaque")})`, _v$2 = `url(${art("hud-bar")})`, _v$3 = t("hud.next", {
+      var _v$3 = `url(${art("hud-plaque")})`, _v$4 = `url(${art("hud-bar")})`, _v$5 = t("hud.next", {
         tokens: formatTokens(Math.max(0, ui.nextFloorIn))
-      }), _v$4 = ui.status, _v$5 = art(ui.status === "idle" ? "ui-socket" : "ui-gem"), _v$6 = t(`status.${ui.status}`), _v$7 = t(`status.${ui.status}`), _v$8 = ui.boss || void 0, _v$9 = `${left() / ui.hp * 100}%`;
-      _v$ !== _p$.e && web.setStyleProperty(_el$2, "--ra-plaque", _p$.e = _v$);
-      _v$2 !== _p$.t && web.setStyleProperty(_el$2, "--ra-bar", _p$.t = _v$2);
-      _v$3 !== _p$.a && web.setAttribute(_el$4, "title", _p$.a = _v$3);
-      _v$4 !== _p$.o && web.setAttribute(_el$5, "data-status", _p$.o = _v$4);
-      _v$5 !== _p$.i && web.setAttribute(_el$5, "src", _p$.i = _v$5);
-      _v$6 !== _p$.n && web.setAttribute(_el$5, "alt", _p$.n = _v$6);
-      _v$7 !== _p$.s && web.setAttribute(_el$5, "title", _p$.s = _v$7);
-      _v$8 !== _p$.h && web.setAttribute(_el$0, "data-boss", _p$.h = _v$8);
-      _v$9 !== _p$.r && web.setStyleProperty(_el$14, "width", _p$.r = _v$9);
+      }), _v$6 = ui.status, _v$7 = art(ui.status === "idle" ? "ui-socket" : "ui-gem"), _v$8 = t(`status.${ui.status}`), _v$9 = t(`status.${ui.status}`);
+      _v$3 !== _p$.e && web.setStyleProperty(_el$2, "--ra-plaque", _p$.e = _v$3);
+      _v$4 !== _p$.t && web.setStyleProperty(_el$2, "--ra-bar", _p$.t = _v$4);
+      _v$5 !== _p$.a && web.setAttribute(_el$4, "title", _p$.a = _v$5);
+      _v$6 !== _p$.o && web.setAttribute(_el$5, "data-status", _p$.o = _v$6);
+      _v$7 !== _p$.i && web.setAttribute(_el$5, "src", _p$.i = _v$7);
+      _v$8 !== _p$.n && web.setAttribute(_el$5, "alt", _p$.n = _v$8);
+      _v$9 !== _p$.s && web.setAttribute(_el$5, "title", _p$.s = _v$9);
       return _p$;
     }, {
       e: void 0,
@@ -1876,9 +1968,7 @@ function Stage(props) {
       o: void 0,
       i: void 0,
       n: void 0,
-      s: void 0,
-      h: void 0,
-      r: void 0
+      s: void 0
     });
     return _el$2;
   })();
@@ -1886,16 +1976,16 @@ function Stage(props) {
 const art = (name) => SPRITES[name]?.url ?? "";
 function ArtButton(props) {
   return (() => {
-    var _el$23 = _tmpl$6(), _el$24 = _el$23.firstChild;
-    _el$23.$$click = () => props.onClick();
-    web.setAttribute(_el$24, "draggable", false);
+    var _el$22 = _tmpl$7(), _el$23 = _el$22.firstChild;
+    _el$22.$$click = () => props.onClick();
+    web.setAttribute(_el$23, "draggable", false);
     web.effect((_p$) => {
       var _v$0 = `ra-art-button ${props.class ?? ""}`, _v$1 = props.disabled, _v$10 = props.label, _v$11 = props.label, _v$12 = art(props.name);
-      _v$0 !== _p$.e && web.className(_el$23, _p$.e = _v$0);
-      _v$1 !== _p$.t && (_el$23.disabled = _p$.t = _v$1);
-      _v$10 !== _p$.a && web.setAttribute(_el$23, "aria-label", _p$.a = _v$10);
-      _v$11 !== _p$.o && web.setAttribute(_el$23, "title", _p$.o = _v$11);
-      _v$12 !== _p$.i && web.setAttribute(_el$24, "src", _p$.i = _v$12);
+      _v$0 !== _p$.e && web.className(_el$22, _p$.e = _v$0);
+      _v$1 !== _p$.t && (_el$22.disabled = _p$.t = _v$1);
+      _v$10 !== _p$.a && web.setAttribute(_el$22, "aria-label", _p$.a = _v$10);
+      _v$11 !== _p$.o && web.setAttribute(_el$22, "title", _p$.o = _v$11);
+      _v$12 !== _p$.i && web.setAttribute(_el$23, "src", _p$.i = _v$12);
       return _p$;
     }, {
       e: void 0,
@@ -1904,7 +1994,7 @@ function ArtButton(props) {
       o: void 0,
       i: void 0
     });
-    return _el$23;
+    return _el$22;
   })();
 }
 function TalentMenu(props) {
@@ -1918,10 +2008,10 @@ function TalentMenu(props) {
     value: +(Math.max(1, r) * PER_RANK[b]).toFixed(1)
   });
   return (() => {
-    var _el$25 = _tmpl$7(), _el$26 = _el$25.firstChild, _el$27 = _el$26.firstChild, _el$28 = _el$27.nextSibling, _el$29 = _el$26.nextSibling, _el$30 = _el$29.nextSibling, _el$31 = _el$30.firstChild, _el$32 = _el$31.firstChild, _el$33 = _el$32.firstChild, _el$34 = _el$33.nextSibling, _el$35 = _el$32.nextSibling, _el$36 = _el$35.firstChild, _el$37 = _el$31.nextSibling;
-    web.insert(_el$27, free);
-    web.insert(_el$28, () => t("talents.banner"));
-    web.insert(_el$26, web.createComponent(ArtButton, {
+    var _el$24 = _tmpl$8(), _el$25 = _el$24.firstChild, _el$26 = _el$25.firstChild, _el$27 = _el$26.nextSibling, _el$28 = _el$25.nextSibling, _el$29 = _el$28.nextSibling, _el$30 = _el$29.firstChild, _el$31 = _el$30.firstChild, _el$32 = _el$31.firstChild, _el$33 = _el$32.nextSibling, _el$34 = _el$31.nextSibling, _el$35 = _el$34.firstChild, _el$36 = _el$30.nextSibling;
+    web.insert(_el$26, free);
+    web.insert(_el$27, () => t("talents.banner"));
+    web.insert(_el$25, web.createComponent(ArtButton, {
       name: "ui-close",
       get label() {
         return t("talents.close");
@@ -1931,33 +2021,33 @@ function TalentMenu(props) {
         return props.close;
       }
     }), null);
-    web.insert(_el$29, web.createComponent(solidJs.For, {
+    web.insert(_el$28, web.createComponent(solidJs.For, {
       each: BRANCHES,
       children: (b) => (() => {
-        var _el$38 = _tmpl$8(), _el$39 = _el$38.firstChild, _el$40 = _el$39.nextSibling;
-        _el$38.$$dblclick = () => props.dungeon.setTalent(b, 1);
-        _el$38.$$click = () => setChosen(b);
-        web.setAttribute(_el$39, "draggable", false);
-        web.insert(_el$40, web.createComponent(solidJs.For, {
+        var _el$37 = _tmpl$9(), _el$38 = _el$37.firstChild, _el$39 = _el$38.nextSibling;
+        _el$37.$$dblclick = () => props.dungeon.setTalent(b, 1);
+        _el$37.$$click = () => setChosen(b);
+        web.setAttribute(_el$38, "draggable", false);
+        web.insert(_el$39, web.createComponent(solidJs.For, {
           get each() {
             return Array.from({
               length: MAX_RANK
             }, (_, i) => i);
           },
           children: (i) => (() => {
-            var _el$41 = _tmpl$9();
-            web.setAttribute(_el$41, "draggable", false);
-            web.effect(() => web.setAttribute(_el$41, "src", art(i < rank(b) ? "ui-gem" : "ui-socket")));
-            return _el$41;
+            var _el$40 = _tmpl$0();
+            web.setAttribute(_el$40, "draggable", false);
+            web.effect(() => web.setAttribute(_el$40, "src", art(i < rank(b) ? "ui-gem" : "ui-socket")));
+            return _el$40;
           })()
         }));
         web.effect((_p$) => {
           var _v$21 = chosen() === b || void 0, _v$22 = rank(b) > 0 || void 0, _v$23 = t(`branch.${b}`), _v$24 = t(`branch.${b}`), _v$25 = branchIcon(b);
-          _v$21 !== _p$.e && web.setAttribute(_el$38, "data-chosen", _p$.e = _v$21);
-          _v$22 !== _p$.t && web.setAttribute(_el$38, "data-active", _p$.t = _v$22);
-          _v$23 !== _p$.a && web.setAttribute(_el$38, "aria-label", _p$.a = _v$23);
-          _v$24 !== _p$.o && web.setAttribute(_el$38, "title", _p$.o = _v$24);
-          _v$25 !== _p$.i && web.setAttribute(_el$39, "src", _p$.i = _v$25);
+          _v$21 !== _p$.e && web.setAttribute(_el$37, "data-chosen", _p$.e = _v$21);
+          _v$22 !== _p$.t && web.setAttribute(_el$37, "data-active", _p$.t = _v$22);
+          _v$23 !== _p$.a && web.setAttribute(_el$37, "aria-label", _p$.a = _v$23);
+          _v$24 !== _p$.o && web.setAttribute(_el$37, "title", _p$.o = _v$24);
+          _v$25 !== _p$.i && web.setAttribute(_el$38, "src", _p$.i = _v$25);
           return _p$;
         }, {
           e: void 0,
@@ -1966,20 +2056,20 @@ function TalentMenu(props) {
           o: void 0,
           i: void 0
         });
-        return _el$38;
+        return _el$37;
       })()
     }));
-    web.insert(_el$33, () => t(`branch.${chosen()}`));
-    web.insert(_el$34, () => t(`branch.${chosen()}.style`));
-    web.insert(_el$35, (() => {
-      var _c$2 = web.memo(() => rank(chosen()) > 0);
-      return () => _c$2() ? t("talents.rank", {
+    web.insert(_el$32, () => t(`branch.${chosen()}`));
+    web.insert(_el$33, () => t(`branch.${chosen()}.style`));
+    web.insert(_el$34, (() => {
+      var _c$3 = web.memo(() => rank(chosen()) > 0);
+      return () => _c$3() ? t("talents.rank", {
         rank: rank(chosen()),
         max: MAX_RANK
       }) : t("talents.first");
-    })(), _el$36);
-    web.insert(_el$35, () => effect2(chosen(), rank(chosen())), null);
-    web.insert(_el$37, web.createComponent(ArtButton, {
+    })(), _el$35);
+    web.insert(_el$34, () => effect2(chosen(), rank(chosen())), null);
+    web.insert(_el$36, web.createComponent(ArtButton, {
       name: "ui-reset",
       get label() {
         return t("talents.reset");
@@ -1989,7 +2079,7 @@ function TalentMenu(props) {
       },
       onClick: () => props.dungeon.resetTalents()
     }), null);
-    web.insert(_el$37, web.createComponent(ArtButton, {
+    web.insert(_el$36, web.createComponent(ArtButton, {
       name: "ui-minus",
       get label() {
         return t("talents.remove");
@@ -1999,7 +2089,7 @@ function TalentMenu(props) {
       },
       onClick: () => props.dungeon.setTalent(chosen(), -1)
     }), null);
-    web.insert(_el$37, web.createComponent(ArtButton, {
+    web.insert(_el$36, web.createComponent(ArtButton, {
       name: "ui-plus",
       get label() {
         return t("talents.add");
@@ -2014,14 +2104,14 @@ function TalentMenu(props) {
         free: free(),
         total: ui.points
       }), _v$18 = `url(${art("ui-banner")})`, _v$19 = `url(${art("ui-scroll")})`, _v$20 = rank(chosen()) === 0 || void 0;
-      _v$13 !== _p$.e && web.setAttribute(_el$25, "aria-label", _p$.e = _v$13);
-      _v$14 !== _p$.t && web.setStyleProperty(_el$25, "background-image", _p$.t = _v$14);
-      _v$15 !== _p$.a && web.setAttribute(_el$27, "data-free", _p$.a = _v$15);
-      _v$16 !== _p$.o && web.setStyleProperty(_el$27, "background-image", _p$.o = _v$16);
-      _v$17 !== _p$.i && web.setAttribute(_el$27, "title", _p$.i = _v$17);
-      _v$18 !== _p$.n && web.setStyleProperty(_el$28, "background-image", _p$.n = _v$18);
-      _v$19 !== _p$.s && web.setStyleProperty(_el$30, "background-image", _p$.s = _v$19);
-      _v$20 !== _p$.h && web.setAttribute(_el$35, "data-preview", _p$.h = _v$20);
+      _v$13 !== _p$.e && web.setAttribute(_el$24, "aria-label", _p$.e = _v$13);
+      _v$14 !== _p$.t && web.setStyleProperty(_el$24, "background-image", _p$.t = _v$14);
+      _v$15 !== _p$.a && web.setAttribute(_el$26, "data-free", _p$.a = _v$15);
+      _v$16 !== _p$.o && web.setStyleProperty(_el$26, "background-image", _p$.o = _v$16);
+      _v$17 !== _p$.i && web.setAttribute(_el$26, "title", _p$.i = _v$17);
+      _v$18 !== _p$.n && web.setStyleProperty(_el$27, "background-image", _p$.n = _v$18);
+      _v$19 !== _p$.s && web.setStyleProperty(_el$29, "background-image", _p$.s = _v$19);
+      _v$20 !== _p$.h && web.setAttribute(_el$34, "data-preview", _p$.h = _v$20);
       return _p$;
     }, {
       e: void 0,
@@ -2033,7 +2123,7 @@ function TalentMenu(props) {
       s: void 0,
       h: void 0
     });
-    return _el$25;
+    return _el$24;
   })();
 }
 web.delegateEvents(["keydown", "click", "dblclick"]);
@@ -2527,7 +2617,9 @@ const Guild = effect.Schema.Struct({
   }),
   synced: effect.Schema.Boolean,
   seenTokens: N,
-  seenWeighted: N
+  seenWeighted: N,
+  startedAt: N,
+  clearedAt: N
 });
 const EVENTS = ["session.created", "session.deleted", "session.execution.started", "session.execution.succeeded", "session.execution.failed", "session.execution.interrupted", "session.step.started", "session.step.ended", "session.reasoning.delta", "session.text.delta", "session.tool.input.started", "session.tool.input.delta", "session.tool.success", "session.tool.failed", "session.compaction.ended"];
 const gui = gui$1.Plugin.define({
@@ -2552,7 +2644,9 @@ const gui = gui$1.Plugin.define({
         },
         synced: stored.synced,
         seenTokens: stored.seenTokens,
-        seenWeighted: stored.seenWeighted
+        seenWeighted: stored.seenWeighted,
+        startedAt: stored.startedAt,
+        clearedAt: stored.clearedAt
       },
       save: (saved) => void ctx.stores.guild2.set(saved),
       resolve: async (sessionID) => {

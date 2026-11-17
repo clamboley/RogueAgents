@@ -1,16 +1,23 @@
 // The dungeon's math: where a cumulative amount of damage stands, and what talents add. Pure functions only.
 
-/** Damage the first floor costs, and how much more each next floor costs. */
-export const FLOOR_BASE = 50_000
-export const FLOOR_GROWTH = 1.15
+/** Damage the first floor costs, and how much more each next floor costs. Calibrated on a heavy single-agent user
+ * (~75 M damage a day): the first six biomes in under two weeks, floor 100 in about a year and a half, the end in two. */
+export const FLOOR_BASE = 300_000
+export const FLOOR_GROWTH = 1.1
 /** Each floor: four monsters, then its boss, as shares of the floor's cost. */
 export const ROOM_SHARES = [0.15, 0.15, 0.15, 0.15, 0.4] as const
 export const BOSS_ROOM = ROOM_SHARES.length - 1
 export const FLOORS_PER_BIOME = 10
+/** The last floor of the last biome. The floors after it hold one ultra boss each, alone, until the last. */
+export const LAST_BIOME_FLOOR = 100
+export const FINAL_FLOOR = 105
 
 export const floorCost = (floor: number) => FLOOR_BASE * FLOOR_GROWTH ** (floor - 1)
 /** Damage needed to reach the start of `floor`. */
 export const costBefore = (floor: number) => (FLOOR_BASE * (FLOOR_GROWTH ** (floor - 1) - 1)) / (FLOOR_GROWTH - 1)
+/** Damage that clears the dungeon: the last ultra boss falls. */
+export const DUNGEON_COST = costBefore(FINAL_FLOOR + 1)
+export const isUltra = (floor: number) => floor > LAST_BIOME_FLOOR
 
 export interface Position {
   floor: number
@@ -20,27 +27,35 @@ export interface Position {
   hp: number
   /** Damage already dealt to it. */
   dealt: number
+  /** The last ultra boss has fallen: the dungeon is cleared, and the position stays on it. */
+  cleared: boolean
 }
 
 /** Where cumulative damage stands: the floor, the room in it, and the current monster's health. */
 export function position(damage: number): Position {
   const d = Math.max(0, damage)
+  if (d >= DUNGEON_COST) {
+    const hp = floorCost(FINAL_FLOOR)
+    return { floor: FINAL_FLOOR, room: BOSS_ROOM, boss: true, hp, dealt: hp, cleared: true }
+  }
   // The closed form can land one floor off through rounding; step to the floor whose range holds `d`.
   let floor = Math.max(1, Math.floor(Math.log(1 + (d * (FLOOR_GROWTH - 1)) / FLOOR_BASE) / Math.log(FLOOR_GROWTH)) + 1)
   while (floor > 1 && costBefore(floor) > d) floor -= 1
   while (costBefore(floor + 1) <= d) floor += 1
   const cost = floorCost(floor)
   let within = d - costBefore(floor)
+  // An ultra boss holds its whole floor alone.
+  if (isUltra(floor)) return { floor, room: BOSS_ROOM, boss: true, hp: cost, dealt: within, cleared: false }
   for (let room = 0; room < ROOM_SHARES.length; room++) {
     const hp = cost * ROOM_SHARES[room]!
     if (within < hp || room === BOSS_ROOM)
-      return { floor, room, boss: room === BOSS_ROOM, hp, dealt: Math.min(within, hp) }
+      return { floor, room, boss: room === BOSS_ROOM, hp, dealt: Math.min(within, hp), cleared: false }
     within -= hp
   }
-  return { floor, room: BOSS_ROOM, boss: true, hp: cost * ROOM_SHARES[BOSS_ROOM], dealt: 0 }
+  return { floor, room: BOSS_ROOM, boss: true, hp: cost * ROOM_SHARES[BOSS_ROOM], dealt: 0, cleared: false }
 }
 
-/** The biome of a floor: 0 for floors 1–10, 1 for 11–20, and so on. */
+/** The biome of a floor: 0 for floors 1–10, 1 for 11–20, and so on; the ultra bosses' floors make one more. */
 export const biomeOf = (floor: number) => Math.floor((floor - 1) / FLOORS_PER_BIOME)
 
 // ───────── Tokens ─────────
@@ -111,9 +126,10 @@ export const emptyTalents = (): Talents => ({
   artisan: 0,
 })
 
-/** One talent point every two floors cleared: points stay scarce, so a tree is a choice. The 30th comes with the
- * Archon at the end of the first cycle (floor 60, ~1.3 billion damage); the 40 that fill every branch, past 20 billion. */
-export const talentPoints = (floor: number) => Math.floor((floor - 1) / 2)
+/** One talent point every five floors cleared, one at each biome's midway champion and one at its boss: 20 when the
+ * last biome falls, against 40 ranks in the tree, so only half of it ever fills and the tree stays a choice. The ultra
+ * bosses give none. */
+export const talentPoints = (floor: number) => Math.floor((Math.min(floor, LAST_BIOME_FLOOR + 1) - 1) / 5)
 export const spentPoints = (t: Talents) => BRANCHES.reduce((sum, b) => sum + t[b], 0)
 
 /** Per-rank strength of each branch, used both for damage and for the panel's descriptions (in percent). */

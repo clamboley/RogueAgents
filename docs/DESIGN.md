@@ -4,11 +4,11 @@
 
 ## Le pitch
 
-Ta guilde descend un donjon infini. Chaque session OpenCode active envoie un aventurier au combat, chaque sous-agent
-invoque un petit familier, et **chaque token consommé frappe le monstre en face**. Le jeu se joue tout seul ; toi, tu
-choisis de temps en temps des talents qui orientent la guilde selon ta façon de vibecoder.
+Ta guilde descend un donjon de 105 étages. Chaque session OpenCode active envoie un aventurier au combat, chaque
+sous-agent invoque un petit familier, et **chaque token consommé frappe le monstre en face**. Le jeu se joue tout
+seul ; toi, tu choisis de temps en temps des talents qui orientent la guilde selon ta façon de vibecoder.
 
-« J'ai dépensé 90 M de tokens, je suis au boss de l'étage 21. Et toi ? »
+« J'ai dépensé 300 M de tokens, je suis au boss de l'étage 21. Et toi ? »
 
 ## Principes
 
@@ -22,26 +22,33 @@ choisis de temps en temps des talents qui orientent la guilde selon ta façon de
 
 ## Le donjon
 
-- **Infini, découpé en étages.** Un étage, c'est 4 monstres (15 % de son coût chacun) puis un boss (40 %).
+- **105 étages.** Un étage, c'est 4 monstres (15 % de son coût chacun) puis un boss (40 %).
 - **Un biome tous les 10 étages**, chacun avec ses décors, ses monstres et son boss de biome à l'étage 10, 20, 30… :
   cryptes (Roi-Liche) · grottes de cristal (Colosse prismatique) · forêt fongique (Seigneur mycélien) · forge
-  volcanique (Roi de la forge) · abysses (Léviathan) · palais céleste (Archonte). Ensuite, les biomes reviennent en
-  version « corrompue », plus sombre. Sur les autres étages, le boss est un monstre « champion », deux fois plus grand
-  et couronné.
-- **Les points de vie se comptent en dégâts.** L'étage n coûte `50 000 × 1,15^(n−1)` points de dégâts. La
-  progression est rapide au début, puis se mérite, et il n'y a pas de fin :
+  volcanique (Roi de la forge) · abysses (Léviathan) · palais céleste (Archonte) · citadelle gelée · profondeurs
+  mécaniques · bibliothèque arcanique · néant. Sur les autres étages, le boss est un monstre « champion », deux fois
+  plus grand et couronné.
+- **Le cœur du donjon (étages 101 à 105).** Cinq ultra boss, un par étage, seuls, avec toute la vie de l'étage : le
+  Limiteur de débit, l'Hallucination, la Boucle infinie, la Fenêtre de contexte, puis le Dévoreur de tokens. Quand le
+  dernier tombe, le donjon est vaincu : la guilde campe pour de bon, les tokens continuent d'être comptés, et la ligne
+  de partage dit en combien de jours.
+- **Les points de vie se comptent en dégâts.** L'étage n coûte `300 000 × 1,1^(n−1)` points de dégâts. La
+  progression est rapide au début, puis se mérite :
 
   | Boss vaincu                | Dégâts cumulés |
   | -------------------------- | -------------- |
-  | Étage 10 : Roi-Liche       | ~1 M           |
-  | Étage 20 : Colosse         | ~5 M           |
-  | Étage 30 : Seigneur        | ~22 M          |
-  | Étage 40 : Roi de la forge | ~89 M          |
-  | Étage 50 : Léviathan       | ~360 M         |
-  | Étage 60 : Archonte        | ~1,5 milliard  |
+  | Étage 10 : Roi-Liche       | ~5 M           |
+  | Étage 20 : Colosse         | ~17 M          |
+  | Étage 30 : Seigneur        | ~49 M          |
+  | Étage 40 : Roi de la forge | ~133 M         |
+  | Étage 50 : Léviathan       | ~350 M         |
+  | Étage 60 : Archonte        | ~910 M         |
+  | Étage 100 : boss du néant  | ~41 milliards  |
+  | Étage 105 : Dévoreur       | ~67 milliards  |
 
-  Au rythme d'un gros utilisateur (~25 M de tokens par jour, surtout du contexte, soit ~1,5 M de dégâts) : étage 10
-  en une demi-journée, 30 en deux semaines, 40 en deux mois, 50 en sept mois.
+  Calibré sur un gros utilisateur d'un seul agent à la fois (~75 M de dégâts par jour) : les six premiers biomes en
+  moins de deux semaines, l'étage 100 en un an et demi, la fin en deux ans. À 1,5 M de dégâts par jour, l'étage 20
+  prend dix jours et l'étage 40 trois mois.
 
 - **On part de zéro.** Au premier lancement, la guilde démarre à l'étage 1 : l'historique OpenCode d'avant
   l'installation ne compte pas. Ensuite, le travail fait pendant que l'app était fermée est rattrapé à l'ouverture
@@ -74,9 +81,9 @@ choisis de temps en temps des talents qui orientent la guilde selon ta façon de
 
 ## Les talents
 
-- **1 point de talent tous les 2 étages vaincus.** Les points restent rares pour que l'arbre soit un vrai choix :
-  5 points vers 1 M de dégâts, 15 vers 22 M, 30 seulement après l'Archonte, et les 40 qui remplissent tout l'arbre
-  au-delà de 20 milliards.
+- **1 point de talent tous les 5 étages vaincus**, un au champion du milieu de chaque biome et un à son boss : 20
+  points à la fin du dernier biome, aucun pour les ultra boss. L'arbre compte 40 rangs, on n'en remplit donc jamais
+  que la moitié : c'est un vrai choix.
 - **Une branche par style de vibecoding**, 5 rangs chacune :
 
   | Branche            | Style récompensé            | Effet par rang                                                 |
@@ -97,7 +104,7 @@ choisis de temps en temps des talents qui orientent la guilde selon ta façon de
 ## Le partage
 
 Le bouton « Copier ma progression » copie par exemple :
-`Rogue Agents · Étage 21 (Forêt fongique) · 90,4 M tokens · Essaim 5 / Marathon 3`
+`Rogue Agents · Étage 21 (Forêt fongique) · 307,6 M tokens · Essaim 5 / Marathon 3`
 
 ## L'interface
 
@@ -116,4 +123,6 @@ Le bouton « Copier ma progression » copie par exemple :
   plugin.
 - La progression est sauvegardée par machine (stockage de l'app desktop) : sur un nouvel ordinateur, la guilde
   repart de l'étage 1.
+- Les quatre derniers biomes et les ultra boss n'ont pas encore leur art : ils empruntent, recolorés, celui des
+  premiers biomes (`placeholder` dans `src/game/art.ts`).
 - L'estimation en direct est approximative ; seul le chiffre de fin d'étape fait foi.

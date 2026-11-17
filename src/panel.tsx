@@ -93,27 +93,31 @@ function Stage(props: {
         />
         <span class="ra-where-text">
           <strong>
-            {t("hud.floor", { floor: ui.floor })} · {ui.boss ? t("hud.boss") : t("hud.room", { room: ui.room + 1 })}
+            <Show when={!ui.cleared} fallback={t("hud.cleared")}>
+              {t("hud.floor", { floor: ui.floor })} · {ui.boss ? t("hud.boss") : t("hud.room", { room: ui.room + 1 })}
+            </Show>
           </strong>
           <span>{t("hud.tokens", { tokens: formatTokens(ui.tokens) })}</span>
         </span>
       </div>
 
-      {/* The monster: its name on a plaque, its tokens left in an iron bar. */}
-      <div class="ra-foe" data-boss={ui.boss || undefined}>
-        <div class="ra-plaque ra-foe-name">
-          <Show when={ui.boss}>
-            <img class="ra-crown" src={art("crown")} alt="" />
-          </Show>
-          <span>{ui.monster}</span>
+      {/* The monster: its name on a plaque, its health left in an iron bar. Gone once the dungeon is cleared. */}
+      <Show when={!ui.cleared}>
+        <div class="ra-foe" data-boss={ui.boss || undefined}>
+          <div class="ra-plaque ra-foe-name">
+            <Show when={ui.boss}>
+              <img class="ra-crown" src={art("crown")} alt="" />
+            </Show>
+            <span>{ui.monster}</span>
+          </div>
+          <div class="ra-bar">
+            <span class="ra-bar-fill">
+              <i style={{ width: `${(left() / ui.hp) * 100}%` }} />
+            </span>
+            <span class="ra-bar-text">{t("hud.hp", { left: formatTokens(left()), total: formatTokens(ui.hp) })}</span>
+          </div>
         </div>
-        <div class="ra-bar">
-          <span class="ra-bar-fill">
-            <i style={{ width: `${(left() / ui.hp) * 100}%` }} />
-          </span>
-          <span class="ra-bar-text">{t("hud.hp", { left: formatTokens(left()), total: formatTokens(ui.hp) })}</span>
-        </div>
-      </div>
+      </Show>
 
       {/* Talents is the button that matters; demo and share sit small beside it, one above the other. */}
       <div class="ra-actions">
@@ -140,9 +144,9 @@ function Stage(props: {
       <Show when={ui.banner.at || undefined} keyed>
         <div class="ra-banner">
           <span class="ra-ribbon" style={{ "background-image": `url(${art("ui-banner")})` }}>
-            {t("banner.floor", { floor: ui.banner.floor })}
+            {ui.banner.cleared ? t("banner.cleared") : t("banner.floor", { floor: ui.banner.floor })}
           </span>
-          <em>{ui.biome}</em>
+          <em>{ui.banner.cleared ? t("hud.cleared") : ui.biome}</em>
         </div>
       </Show>
       <Show when={menu()}>

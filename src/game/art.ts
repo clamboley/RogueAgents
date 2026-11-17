@@ -43,6 +43,8 @@ export interface Biome {
   light: string
   monsters: MonsterDef[]
   boss: MonsterDef
+  /** The final biome's ultra bosses, one per floor after the last biome. */
+  ultras?: MonsterDef[]
 }
 
 const CRYPT_MONSTERS = (keys: [string, string, string, string]): MonsterDef[] => [
@@ -128,18 +130,39 @@ export const BIOMES: Biome[] = [
   },
 ]
 
-/** The biome of a biome index; past the last one they come back corrupted (darker, with a magenta cast). */
-export function biome(index: number): Biome & { corrupted: boolean } {
-  const base = BIOMES[index % BIOMES.length]!
-  const corrupted = index >= BIOMES.length
-  if (!corrupted) return { ...base, corrupted }
-  return {
-    ...base,
-    corrupted,
-    filter: `${base.filter} hue-rotate(45deg) saturate(1.3) brightness(0.7)`.trim(),
-    light: "#ff5cc8",
-  }
+/** A biome still waiting for its art: another biome's rooms and monsters, recoloured by `filter`. */
+const placeholder = (key: string, from: Biome, filter: string, light: string): Biome => ({
+  ...from,
+  key,
+  filter,
+  light,
+})
+const byKey = (key: string) => BIOMES.find((b) => b.key === key)!
+
+// Floors 61–100. TODO: their own art (rooms, monsters, biome boss); until then they borrow an earlier biome's.
+BIOMES.push(
+  placeholder("frost", byKey("crystal"), "saturate(0.35) brightness(1.25) hue-rotate(-20deg)", "#d4f1ff"),
+  placeholder("clockwork", byKey("forge"), "sepia(0.7) saturate(0.9) hue-rotate(-10deg)", "#ffc46b"),
+  placeholder("library", byKey("crypt"), "hue-rotate(230deg) saturate(1.2)", "#c9a6ff"),
+  placeholder("void", byKey("abyss"), "hue-rotate(80deg) saturate(0.8) brightness(0.65)", "#b77cff"),
+)
+
+/** Floors 101–105: the heart of the dungeon, where five ultra bosses wait alone, one per floor. TODO: their own art. */
+export const FINALE: Biome = {
+  ...placeholder("heart", byKey("celestial"), "hue-rotate(250deg) saturate(1.4) brightness(0.55)", "#ff6b9a"),
+  monsters: [],
+  boss: { key: "devourer", sprite: "archon", scale: 1 },
+  ultras: [
+    { key: "ratelimiter", sprite: "forgeking", scale: 1 },
+    { key: "hallucination", sprite: "mycelord", scale: 1 },
+    { key: "infiniteloop", sprite: "leviathan", scale: 1 },
+    { key: "contextwindow", sprite: "prism", scale: 1 },
+    { key: "devourer", sprite: "archon", scale: 1 },
+  ],
 }
+
+/** The biome of a biome index; past the last biome, the finale. */
+export const biome = (index: number): Biome => BIOMES[index] ?? FINALE
 
 // ───────── Adventurers ─────────
 

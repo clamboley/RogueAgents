@@ -36,6 +36,8 @@ const Guild = Schema.Struct({
   synced: Schema.Boolean,
   seenTokens: N,
   seenWeighted: N,
+  startedAt: N,
+  clearedAt: N,
 })
 
 // Server events the dungeon reacts to; everything else stays off the wire.
@@ -74,6 +76,8 @@ export default Plugin.define({
         synced: stored.synced,
         seenTokens: stored.seenTokens,
         seenWeighted: stored.seenWeighted,
+        startedAt: stored.startedAt,
+        clearedAt: stored.clearedAt,
       },
       save: (saved) => void ctx.stores.guild2.set(saved),
       resolve: async (sessionID) => {

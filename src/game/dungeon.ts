@@ -23,6 +23,8 @@ import {
   emptyTalents,
   floorCost,
   costBefore,
+  isUltra,
+  LAST_BIOME_FLOOR,
   multiplier,
   position,
   rawTokens,
@@ -64,6 +66,9 @@ export interface Saved {
   /** The server's lifetime totals already accounted for, raw and weighted, so a later reading adds only what is new. */
   seenTokens: number
   seenWeighted: number
+  /** When the guild was founded (the first reading of the server) and when it cleared the dungeon; 0 until then. */
+  startedAt: number
+  clearedAt: number
 }
 
 export const freshSave = (): Saved => ({
@@ -73,6 +78,8 @@ export const freshSave = (): Saved => ({
   synced: false,
   seenTokens: 0,
   seenWeighted: 0,
+  startedAt: 0,
+  clearedAt: 0,
 })
 
 export type Translate = (key: string, params?: Record<string, string | number>) => string
@@ -201,9 +208,10 @@ export function createDungeon(options: {
     points: talentPoints(pos0.floor),
     talents: { ...state.talents },
     resting: true,
+    cleared: pos0.cleared,
     status: "idle" as Status,
     demo: false,
-    banner: { floor: 0, at: 0 },
+    banner: { floor: 0, at: 0, cleared: false },
   })
 
   // ───────── Saving and the panel's view ─────────
@@ -216,8 +224,13 @@ export function createDungeon(options: {
   function monsterOf(floor: number, room: number, boss: boolean) {
     const b = biome(biomeOf(floor))
     const r = rng(floor * 31 + room)
-    const bigBoss = boss && floor % 10 === 0
-    const def = bigBoss ? b.boss : b.monsters[Math.floor(r() * b.monsters.length)]!
+    const ultra = isUltra(floor)
+    const bigBoss = boss && (ultra || floor % 10 === 0)
+    const def = ultra
+      ? (b.ultras?.[floor - LAST_BIOME_FLOOR - 1] ?? b.boss)
+      : bigBoss
+        ? b.boss
+        : b.monsters[Math.floor(r() * b.monsters.length)]!
     const name = bigBoss
       ? t(`monster.${def.key}`)
       : boss
@@ -238,7 +251,9 @@ export function createDungeon(options: {
   function refresh() {
     const p = position(state.damage)
     const mon = monsterOf(p.floor, p.room, p.boss)
-    if (p.floor !== ui.floor && ui.floor) setUi("banner", { floor: p.floor, at: now() })
+    if (p.floor !== ui.floor && ui.floor) setUi("banner", { floor: p.floor, at: now(), cleared: false })
+    if (p.cleared && !ui.cleared && ui.floor) setUi("banner", { floor: p.floor, at: now(), cleared: true })
+    if (p.cleared && state === real && !real.clearedAt) real.clearedAt = now()
     setUi({
       floor: p.floor,
       room: p.room,
@@ -246,7 +261,8 @@ export function createDungeon(options: {
       hp: p.hp,
       dealt: p.dealt,
       monster: mon.name,
-      biome: t(`biome.${mon.biome.key}`) + (mon.biome.corrupted ? ` · ${t("biome.corrupted")}` : ""),
+      biome: t(`biome.${mon.biome.key}`),
+      cleared: p.cleared,
       tokens: state.tokens,
       nextFloorIn: costBefore(p.floor + 1) - state.damage,
       points: talentPoints(p.floor),
@@ -332,7 +348,8 @@ export function createDungeon(options: {
   function counts() {
     const active = [...units.values()].filter((u) => now() - u.lastActive < ACTIVE_MS)
     const shown = shownUnits()
-    setUi({ resting: !active.some((u) => u.executing) })
+    // Once the dungeon is cleared, the guild rests by the fire for good.
+    setUi({ resting: position(state.damage).cleared || !active.some((u) => u.executing) })
   }
 
   /** The units on screen: the most recently active adventurers, each with its familiars. */
@@ -562,6 +579,7 @@ export function createDungeon(options: {
     if (state !== real) return
     const seen = real.synced ? { tokens: real.seenTokens, weighted: real.seenWeighted } : undefined
     const { mark, damage, tokens } = settle(seen, s.tokens)
+    if (!real.synced) real.startedAt = now()
     real.damage += damage
     real.tokens += tokens
     real.seenTokens = mark.tokens
@@ -592,6 +610,12 @@ export function createDungeon(options: {
       // Attacks: everything queued since the last swing lands together, on a steady rhythm.
       const pending = u.queued + u.queuedBig
       if (pending <= 0 || at < u.nextAttack) continue
+      // A cleared dungeon has no one left to strike: the tokens still count, the blows go nowhere.
+      if (ui.cleared) {
+        u.queued = 0
+        u.queuedBig = 0
+        continue
+      }
       const big = u.queuedBig > 0
       const amount = pending
       u.queued = 0
@@ -755,7 +779,7 @@ export function createDungeon(options: {
         alpha: 1 - dk,
       })
     }
-    if (!dying || transition) {
+    if (!ui.cleared && (!dying || transition)) {
       const y = monsterAt(mon.def, mon.scale)
       // A wide boss slides left just enough to stay inside the frame.
       const mx = monsterBox().x
@@ -993,9 +1017,14 @@ export function createDungeon(options: {
       .sort((a, b2) => state.talents[b2] - state.talents[a])
       .slice(0, 3)
       .map((br) => `${t(`branch.${br}`)} ${state.talents[br]}`)
+    const days = Math.max(1, Math.round((state.clearedAt - state.startedAt) / 86_400_000))
     return [
       "Rogue Agents",
-      t("share.floor", { floor: p.floor, biome: t(`biome.${b.key}`) }),
+      p.cleared && state.startedAt && state.clearedAt
+        ? t("share.cleared", { days })
+        : p.cleared
+          ? t("share.clearedPlain")
+          : t("share.floor", { floor: p.floor, biome: t(`biome.${b.key}`) }),
       t("share.tokens", { tokens: formatTokens(state.tokens) }),
       ...(top.length ? [top.join(" / ")] : []),
     ].join(" · ")

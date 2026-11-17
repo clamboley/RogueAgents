@@ -1,13 +1,13 @@
 # Rogue Agents
 
-An endless pixel-art dungeon your [OpenCode](https://opencode.ai) agents fight through. Every token they spend strikes
-the monster in front of them: each active session sends an adventurer into the fight, each subagent summons a small
-familiar, and the guild goes deeper as you work.
+A pixel-art dungeon, 105 floors deep, that your [OpenCode](https://opencode.ai) agents fight through. Every token
+they spend strikes the monster in front of them: each active session sends an adventurer into the fight, each subagent
+summons a small familiar, and the guild goes deeper as you work.
 
 ![The guild fighting the Forge King](docs/screenshots/fight.png)
 
 It plays itself. Now and then you spend talent points on the branches that suit the way you work, and you compare
-depths with your colleagues: _"90 M tokens, I'm at the floor 21 boss. You?"_
+depths with your colleagues: _"300 M tokens, I'm at the floor 21 boss. You?"_
 
 ## Install
 
@@ -31,22 +31,25 @@ work your agents do while the app is closed is caught up when it opens.
 ## How it plays
 
 - **Floors and biomes.** Each floor holds four monsters and a boss, with health counted in damage. Every ten floors
-  the dungeon changes biome (crypts, crystal caves, fungal forest, volcanic forge, abyss, celestial palace) and ends
-  with a biome boss; after floor 60 the biomes return, corrupted. Each floor costs 15 % more than the last, and there
-  is no end: about 1 M damage clears the crypts, 1.5 billion the whole first cycle. At a heavy user's pace (some 25 M
-  tokens a day, mostly context), the crypts take half a day, floor 30 two weeks, floor 40 two months.
+  the dungeon changes biome (crypts, crystal caves, fungal forest, volcanic forge, abyss, celestial palace, frozen
+  citadel, clockwork depths, arcane library, the void) and ends with a biome boss.
+- **The heart of the dungeon.** Below floor 100 wait five ultra bosses, one per floor, alone. When the fifth falls,
+  the dungeon is cleared, and the share line says how many days it took.
+- **Pace.** Each floor costs 10 % more than the last: about 5 M damage clears the crypts, 900 M the first six biomes,
+  41 billion the last one and 67 billion the whole dungeon. For a heavy user of one agent at a time (some 75 M damage
+  a day), that is under two weeks for the first six biomes, a year and a half to floor 100, two years to the end.
 - **Live damage.** Output and reasoning tokens strike in full while they stream. The context a step reads (input and
   cache) lands as a charged attack when the step ends, at 5 % of its size: an agent reads its whole context again at
   every step, so at full weight it would be the whole game. Nothing depends on whether a task succeeds, only on what
   your agents spend.
-- **Talents.** One point every two floors, to spend in eight branches, one per way of working: many subagents, many
+- **Talents.** One point every five floors, to spend in eight branches, one per way of working: many subagents, many
   sessions, a single session, long sessions, frequent compactions, heavy reasoning, heavy caching, many tool calls.
-  Points stay scarce, so the tree is a choice; resetting it is free.
+  The 20 points cover only half of the tree's 40 ranks, so the tree is a choice; resetting it is free.
 
   ![The talent menu](docs/screenshots/talents.png)
 
 - **Share** (the quill button) copies a line such as
-  `Rogue Agents · Floor 21 (Fungal forest) · 90.4 M tokens · Swarm 5 / Marathon 3`.
+  `Rogue Agents · Floor 21 (Fungal forest) · 307.6 M tokens · Swarm 5 / Marathon 3`.
 - **Demo** (the play button) shows a made-up guild fighting in a random biome, without touching your progress.
 
 The full design, in French, is in [docs/DESIGN.md](docs/DESIGN.md).

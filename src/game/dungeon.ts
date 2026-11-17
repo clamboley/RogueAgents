@@ -874,17 +874,19 @@ export function createDungeon(options: {
     for (const u of list) if (u.emote && u.emote.until > at) bubble(c, u)
   }
 
-  /** Where the pieces circling a monster are: a slow tilted ring around its middle, each piece bobbing on its own. */
+  /** Where the pieces circling a monster are: a slow tilted ring low around its body, below its arms, each piece
+   * bobbing and brightening on its own beat. */
   function orbiting(def: MonsterDef, x: number, y: number, time: number) {
     const size = spriteSize(def.sprite)
     if (!def.orbit || !size) return []
-    const n = def.orbit.length
-    return def.orbit.map((sprite, i) => {
-      const a = time * 0.35 + (i / n) * Math.PI * 2
+    const { sprite, count, frames } = def.orbit
+    return Array.from({ length: count }, (_, i) => {
+      const a = time * 0.5 + (i / count) * Math.PI * 2
+      const glow = (Math.sin(time * 1.8 + i * 2.1) + 1) / 2
       return {
-        sprite,
-        x: x + Math.cos(a) * size.w * 0.42,
-        y: y - size.h * 0.4 + Math.sin(a) * size.h * 0.14 + Math.round(Math.sin(time * 1.6 + i * 1.3) * 2),
+        sprite: `${sprite}-${Math.min(frames - 1, Math.floor(glow * frames))}`,
+        x: x + Math.cos(a) * size.w * 0.4,
+        y: y - size.h * 0.22 + Math.sin(a) * size.h * 0.08 + Math.round(Math.sin(time * 1.6 + i * 1.3) * 2),
         behind: Math.sin(a) < 0,
       }
     })

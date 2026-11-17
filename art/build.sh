@@ -88,9 +88,6 @@ $S raw/ultra-contextwindow.jpeg processed/monsters-ultra-contextwindow --grid 1x
 # The Architect, drawn facing right; its glows were painted over the magenta, --unmix turns them back to cyan light.
 $S raw/ultra-architect.jpeg processed/monsters-ultra-architect --grid 1x1 --scale 6.8 --colors 48 --despill \
   --drop-far 40 --flip --unmix bff6ff --names architect
-# The fragments of the worlds it built, one per biome, circling it.
-$S raw/fragments.jpeg processed/fragments --grid 2x5 --scale 12 --despill \
-  --names fragment-crypt,fragment-crystal,fragment-fungal,fragment-forge,fragment-abyss,fragment-frost,fragment-storm,fragment-celestial,fragment-space,fragment-void
 
 # Props.
 $S raw/crown.jpeg processed/crown --grid 1x1 --scale 22 --colors 24 --names crown

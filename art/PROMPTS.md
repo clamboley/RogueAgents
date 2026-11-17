@@ -175,7 +175,7 @@ take on a red cavern, then a futuristic lab, were dropped: the lab looked like a
 are a little taller than the biome bosses.
 
 Done: `bg-heart-1`, `bg-heart-2`, `ultra-ratelimiter`, `ultra-hallucination`, `ultra-infiniteloop`,
-`ultra-contextwindow`, `ultra-architect`, `fragments`. Two first Context Windows were dropped: a porcelain mirror frame holding an eye, then a
+`ultra-contextwindow`, `ultra-architect`. Two first Context Windows were dropped: a porcelain mirror frame holding an eye, then a
 jellyfish holding memories. It is a hard limit: the keeper of the world's boundary. (Gemini refused a prompt calling it
 a warden or a sentinel, likely as too close to existing creatures.)
 
@@ -252,14 +252,16 @@ the image shows it alone.
 > floating around it, no separate objects. About four and a half times as tall as the skeleton, and very wide, full
 > body, facing LEFT, centred with plenty of empty magenta around. Crisp pixels, no anti-aliasing, no text.
 
-`fragments.jpeg`: the worlds the Architect built, circling it.
+`orb.jpeg`: one of the three pearly orbs circling the Architect, in four steps of light. The game cycles them, each
+orb on its own beat. (A first take, ten floating fragments of the biomes, clashed with the white hall.)
 
-> Same pixel art style. Perfectly flat solid magenta background (#FF00FF), a grid of 2 rows and 5 columns, ten small
-> floating fragments, plenty of space between them, each a tiny chunk of rock floating like a miniature island and
-> carrying a piece of one world: 1) a crypt with a tiny tombstone and a skull, 2) a cluster of blue crystals, 3) glowing mushrooms, 4) a tiny anvil glowing with lava, 5) coral and a shell from the deep sea, 6) a block of ice
-> with a frozen spire, 7) a tiny storm cloud with lightning, 8) a small golden temple column, 9) a tiny planet with a
-> ring, 10) a small black cube of nothingness with a violet glow. Each wrapped in a faint thread of pale cyan light.
-> Avoid pink and magenta tones. Crisp pixels, no anti-aliasing, no text.
+> Same pixel art style. Perfectly flat solid magenta background (#FF00FF), a single row of 4 columns, plenty of space
+> between them: the same small pearly orb four times, an animation of it lighting up. A perfect sphere of smooth
+> mother-of-pearl, white with soft iridescent pale cyan and silver swirls, with a light inside it. Column 1: almost
+> dark, the light asleep, only a faint pale cyan shimmer. Column 2: a soft glow from within. Column 3: bright, cyan
+> light shining through its pearly shell. Column 4: blazing, a halo of pale cyan light and a few small sparkles around
+> it. Exactly the same size, shape and position in every column. Avoid pink and magenta tones. Crisp pixels, no
+> anti-aliasing, no text.
 
 ## Familiars (two per biome after the crypts)
 

@@ -34,8 +34,7 @@ work your agents do while the app is closed is caught up when it opens.
   the dungeon changes biome (crypts, crystal caves, fungal forest, volcanic forge, abyss, frozen citadel, storm
   peaks, celestial palace, outer space, the void) and ends with a biome boss.
 - **Outside the simulation.** Past floor 100 the guild escapes: the dungeon was a simulation, and its makers, alien
-  beings in a white hall of flowing curves, send five ultra bosses, one per floor, alone; the last is the Architect who made it all, circled by a fragment of
-  every biome. When it falls, the
+  beings in a white hall of flowing curves, send five ultra bosses, one per floor, alone; the last is the Architect who made it all, circled by three pearly orbs. When it falls, the
   game is won, and the share line says how many days it took.
 - **Pace.** Each floor costs 10 % more than the last: about 5 M damage clears the crypts, 900 M the first six biomes,
   41 billion the last one and 67 billion the whole dungeon. For a heavy user of one agent at a time (some 75 M damage

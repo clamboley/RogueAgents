@@ -29,8 +29,9 @@ export interface MonsterDef {
   key: string
   sprite: string
   hover?: number
-  /** Sprites that circle the monster on a tilted ring, passing behind it on the far side; it also glows. */
-  orbit?: string[]
+  /** Identical pieces circling the monster on a tilted ring, passing behind it on the far side. Each cycles through
+   * `frames` sprites (`<sprite>-0`, `-1`…, dim to bright) out of step with the others. The monster also glows. */
+  orbit?: { sprite: string; count: number; frames: number }
   /** A biome boss's scale: 1 for its own art, 3 for a borrowed monster sprite. */
   scale?: number
 }
@@ -204,16 +205,13 @@ export const BIOMES: Biome[] = [
   ...["crypt", "crystal", "fungal", "forge", "abyss", "frost", "storm", "celestial", "space", "void"].map(byKey),
 ]
 
-/** The last ultra boss: the alien who made the simulation, floating among fragments of the worlds it built, one per
- * biome. */
+/** The last ultra boss: the alien who made the simulation, floating, with three pearly orbs circling it. */
 const ARCHITECT: MonsterDef = {
   key: "architect",
   sprite: "architect",
   hover: 6,
   scale: 1,
-  orbit: ["crypt", "crystal", "fungal", "forge", "abyss", "frost", "storm", "celestial", "space", "void"].map(
-    (biome) => `fragment-${biome}`,
-  ),
+  orbit: { sprite: "orb", count: 3, frames: 4 },
 }
 
 /** Floors 101–105: outside the simulation. The guild has escaped the dungeon and meets the alien beings who made it;

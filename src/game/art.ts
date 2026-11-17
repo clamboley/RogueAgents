@@ -192,7 +192,7 @@ export const BIOMES: Biome[] = [
 ]
 
 /** Floors 101–105: outside the simulation. The guild has escaped the dungeon and meets the alien beings who made it;
- * five ultra bosses wait alone, one per floor. TODO: the last four still borrow a biome boss's sprite. */
+ * five ultra bosses wait alone, one per floor. TODO: the last two still borrow a biome boss's sprite. */
 export const FINALE: Biome = {
   key: "heart",
   art: "heart",
@@ -202,8 +202,8 @@ export const FINALE: Biome = {
   boss: { key: "devourer", sprite: "archon", scale: 1 },
   ultras: [
     { key: "ratelimiter", sprite: "ratelimiter", scale: 1 },
-    { key: "hallucination", sprite: "mycelord", scale: 1 },
-    { key: "infiniteloop", sprite: "leviathan", scale: 1 },
+    { key: "hallucination", sprite: "hallucination", scale: 1 },
+    { key: "infiniteloop", sprite: "infiniteloop", scale: 1 },
     { key: "contextwindow", sprite: "prism", scale: 1 },
     { key: "devourer", sprite: "archon", scale: 1 },
   ],

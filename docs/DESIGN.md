@@ -127,6 +127,6 @@ Le bouton « Copier ma progression » copie par exemple :
   plugin.
 - La progression est sauvegardée par machine (stockage de l'app desktop) : sur un nouvel ordinateur, la guilde
   repart de l'étage 1.
-- Quatre des cinq ultra boss n'ont pas encore leur art : ils empruntent le sprite d'un boss de biome (`FINALE` dans
+- Deux des cinq ultra boss n'ont pas encore leur art : ils empruntent le sprite d'un boss de biome (`FINALE` dans
   `src/game/art.ts`).
 - L'estimation en direct est approximative ; seul le chiffre de fin d'étape fait foi.

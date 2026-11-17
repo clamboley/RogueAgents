@@ -174,7 +174,7 @@ white, smooth and curved, like porcelain and mother-of-pearl: no screens, no mac
 take on a red cavern, then a futuristic lab, were dropped: the lab looked like a human spaceship.) The ultra bosses
 are a little taller than the biome bosses.
 
-Done: `bg-heart-1`, `bg-heart-2`, `ultra-ratelimiter`.
+Done: `bg-heart-1`, `bg-heart-2`, `ultra-ratelimiter`, `ultra-hallucination`, `ultra-infiniteloop`.
 
 `bg-heart-1.jpeg`
 

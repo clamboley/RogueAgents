@@ -117,6 +117,8 @@ import monsters_storm_stormknight from "./monsters-storm/stormknight.png"
 import monsters_storm_tempestharpy from "./monsters-storm/tempestharpy.png"
 import monsters_storm_windwraith from "./monsters-storm/windwraith.png"
 import monsters_storm_thunderwyvern from "./monsters-storm/thunderwyvern.png"
+import monsters_ultra_hallucination_hallucination from "./monsters-ultra-hallucination/hallucination.png"
+import monsters_ultra_infiniteloop_infiniteloop from "./monsters-ultra-infiniteloop/infiniteloop.png"
 import monsters_ultra_ratelimiter_ratelimiter from "./monsters-ultra-ratelimiter/ratelimiter.png"
 import monsters_void_voidwalker from "./monsters-void/voidwalker.png"
 import monsters_void_riftcrawler from "./monsters-void/riftcrawler.png"
@@ -265,6 +267,8 @@ export const SPRITES: Record<string, SpriteAsset> = {
   "tempestharpy": { url: monsters_storm_tempestharpy, w: 48, h: 60, ax: 24.0 },
   "windwraith": { url: monsters_storm_windwraith, w: 55, h: 68, ax: 27.5 },
   "thunderwyvern": { url: monsters_storm_thunderwyvern, w: 67, h: 72, ax: 33.5 },
+  "hallucination": { url: monsters_ultra_hallucination_hallucination, w: 291, h: 196, ax: 145.5 },
+  "infiniteloop": { url: monsters_ultra_infiniteloop_infiniteloop, w: 297, h: 195, ax: 148.5 },
   "ratelimiter": { url: monsters_ultra_ratelimiter_ratelimiter, w: 285, h: 203, ax: 142.5 },
   "voidwalker": { url: monsters_void_voidwalker, w: 44, h: 75, ax: 22.0 },
   "riftcrawler": { url: monsters_void_riftcrawler, w: 73, h: 52, ax: 36.5 },

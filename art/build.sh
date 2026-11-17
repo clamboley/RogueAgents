@@ -67,6 +67,10 @@ $S raw/boss-void.jpeg processed/monsters-boss-void --grid 1x1 --scale 9.5 --colo
 # Ultra bosses: one image each, a little taller than the biome bosses.
 $S raw/ultra-ratelimiter.jpeg processed/monsters-ultra-ratelimiter --grid 1x1 --scale 7.8 --colors 48 --despill \
   --drop-far 40 --names ratelimiter
+$S raw/ultra-hallucination.jpeg processed/monsters-ultra-hallucination --grid 1x1 --scale 7.8 --colors 48 --despill \
+  --drop-far 40 --names hallucination
+$S raw/ultra-infiniteloop.jpeg processed/monsters-ultra-infiniteloop --grid 1x1 --scale 7.8 --colors 48 --despill \
+  --drop-far 40 --names infiniteloop
 
 # Props.
 $S raw/crown.jpeg processed/crown --grid 1x1 --scale 22 --colors 24 --names crown

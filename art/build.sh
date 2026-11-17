@@ -33,6 +33,17 @@ $S raw/familiars.jpeg processed/familiars --grid 4x2 --scale 12 \
   --names cat-idle,cat-attack,owl-idle,owl-attack,dragon-idle,dragon-attack,slime-idle,slime-attack
 $S raw/familiars-2.jpeg processed/familiars-2 --grid 4x2 --scale 12 \
   --names wisp-idle,wisp-attack,fox-idle,fox-attack,frog-idle,frog-attack,mushroom-idle,mushroom-attack
+# The biomes' familiars: each attack sits on its idle pose, so a breath or a bolt does not move the body.
+$S raw/familiars-3.jpeg processed/familiars-3 --grid 4x2 --scale 12 --pair-anchor \
+  --names quartzling-idle,quartzling-attack,glowfly-idle,glowfly-attack,sporehopper-idle,sporehopper-attack,snail-idle,snail-attack
+$S raw/familiars-4.jpeg processed/familiars-4 --grid 4x2 --scale 12 --pair-anchor \
+  --names salamander-idle,salamander-attack,emberling-idle,emberling-attack,octopus-idle,octopus-attack,seahorse-idle,seahorse-attack
+$S raw/familiars-5.jpeg processed/familiars-5 --grid 4x2 --scale 13.5 --pair-anchor --hang stormcloud-attack \
+  --names snowfox-idle,snowfox-attack,penguin-idle,penguin-attack,griffonling-idle,griffonling-attack,stormcloud-idle,stormcloud-attack
+$S raw/familiars-6.jpeg processed/familiars-6 --grid 4x2 --scale 13.5 --pair-anchor --flip-only cometling-idle,cometling-attack \
+  --names cherub-idle,cherub-attack,unicorn-idle,unicorn-attack,cometling-idle,cometling-attack,moonmoth-idle,moonmoth-attack
+$S raw/familiars-7.jpeg processed/familiars-7 --grid 2x2 --scale 12 --pair-anchor \
+  --names floateye-idle,floateye-attack,shadeling-idle,shadeling-attack
 
 # Monsters and biome bosses.
 $S raw/monsters-crypt.jpeg processed/monsters-crypt --grid 1x4 --scale 9.5 --despill --names skeleton,rat,ghost,bat

@@ -174,7 +174,8 @@ white, smooth and curved, like porcelain and mother-of-pearl: no screens, no mac
 take on a red cavern, then a futuristic lab, were dropped: the lab looked like a human spaceship.) The ultra bosses
 are a little taller than the biome bosses.
 
-Done: `bg-heart-1`, `bg-heart-2`, `ultra-ratelimiter`, `ultra-hallucination`, `ultra-infiniteloop`.
+Done: `bg-heart-1`, `bg-heart-2`, `ultra-ratelimiter`, `ultra-hallucination`, `ultra-infiniteloop`. A first Context
+Window, a porcelain mirror frame holding an eye, was dropped.
 
 `bg-heart-1.jpeg`
 
@@ -226,11 +227,12 @@ Done: `bg-heart-1`, `bg-heart-2`, `ultra-ratelimiter`, `ultra-hallucination`, `u
 `ultra-contextwindow.jpeg`
 
 > Same pixel art style and level of detail as the boss sprites you made. A single huge ultra boss on a perfectly flat
-> solid magenta background (#FF00FF). Not humanoid. The Context Window, a giant floating oval frame of smooth pearly
-> white material like a curved porcelain mirror, holding a pane of liquid light with a single enormous eye looking out
-> of it, long flowing white tendrils trailing from the frame and ribbons of light pouring down from it. No metal, no
-> machine parts. Menacing and epic. About three and a half times as tall as the skeleton, full body, facing LEFT,
-> centred with plenty of empty magenta around. Crisp pixels, no anti-aliasing, no text.
+> solid magenta background (#FF00FF). Not humanoid. The Context Window, a colossal floating alien jellyfish with a
+> huge translucent pearly white bell, and inside the bell, frozen like memories, small dark silhouettes of the
+> dungeon's monsters and adventurers it has swallowed. Long curved white tentacles hang from it and fade into drifting
+> pale cyan dust at their tips, as if forgetting. No metal, no machine parts. Menacing and epic. About three and a half
+> times as tall as the skeleton, full body, facing LEFT, centred with plenty of empty magenta around. Crisp pixels, no
+> anti-aliasing, no text.
 
 `ultra-devourer.jpeg`
 
@@ -247,6 +249,8 @@ Done: `bg-heart-1`, `bg-heart-2`, `ultra-ratelimiter`, `ultra-hallucination`, `u
 Each sheet holds 4 familiars, one per row: at rest on the left, attacking on the right, like the first familiar
 sheets (`--grid 4x2` in `build.sh`). Familiars fight beside the adventurers, so they face RIGHT, towards the monster.
 They are drawn tiny in the game: the prompts ask for bold, readable silhouettes.
+
+Done: `familiars-3` to `familiars-7`. Gemini drew the little comet flying left: `build.sh` mirrors it.
 
 `familiars-3.jpeg`: crystal caves and fungal forest
 

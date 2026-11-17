@@ -31,6 +31,26 @@ def magenta_mask(a: np.ndarray) -> np.ndarray:
     return (r - g > 90) & (b - g > 90) & (abs(r - b) < 110)
 
 
+def place(idle: np.ndarray, attack: np.ndarray) -> tuple[int, int]:
+    """Where the idle sprite sits best within the attack one: the offset where most opaque pixels of both agree in
+    colour. The body keeps its colours from one pose to the other; a cloud of dust or a beam does not share them."""
+    hi, wi = idle.shape[:2]
+    ha, wa = attack.shape[:2]
+    pad = np.zeros((ha + 2 * hi, wa + 2 * wi, 4), dtype=int)
+    pad[hi : hi + ha, wi : wi + wa] = attack
+    small = idle.astype(int)
+    best, at = -1, (0, 0)
+    for y in range(ha + hi + 1):
+        for x in range(wa + wi + 1):
+            win = pad[y : y + hi, x : x + wi]
+            both = (win[..., 3] > 0) & (small[..., 3] > 0)
+            close = (np.abs(win[..., :3] - small[..., :3]).sum(axis=-1) < 60) & both
+            score = int(close.sum())
+            if score > best:
+                best, at = score, (x - wi, y - hi)
+    return at
+
+
 def label(mask: np.ndarray) -> tuple[np.ndarray, int]:
     """8-connected component labels of a boolean mask."""
     labels = np.zeros(mask.shape, dtype=np.int32)
@@ -77,6 +97,16 @@ def main():
     p.add_argument("--strict", action="store_true", help="key out only near-pure magenta")
     p.add_argument("--flip", action="store_true", help="mirror every sprite, for a sheet drawn facing the wrong way")
     p.add_argument("--flip-only", default="", help="mirror only these sprites (comma-separated names)")
+    p.add_argument(
+        "--pair-anchor",
+        action="store_true",
+        help="place each <x>-attack on its <x>-idle, so a breath or a bolt does not move the body",
+    )
+    p.add_argument(
+        "--hang",
+        default="",
+        help="with --pair-anchor, these attacks keep what hangs below their body under the feet line, like a bolt",
+    )
     p.add_argument("--drop-far", type=int, help="drop pieces farther than this (source pixels) from the largest one")
     args = p.parse_args()
     global STRICT
@@ -120,6 +150,7 @@ def main():
     names = [s.strip() for s in args.names.split(",")]
     os.makedirs(args.outdir, exist_ok=True)
     meta = {}
+    images: dict[str, np.ndarray] = {}
     for r in range(rows):
         for c in range(cols):
             name = names[r * cols + c] if r * cols + c < len(names) else f"r{r}c{c}"
@@ -162,7 +193,21 @@ def main():
             fx = float(np.nonzero(low)[1].mean()) if low.any() else solid.shape[1] / 2
             Image.fromarray(out, "RGBA").save(os.path.join(args.outdir, f"{name}.png"))
             meta[name] = {"w": int(out.shape[1]), "h": int(out.shape[0]), "ax": round(fx, 1)}
+            images[name] = out
             print(f"{name}: {out.shape[1]}x{out.shape[0]} anchor {fx:.1f}")
+    if args.pair_anchor:
+        for name in images:
+            idle = name.removesuffix("-attack") + "-idle"
+            if name.endswith("-attack") and idle in images:
+                dx, dy = place(images[idle], images[name])
+                meta[name]["ax"] = round(meta[idle]["ax"] + dx, 1)
+                below = meta[name]["h"] - (dy + meta[idle]["h"])
+                # A walking body changes its pose and keeps its feet on the ground; only a floating one hangs its attack.
+                if below > 0 and name in args.hang.split(","):
+                    meta[name]["below"] = below
+                else:
+                    below = 0
+                print(f"{name}: on {idle} at {dx},{dy}, anchor {meta[name]['ax']}" + (f", {below} below" if below > 0 else ""))
     with open(os.path.join(args.outdir, "meta.json"), "w") as f:
         json.dump(meta, f, indent=1)
 

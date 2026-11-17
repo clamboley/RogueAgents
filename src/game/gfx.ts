@@ -142,7 +142,8 @@ export function drawArt(c: CanvasRenderingContext2D, name: string, x: number, y:
   c.globalAlpha = o.alpha ?? 1
   c.translate(Math.round(x), Math.round(y))
   if (o.flip) c.scale(-1, 1)
-  c.drawImage(source, Math.round(-sprite.ax * scale), -sprite.h * scale, sprite.w * scale, sprite.h * scale)
+  const top = -(sprite.h - (sprite.below ?? 0)) * scale
+  c.drawImage(source, Math.round(-sprite.ax * scale), top, sprite.w * scale, sprite.h * scale)
   c.restore()
   return sprite.h * scale
 }

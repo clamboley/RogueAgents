@@ -34,6 +34,42 @@ import familiars_2_frog_idle from "./familiars-2/frog-idle.png"
 import familiars_2_frog_attack from "./familiars-2/frog-attack.png"
 import familiars_2_mushroom_idle from "./familiars-2/mushroom-idle.png"
 import familiars_2_mushroom_attack from "./familiars-2/mushroom-attack.png"
+import familiars_3_quartzling_idle from "./familiars-3/quartzling-idle.png"
+import familiars_3_quartzling_attack from "./familiars-3/quartzling-attack.png"
+import familiars_3_glowfly_idle from "./familiars-3/glowfly-idle.png"
+import familiars_3_glowfly_attack from "./familiars-3/glowfly-attack.png"
+import familiars_3_sporehopper_idle from "./familiars-3/sporehopper-idle.png"
+import familiars_3_sporehopper_attack from "./familiars-3/sporehopper-attack.png"
+import familiars_3_snail_idle from "./familiars-3/snail-idle.png"
+import familiars_3_snail_attack from "./familiars-3/snail-attack.png"
+import familiars_4_salamander_idle from "./familiars-4/salamander-idle.png"
+import familiars_4_salamander_attack from "./familiars-4/salamander-attack.png"
+import familiars_4_emberling_idle from "./familiars-4/emberling-idle.png"
+import familiars_4_emberling_attack from "./familiars-4/emberling-attack.png"
+import familiars_4_octopus_idle from "./familiars-4/octopus-idle.png"
+import familiars_4_octopus_attack from "./familiars-4/octopus-attack.png"
+import familiars_4_seahorse_idle from "./familiars-4/seahorse-idle.png"
+import familiars_4_seahorse_attack from "./familiars-4/seahorse-attack.png"
+import familiars_5_snowfox_idle from "./familiars-5/snowfox-idle.png"
+import familiars_5_snowfox_attack from "./familiars-5/snowfox-attack.png"
+import familiars_5_penguin_idle from "./familiars-5/penguin-idle.png"
+import familiars_5_penguin_attack from "./familiars-5/penguin-attack.png"
+import familiars_5_griffonling_idle from "./familiars-5/griffonling-idle.png"
+import familiars_5_griffonling_attack from "./familiars-5/griffonling-attack.png"
+import familiars_5_stormcloud_idle from "./familiars-5/stormcloud-idle.png"
+import familiars_5_stormcloud_attack from "./familiars-5/stormcloud-attack.png"
+import familiars_6_cherub_idle from "./familiars-6/cherub-idle.png"
+import familiars_6_cherub_attack from "./familiars-6/cherub-attack.png"
+import familiars_6_unicorn_idle from "./familiars-6/unicorn-idle.png"
+import familiars_6_unicorn_attack from "./familiars-6/unicorn-attack.png"
+import familiars_6_cometling_idle from "./familiars-6/cometling-idle.png"
+import familiars_6_cometling_attack from "./familiars-6/cometling-attack.png"
+import familiars_6_moonmoth_idle from "./familiars-6/moonmoth-idle.png"
+import familiars_6_moonmoth_attack from "./familiars-6/moonmoth-attack.png"
+import familiars_7_floateye_idle from "./familiars-7/floateye-idle.png"
+import familiars_7_floateye_attack from "./familiars-7/floateye-attack.png"
+import familiars_7_shadeling_idle from "./familiars-7/shadeling-idle.png"
+import familiars_7_shadeling_attack from "./familiars-7/shadeling-attack.png"
 import familiars_cat_idle from "./familiars/cat-idle.png"
 import familiars_cat_attack from "./familiars/cat-attack.png"
 import familiars_owl_idle from "./familiars/owl-idle.png"
@@ -154,6 +190,8 @@ export interface SpriteAsset {
   w: number
   h: number
   ax: number
+  /** Rows drawn below the feet line, such as a bolt under a floating cloud. */
+  below?: number
 }
 
 export const BACKGROUNDS: Record<string, Background[]> = {
@@ -184,6 +222,42 @@ export const SPRITES: Record<string, SpriteAsset> = {
   "frog-attack": { url: familiars_2_frog_attack, w: 39, h: 24, ax: 5.3 },
   "mushroom-idle": { url: familiars_2_mushroom_idle, w: 20, h: 22, ax: 10.3 },
   "mushroom-attack": { url: familiars_2_mushroom_attack, w: 26, h: 23, ax: 13.5 },
+  "quartzling-idle": { url: familiars_3_quartzling_idle, w: 23, h: 29, ax: 11.4 },
+  "quartzling-attack": { url: familiars_3_quartzling_attack, w: 48, h: 34, ax: 20.4 },
+  "glowfly-idle": { url: familiars_3_glowfly_idle, w: 20, h: 19, ax: 9.3 },
+  "glowfly-attack": { url: familiars_3_glowfly_attack, w: 67, h: 20, ax: 8.3 },
+  "sporehopper-idle": { url: familiars_3_sporehopper_idle, w: 23, h: 23, ax: 11.5 },
+  "sporehopper-attack": { url: familiars_3_sporehopper_attack, w: 56, h: 28, ax: 11.5 },
+  "snail-idle": { url: familiars_3_snail_idle, w: 26, h: 23, ax: 11.8 },
+  "snail-attack": { url: familiars_3_snail_attack, w: 50, h: 24, ax: 11.8 },
+  "salamander-idle": { url: familiars_4_salamander_idle, w: 31, h: 20, ax: 14.8 },
+  "salamander-attack": { url: familiars_4_salamander_attack, w: 59, h: 27, ax: 16.8 },
+  "emberling-idle": { url: familiars_4_emberling_idle, w: 22, h: 24, ax: 10.1 },
+  "emberling-attack": { url: familiars_4_emberling_attack, w: 44, h: 30, ax: 16.1 },
+  "octopus-idle": { url: familiars_4_octopus_idle, w: 29, h: 23, ax: 14.2 },
+  "octopus-attack": { url: familiars_4_octopus_attack, w: 58, h: 23, ax: 14.2 },
+  "seahorse-idle": { url: familiars_4_seahorse_idle, w: 16, h: 31, ax: 5.3 },
+  "seahorse-attack": { url: familiars_4_seahorse_attack, w: 39, h: 31, ax: 4.3 },
+  "snowfox-idle": { url: familiars_5_snowfox_idle, w: 31, h: 27, ax: 15.6 },
+  "snowfox-attack": { url: familiars_5_snowfox_attack, w: 66, h: 30, ax: 24.6 },
+  "penguin-idle": { url: familiars_5_penguin_idle, w: 20, h: 27, ax: 9.6 },
+  "penguin-attack": { url: familiars_5_penguin_attack, w: 42, h: 21, ax: 30.6 },
+  "griffonling-idle": { url: familiars_5_griffonling_idle, w: 30, h: 28, ax: 16.4 },
+  "griffonling-attack": { url: familiars_5_griffonling_attack, w: 41, h: 25, ax: 20.4 },
+  "stormcloud-idle": { url: familiars_5_stormcloud_idle, w: 30, h: 20, ax: 14.6 },
+  "stormcloud-attack": { url: familiars_5_stormcloud_attack, w: 44, h: 30, ax: 14.6, below: 10 },
+  "cherub-idle": { url: familiars_6_cherub_idle, w: 21, h: 26, ax: 10.8 },
+  "cherub-attack": { url: familiars_6_cherub_attack, w: 28, h: 27, ax: 10.8 },
+  "unicorn-idle": { url: familiars_6_unicorn_idle, w: 25, h: 25, ax: 11.6 },
+  "unicorn-attack": { url: familiars_6_unicorn_attack, w: 35, h: 23, ax: 15.6 },
+  "cometling-idle": { url: familiars_6_cometling_idle, w: 26, h: 20, ax: 19.1 },
+  "cometling-attack": { url: familiars_6_cometling_attack, w: 38, h: 20, ax: 31.1 },
+  "moonmoth-idle": { url: familiars_6_moonmoth_idle, w: 32, h: 20, ax: 15.5 },
+  "moonmoth-attack": { url: familiars_6_moonmoth_attack, w: 45, h: 22, ax: 10.5 },
+  "floateye-idle": { url: familiars_7_floateye_idle, w: 23, h: 24, ax: 10.1 },
+  "floateye-attack": { url: familiars_7_floateye_attack, w: 68, h: 24, ax: 13.1 },
+  "shadeling-idle": { url: familiars_7_shadeling_idle, w: 30, h: 29, ax: 14.8 },
+  "shadeling-attack": { url: familiars_7_shadeling_attack, w: 70, h: 38, ax: 20.8 },
   "cat-idle": { url: familiars_cat_idle, w: 20, h: 22, ax: 9.1 },
   "cat-attack": { url: familiars_cat_attack, w: 36, h: 20, ax: 7.3 },
   "owl-idle": { url: familiars_owl_idle, w: 19, h: 21, ax: 8.0 },

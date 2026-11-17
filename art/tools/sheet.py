@@ -131,6 +131,10 @@ def main():
         type=float,
         help="turn large areas of pale cool light (a wall of light) into pale cyan glass of this opacity, e.g. 0.4",
     )
+    p.add_argument(
+        "--unmix",
+        help="hex colour of a glow painted over the magenta (e.g. bff6ff): pink-cast pixels become that glow, see-through",
+    )
     p.add_argument("--drop-far", type=int, help="drop pieces farther than this (source pixels) from the largest one")
     args = p.parse_args()
     global STRICT
@@ -194,6 +198,9 @@ def main():
             y0, y1, x0, x1 = ys.min(), ys.max() + 1, xs.min(), xs.max() + 1
             # Despill: translucent parts drawn over magenta keep a pink-violet cast; pull red and blue back towards green.
             cell = src[y0:y1, x0:x1].astype(int)
+            # How much magenta shows through each pixel, measured before any despill.
+            spill_map = np.clip(np.minimum(cell[..., 0], cell[..., 2]) - cell[..., 1], 0, 255).astype(np.uint8)
+            green_map = cell[..., 1].astype(np.uint8)
             if args.despill:
                 spill = np.clip(np.minimum(cell[..., 0], cell[..., 2]) - cell[..., 1] - 12, 0, None)
                 cell[..., 0] -= (spill * 0.85).astype(int)
@@ -208,6 +215,19 @@ def main():
                 colors=args.colors, method=Image.Quantize.LIBIMAGEQUANT, dither=Image.Dither.NONE
             )
             out = np.dstack([np.asarray(rgb.convert("RGB")), np.where(solid, 255, 0).astype(np.uint8)])
+            if args.unmix:
+                # A glow over magenta: green only comes from the glow, so it tells how much of it there is.
+                glow = tuple(int(args.unmix[i : i + 2], 16) for i in (0, 2, 4))
+                inside = mask[y0:y1, x0:x1]
+                spill = np.asarray(Image.fromarray(np.where(inside, spill_map, 0)).resize((w, h), Image.Resampling.BOX))
+                green = np.asarray(Image.fromarray(np.where(inside, green_map, 0)).resize((w, h), Image.Resampling.BOX))
+                haze = solid & (spill > 16)
+                alpha = np.clip(green.astype(float) / glow[1], 0, 1)
+                alpha = np.round(alpha * 8) / 8
+                out[haze & (alpha < 0.25), 3] = 0
+                keep = haze & (alpha >= 0.25)
+                out[keep, :3] = glow
+                out[keep, 3] = (alpha[keep] * 255).astype(np.uint8)
             if glass is not None:
                 cell_glass = Image.fromarray((glass[y0:y1, x0:x1] & mask[y0:y1, x0:x1]).astype(np.uint8) * 255, "L")
                 see = (np.asarray(cell_glass.resize((w, h), Image.Resampling.BOX)) > 127) & solid

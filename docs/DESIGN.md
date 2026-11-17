@@ -33,7 +33,8 @@ seul ; toi, tu choisis de temps en temps des talents qui orientent la guilde sel
   simulation. Elle arrive chez ceux qui l'ont créée, des êtres extraterrestres, dans une salle blanche aux formes
   courbes comme de la nacre, où flotte une sphère contenant le donjon en miniature. Leurs cinq ultra boss l'attendent,
   un par étage, seuls, avec toute la vie de l'étage : le Limiteur de débit, l'Hallucination, la Boucle infinie, la
-  Fenêtre de contexte, puis le Dévoreur de tokens. Quand le dernier tombe, le jeu est gagné : la guilde campe pour de
+  Fenêtre de contexte, puis l'Architecte, l'être qui a créé la simulation : il flotte, entouré d'une lueur qui
+  respire, et un fragment de chaque biome traversé tourne autour de lui. Quand le dernier tombe, le jeu est gagné : la guilde campe pour de
   bon, les tokens continuent d'être comptés, et la ligne de partage dit en combien de jours.
 - **Les points de vie se comptent en dégâts.** L'étage n coûte `300 000 × 1,1^(n−1)` points de dégâts. La
   progression est rapide au début, puis se mérite :
@@ -132,6 +133,4 @@ Le bouton « Copier ma progression » copie par exemple :
   plugin.
 - La progression est sauvegardée par machine (stockage de l'app desktop) : sur un nouvel ordinateur, la guilde
   repart de l'étage 1.
-- Deux des cinq ultra boss n'ont pas encore leur art : ils empruntent le sprite d'un boss de biome (`FINALE` dans
-  `src/game/art.ts`).
 - L'estimation en direct est approximative ; seul le chiffre de fin d'étape fait foi.

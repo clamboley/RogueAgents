@@ -78,6 +78,16 @@ import familiars_dragon_idle from "./familiars/dragon-idle.png"
 import familiars_dragon_attack from "./familiars/dragon-attack.png"
 import familiars_slime_idle from "./familiars/slime-idle.png"
 import familiars_slime_attack from "./familiars/slime-attack.png"
+import fragments_fragment_crypt from "./fragments/fragment-crypt.png"
+import fragments_fragment_crystal from "./fragments/fragment-crystal.png"
+import fragments_fragment_fungal from "./fragments/fragment-fungal.png"
+import fragments_fragment_forge from "./fragments/fragment-forge.png"
+import fragments_fragment_abyss from "./fragments/fragment-abyss.png"
+import fragments_fragment_frost from "./fragments/fragment-frost.png"
+import fragments_fragment_storm from "./fragments/fragment-storm.png"
+import fragments_fragment_celestial from "./fragments/fragment-celestial.png"
+import fragments_fragment_space from "./fragments/fragment-space.png"
+import fragments_fragment_void from "./fragments/fragment-void.png"
 import heroes_2_rogue_idle from "./heroes-2/rogue-idle.png"
 import heroes_2_rogue_attack from "./heroes-2/rogue-attack.png"
 import heroes_2_rogue_sit from "./heroes-2/rogue-sit.png"
@@ -153,6 +163,7 @@ import monsters_storm_stormknight from "./monsters-storm/stormknight.png"
 import monsters_storm_tempestharpy from "./monsters-storm/tempestharpy.png"
 import monsters_storm_windwraith from "./monsters-storm/windwraith.png"
 import monsters_storm_thunderwyvern from "./monsters-storm/thunderwyvern.png"
+import monsters_ultra_architect_architect from "./monsters-ultra-architect/architect.png"
 import monsters_ultra_contextwindow_contextwindow from "./monsters-ultra-contextwindow/contextwindow.png"
 import monsters_ultra_hallucination_hallucination from "./monsters-ultra-hallucination/hallucination.png"
 import monsters_ultra_infiniteloop_infiniteloop from "./monsters-ultra-infiniteloop/infiniteloop.png"
@@ -267,6 +278,16 @@ export const SPRITES: Record<string, SpriteAsset> = {
   "dragon-attack": { url: familiars_dragon_attack, w: 46, h: 25, ax: 16.1 },
   "slime-idle": { url: familiars_slime_idle, w: 19, h: 12, ax: 9.0 },
   "slime-attack": { url: familiars_slime_attack, w: 30, h: 18, ax: 5.7 },
+  "fragment-crypt": { url: fragments_fragment_crypt, w: 27, h: 36, ax: 13.6 },
+  "fragment-crystal": { url: fragments_fragment_crystal, w: 27, h: 38, ax: 13.5 },
+  "fragment-fungal": { url: fragments_fragment_fungal, w: 27, h: 33, ax: 13.7 },
+  "fragment-forge": { url: fragments_fragment_forge, w: 27, h: 29, ax: 12.7 },
+  "fragment-abyss": { url: fragments_fragment_abyss, w: 27, h: 40, ax: 14.0 },
+  "fragment-frost": { url: fragments_fragment_frost, w: 27, h: 37, ax: 14.0 },
+  "fragment-storm": { url: fragments_fragment_storm, w: 27, h: 43, ax: 13.6 },
+  "fragment-celestial": { url: fragments_fragment_celestial, w: 27, h: 43, ax: 13.6 },
+  "fragment-space": { url: fragments_fragment_space, w: 29, h: 30, ax: 15.3 },
+  "fragment-void": { url: fragments_fragment_void, w: 27, h: 36, ax: 13.7 },
   "rogue-idle": { url: heroes_2_rogue_idle, w: 37, h: 46, ax: 13.6 },
   "rogue-attack": { url: heroes_2_rogue_attack, w: 63, h: 44, ax: 12.3 },
   "rogue-sit": { url: heroes_2_rogue_sit, w: 54, h: 41, ax: 21.8 },
@@ -342,6 +363,7 @@ export const SPRITES: Record<string, SpriteAsset> = {
   "tempestharpy": { url: monsters_storm_tempestharpy, w: 48, h: 60, ax: 24.0 },
   "windwraith": { url: monsters_storm_windwraith, w: 55, h: 68, ax: 27.5 },
   "thunderwyvern": { url: monsters_storm_thunderwyvern, w: 67, h: 72, ax: 33.5 },
+  "architect": { url: monsters_ultra_architect_architect, w: 248, h: 215, ax: 124.0 },
   "contextwindow": { url: monsters_ultra_contextwindow_contextwindow, w: 263, h: 186, ax: 131.5 },
   "hallucination": { url: monsters_ultra_hallucination_hallucination, w: 291, h: 196, ax: 145.5 },
   "infiniteloop": { url: monsters_ultra_infiniteloop_infiniteloop, w: 297, h: 195, ax: 148.5 },

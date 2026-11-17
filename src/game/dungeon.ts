@@ -883,7 +883,7 @@ export function createDungeon(options: {
       const a = time * 0.35 + (i / n) * Math.PI * 2
       return {
         sprite,
-        x: x + Math.cos(a) * size.w * 0.5,
+        x: x + Math.cos(a) * size.w * 0.42,
         y: y - size.h * 0.4 + Math.sin(a) * size.h * 0.14 + Math.round(Math.sin(time * 1.6 + i * 1.3) * 2),
         behind: Math.sin(a) < 0,
       }

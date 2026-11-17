@@ -205,10 +205,10 @@ export const BIOMES: Biome[] = [
 ]
 
 /** The last ultra boss: the alien who made the simulation, floating among fragments of the worlds it built, one per
- * biome. TODO: it borrows the celestial boss's sprite until it has its own. */
+ * biome. */
 const ARCHITECT: MonsterDef = {
   key: "architect",
-  sprite: "archon",
+  sprite: "architect",
   hover: 6,
   scale: 1,
   orbit: ["crypt", "crystal", "fungal", "forge", "abyss", "frost", "storm", "celestial", "space", "void"].map(

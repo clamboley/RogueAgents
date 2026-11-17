@@ -88,16 +88,20 @@ Already done.
 
 ## 9. Outer space (floors 81–90)
 
+Done: `bg-space-1`, `bg-space-2`, `monsters-space`, `boss-space`. The boss is not humanoid on purpose, after the
+Archon and the Tempest King; its prompt names "the boss sprites" rather than the Lich King, which pulls towards a
+humanoid.
+
 `bg-space-1.jpeg`
 
 > Same pixel art style, level of detail and camera as the empty rooms you made. Draw ONLY the empty room, with no
-> characters and no creatures. A ruined astral observatory platform drifting in outer space filling the entire 16:10
-> canvas edge to edge, with no black bars. Seen slightly from above like a stage: the back wall fills the top 60% and
-> a wide, deep, flat and completely clear floor of dark blue stone with silver constellation inlays fills the bottom
-> 40%, down to the bottom edge. Broken silver arches open onto deep space with blue and teal nebulae, a ringed planet
-> and a comet, a giant telescope in the horizontal center, two floating silver lamps with cold white light at about
-> 25% and 75% of the width and 30% of the height, drifting stardust. No pink or magenta in the sky. No text, no UI, no
-> watermark.
+> characters and no creatures. This is a late, dangerous level: dark, menacing and epic, nothing cute. A ruined astral
+> observatory platform drifting in outer space filling the entire 16:10 canvas edge to edge, with no black bars. Seen
+> slightly from above like a stage: the back wall fills the top 60% and a wide, deep, flat and completely clear floor
+> of dark blue stone with silver constellation inlays fills the bottom 40%, down to the bottom edge. Broken silver
+> arches open onto deep space with blue and teal nebulae, a ringed planet and a comet, a giant telescope in the
+> horizontal center, two floating silver lamps with cold white light at about 25% and 75% of the width and 30% of the
+> height, drifting stardust. No pink or magenta in the sky. No text, no UI, no watermark.
 
 `bg-space-2.jpeg`
 
@@ -107,19 +111,21 @@ Already done.
 `monsters-space.jpeg`
 
 > Same style and scale as the crypt monster sheet you made. Perfectly flat solid magenta background (#FF00FF), one
-> row of 4 monsters, plenty of space between them, all facing LEFT. Avoid pink and magenta tones in the monsters
-> themselves: 1) moon golem, a squat golem of grey moon rock covered in craters, 2) comet hound, a dark blue hound
-> with a blazing white-blue comet tail, 3) nebula jelly, a floating jellyfish made of blue and teal nebula gas with
-> tiny stars inside, 4) star manta, a large flying manta ray with a starry back, flying. Crisp pixels, no
-> anti-aliasing, no text.
+> row of 4 monsters, plenty of space between them, all facing LEFT. These are late-game monsters: menacing and
+> battle-worn, nothing cute. Avoid pink and magenta tones in the monsters themselves: 1) moon golem, a hulking golem
+> of grey moon rock covered in craters, with glowing white cracks, 2) comet hound, a dark blue hound with a blazing
+> white-blue comet tail and bared fangs, 3) nebula jelly, a menacing floating jellyfish made of blue and teal nebula
+> gas with long stinging tendrils, 4) star manta, a large flying manta ray with a starry back and a barbed tail,
+> flying. Crisp pixels, no anti-aliasing, no text.
 
 `boss-space.jpeg`
 
-> Same style as the Lich King sprite. A single large boss on a perfectly flat solid magenta background (#FF00FF): the
-> Astral Colossus, a towering warrior whose body is a dark blue armour shell filled with stars, the stars linked by
-> thin silver lines like a constellation, a crown of orbiting small planets and a glowing white sword. Avoid pink and
-> magenta tones in the boss itself. About three times as tall as the skeleton, full body, standing, facing LEFT,
-> centred with plenty of empty magenta around. Crisp pixels, no anti-aliasing, no text.
+> Same pixel art style and level of detail as the boss sprites you made. A single large boss on a perfectly flat solid
+> magenta background (#FF00FF). Not humanoid. The Star Weaver, a colossal cosmic spider whose body is a dark cracked
+> planet with a glowing blue core, eight long legs made of silver constellation lines joined by bright stars, a
+> cluster of cold white eyes, and a torn web of starlight stretched behind it. Menacing and epic. About three times as
+> tall as the skeleton and wider than tall, full body, facing LEFT, centred with plenty of empty magenta around. Avoid
+> pink and magenta tones in the boss itself. Crisp pixels, no anti-aliasing, no text.
 
 ## 10. The void (floors 91–100)
 

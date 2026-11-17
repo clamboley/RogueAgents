@@ -13,6 +13,8 @@ import bg_frost_1 from "./bg/frost-1.png"
 import bg_frost_2 from "./bg/frost-2.png"
 import bg_fungal_1 from "./bg/fungal-1.png"
 import bg_fungal_2 from "./bg/fungal-2.png"
+import bg_space_1 from "./bg/space-1.png"
+import bg_space_2 from "./bg/space-2.png"
 import bg_storm_1 from "./bg/storm-1.png"
 import bg_storm_2 from "./bg/storm-2.png"
 import campfire_campfire_0 from "./campfire/campfire-0.png"
@@ -76,6 +78,7 @@ import monsters_boss_crystal_prism from "./monsters-boss-crystal/prism.png"
 import monsters_boss_forge_forgeking from "./monsters-boss-forge/forgeking.png"
 import monsters_boss_frost_frostwyrm from "./monsters-boss-frost/frostwyrm.png"
 import monsters_boss_fungal_mycelord from "./monsters-boss-fungal/mycelord.png"
+import monsters_boss_space_starweaver from "./monsters-boss-space/starweaver.png"
 import monsters_boss_storm_tempestking from "./monsters-boss-storm/tempestking.png"
 import monsters_celestial_sentinel from "./monsters-celestial/sentinel.png"
 import monsters_celestial_griffin from "./monsters-celestial/griffin.png"
@@ -101,6 +104,10 @@ import monsters_fungal_mossbones from "./monsters-fungal/mossbones.png"
 import monsters_fungal_boar from "./monsters-fungal/boar.png"
 import monsters_fungal_sporeling from "./monsters-fungal/sporeling.png"
 import monsters_fungal_mothling from "./monsters-fungal/mothling.png"
+import monsters_space_moongolem from "./monsters-space/moongolem.png"
+import monsters_space_comethound from "./monsters-space/comethound.png"
+import monsters_space_nebulajelly from "./monsters-space/nebulajelly.png"
+import monsters_space_starmanta from "./monsters-space/starmanta.png"
 import monsters_storm_stormknight from "./monsters-storm/stormknight.png"
 import monsters_storm_tempestharpy from "./monsters-storm/tempestharpy.png"
 import monsters_storm_windwraith from "./monsters-storm/windwraith.png"
@@ -145,6 +152,7 @@ export const BACKGROUNDS: Record<string, Background[]> = {
   forge: [{ url: bg_forge_1, torches: [[101, 104], [377, 103]] }, { url: bg_forge_2, torches: [[106, 105], [378, 103]] }],
   frost: [{ url: bg_frost_1, torches: [[80, 159], [398, 160]] }, { url: bg_frost_2, torches: [[81, 158], [399, 159]] }],
   fungal: [{ url: bg_fungal_1, torches: [[51, 118], [425, 115]] }, { url: bg_fungal_2, torches: [[52, 118], [425, 115]] }],
+  space: [{ url: bg_space_1, torches: [[120, 114], [360, 114]] }, { url: bg_space_2, torches: [[120, 114], [361, 114]] }],
   storm: [{ url: bg_storm_1, torches: [[120, 112], [359, 112]] }, { url: bg_storm_2, torches: [[121, 112], [359, 112]] }],
 }
 
@@ -210,6 +218,7 @@ export const SPRITES: Record<string, SpriteAsset> = {
   "forgeking": { url: monsters_boss_forge_forgeking, w: 203, h: 181, ax: 101.5 },
   "frostwyrm": { url: monsters_boss_frost_frostwyrm, w: 239, h: 181, ax: 119.5 },
   "mycelord": { url: monsters_boss_fungal_mycelord, w: 190, h: 181, ax: 95.0 },
+  "starweaver": { url: monsters_boss_space_starweaver, w: 266, h: 170, ax: 133.0 },
   "tempestking": { url: monsters_boss_storm_tempestking, w: 274, h: 177, ax: 137.0 },
   "sentinel": { url: monsters_celestial_sentinel, w: 75, h: 61, ax: 37.5 },
   "griffin": { url: monsters_celestial_griffin, w: 56, h: 65, ax: 28.0 },
@@ -235,6 +244,10 @@ export const SPRITES: Record<string, SpriteAsset> = {
   "boar": { url: monsters_fungal_boar, w: 71, h: 55, ax: 35.5 },
   "sporeling": { url: monsters_fungal_sporeling, w: 50, h: 66, ax: 25.0 },
   "mothling": { url: monsters_fungal_mothling, w: 65, h: 64, ax: 32.5 },
+  "moongolem": { url: monsters_space_moongolem, w: 70, h: 64, ax: 35.0 },
+  "comethound": { url: monsters_space_comethound, w: 67, h: 55, ax: 33.5 },
+  "nebulajelly": { url: monsters_space_nebulajelly, w: 60, h: 65, ax: 30.0 },
+  "starmanta": { url: monsters_space_starmanta, w: 66, h: 70, ax: 33.0 },
   "stormknight": { url: monsters_storm_stormknight, w: 69, h: 62, ax: 34.5 },
   "tempestharpy": { url: monsters_storm_tempestharpy, w: 48, h: 60, ax: 24.0 },
   "windwraith": { url: monsters_storm_windwraith, w: 55, h: 68, ax: 27.5 },

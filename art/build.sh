@@ -19,6 +19,7 @@ for n in 1 2; do
   $P raw/bg-celestial-$n.jpeg processed/bg-celestial-$n.png --width 480 --height 300 --colors 64 --floor 0.66 --floor-to 0.62
   $P raw/bg-frost-$n.jpeg processed/bg-frost-$n.png --width 480 --height 300 --colors 64 --floor 0.69 --floor-to 0.64
   $P raw/bg-storm-$n.jpeg processed/bg-storm-$n.png --width 480 --height 300 --colors 64 --floor 0.68 --floor-to 0.64
+  $P raw/bg-space-$n.jpeg processed/bg-space-$n.png --width 480 --height 300 --colors 64 --floor 0.67 --floor-to 0.64
 done
 
 # Adventurers and familiars.
@@ -43,6 +44,8 @@ $S raw/monsters-frost.jpeg processed/monsters-frost --grid 1x4 --scale 10 --flip
   --names icebound,frostwolf,rimewisp,snowowl
 $S raw/monsters-storm.jpeg processed/monsters-storm --grid 1x4 --scale 10 --despill \
   --flip-only stormknight,tempestharpy,windwraith --names stormknight,tempestharpy,windwraith,thunderwyvern
+$S raw/monsters-space.jpeg processed/monsters-space --grid 1x4 --scale 10 --despill \
+  --flip-only moongolem,comethound --names moongolem,comethound,nebulajelly,starmanta
 $S raw/boss-crypt.jpeg processed/monsters-boss-crypt --grid 1x1 --scale 8 --colors 48 --names lich
 $S raw/boss-crystal.jpeg processed/monsters-boss-crystal --grid 1x1 --scale 8.8 --colors 48 --strict --names prism
 $S raw/boss-fungal.jpeg processed/monsters-boss-fungal --grid 1x1 --scale 8.6 --colors 48 --drop-far 60 --names mycelord
@@ -52,6 +55,8 @@ $S raw/boss-celestial.jpeg processed/monsters-boss-celestial --grid 1x1 --scale 
 $S raw/boss-frost.jpeg processed/monsters-boss-frost --grid 1x1 --scale 8.4 --colors 48 --despill --names frostwyrm
 $S raw/boss-storm.jpeg processed/monsters-boss-storm --grid 1x1 --scale 9 --colors 48 --despill --flip --drop-far 40 \
   --names tempestking
+$S raw/boss-space.jpeg processed/monsters-boss-space --grid 1x1 --scale 9.5 --colors 48 --despill --drop-far 40 \
+  --names starweaver
 
 # Props.
 $S raw/crown.jpeg processed/crown --grid 1x1 --scale 22 --colors 24 --names crown

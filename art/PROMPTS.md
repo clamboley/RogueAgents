@@ -167,59 +167,77 @@ by the void, which makes a good transition.
 > itself. About three times as tall as the skeleton, full body, floating, facing LEFT, centred with plenty of empty
 > magenta around. Crisp pixels, no anti-aliasing, no text.
 
-## The heart of the dungeon (floors 101–105)
+## Outside the simulation (floors 101–105)
 
-Two rooms and five ultra bosses, bigger than the biome bosses.
+The guild escapes the dungeon, which was a simulation, and meets its makers: alien beings, not humans. Everything is
+white, smooth and curved, like porcelain and mother-of-pearl: no screens, no machines, no metal. (A first, fantasy
+take on a red cavern, then a futuristic lab, were dropped: the lab looked like a human spaceship.) The ultra bosses
+are a little taller than the biome bosses.
+
+Done: `bg-heart-1`, `bg-heart-2`, `ultra-ratelimiter`.
 
 `bg-heart-1.jpeg`
 
 > Same pixel art style, level of detail and camera as the empty rooms you made. Draw ONLY the empty room, with no
-> characters and no creatures. The heart of the dungeon, a vast cavern of dark red living rock filling the entire
-> 16:10 canvas edge to edge, with no black bars. Seen slightly from above like a stage: the back wall fills the top 60%
-> and a wide, deep, flat and completely clear arena floor of dark stone with glowing golden veins fills the bottom
-> 40%, down to the bottom edge. A giant pulsing crystal heart embedded in the wall in the horizontal center, roots of
-> light spreading from it, piles of gold coins along the walls, two great braziers with deep red flames at about 25%
-> and 75% of the width and 30% of the height, floating embers. No text, no UI, no watermark.
+> characters and no creatures. This is the final arena of the whole game: the adventurers have escaped the dungeon and
+> reach the realm of the alien beings who created it. Not human: no screens, no computers, no machines, no cables, no
+> straight panels. An immense hall of seamless white, made of smooth flowing curves like porcelain and
+> mother-of-pearl, organic and impossibly advanced, filling the entire 16:10 canvas edge to edge, with no black bars.
+> Seen slightly from above like a stage: the back wall fills the top 60% and a wide, deep, flat and completely clear
+> floor of smooth pearly white stone with faint flowing lines of pale cyan light fills the bottom 40%, down to the
+> bottom edge. Curved arches and ribs that flow into each other like a seashell, a large translucent floating sphere in
+> the horizontal center containing a tiny glowing pixel dungeon, two floating smooth white orbs glowing pale cyan at
+> about 25% and 75% of the width and 30% of the height, drifting motes of light. Palette of whites, pearly greys and
+> pale cyan. No text, no UI, no watermark.
 
 `bg-heart-2.jpeg`
 
-> Now same but make it different from the first one: the crystal heart is cracked and blazing, broken thrones and the
-> banners of fallen guilds around it, a river of molten gold at the very base of the wall.
+> Now same but make it different from the first one: the floating sphere is cracked and the tiny dungeon inside
+> flickers, the curved walls open like petals onto a bright white infinity, smooth white droplets floating weightless
+> at the very base of the wall.
 
 `ultra-ratelimiter.jpeg`
 
-> Same style as the Lich King sprite. A single huge ultra boss on a perfectly flat solid magenta background (#FF00FF):
-> the Rate Limiter, a colossal stone gatekeeper golem bound in iron chains, a great glowing hourglass set in its chest,
-> a portcullis for a shield and a heavy key-shaped mace. About three and a half times as tall as the skeleton, full
-> body, standing, facing LEFT, centred with plenty of empty magenta around. Crisp pixels, no anti-aliasing, no text.
+> Same pixel art style and level of detail as the boss sprites you made. A single huge ultra boss on a perfectly flat
+> solid magenta background (#FF00FF): the Rate Limiter, a towering alien guardian, not human, elongated and graceful,
+> with a seamless smooth pearly white body of flowing curves, a curved crescent-shaped head without a face, an
+> hourglass-shaped hollow of pale cyan light in its chest, and a curved shield of light. No metal, no machine parts.
+> Menacing and epic. About three and a half times as tall as the skeleton, full body, standing, facing LEFT, centred
+> with plenty of empty magenta around. Crisp pixels, no anti-aliasing, no text.
 
 `ultra-hallucination.jpeg`
 
-> Same style as the Lich King sprite. A single huge ultra boss on a perfectly flat solid magenta background (#FF00FF):
-> the Hallucination, a shifting mirage creature stitched from mismatched parts of other monsters (a wolf's head, a
-> crystal arm, a brass leg, wings of paper), iridescent and partly see-through, several faces melting into each other.
-> Avoid pink and magenta tones in the boss itself. About three and a half times as tall as the skeleton, full body,
-> facing LEFT, centred with plenty of empty magenta around. Crisp pixels, no anti-aliasing, no text.
+> Same pixel art style and level of detail as the boss sprites you made. A single huge ultra boss on a perfectly flat
+> solid magenta background (#FF00FF). Not humanoid. The Hallucination, a glitching iridescent hologram chimera made of
+> mismatched parts of the dungeon's monsters (a wolf's head, a crystal arm, a wyvern wing, a spider leg), pale cyan
+> and pearly white light, flickering and broken by scanlines and corrupted pixel blocks. Unsettling and epic. Avoid
+> pink and magenta tones in the boss itself. About three and a half times as tall as the skeleton, full body, facing
+> LEFT, centred with plenty of empty magenta around. Crisp pixels, no anti-aliasing, no text.
 
 `ultra-infiniteloop.jpeg`
 
-> Same style as the Lich King sprite. A single huge ultra boss on a perfectly flat solid magenta background (#FF00FF):
-> the Infinite Loop, a giant golden serpent coiled into a perfect ring and biting its own tail, glowing runes running
-> along its body, a second smaller head rising from the coil. About three and a half times as tall as the skeleton,
-> full body, facing LEFT, centred with plenty of empty magenta around. Crisp pixels, no anti-aliasing, no text.
+> Same pixel art style and level of detail as the boss sprites you made. A single huge ultra boss on a perfectly flat
+> solid magenta background (#FF00FF). Not humanoid. The Infinite Loop, a giant alien serpent with a seamless smooth
+> pearly white body like porcelain, coiled into a perfect ring and biting its own tail, flowing lines of pale cyan
+> light running along it, a second smooth head without eyes rising from the ring. No metal, no machine parts. Menacing
+> and epic. About three and a half times as tall as the skeleton, full body, facing LEFT, centred with plenty of empty
+> magenta around. Crisp pixels, no anti-aliasing, no text.
 
 `ultra-contextwindow.jpeg`
 
-> Same style as the Lich King sprite. A single huge ultra boss on a perfectly flat solid magenta background (#FF00FF):
-> the Context Window, a living gothic stained-glass window with stone arms and clawed hands, a single enormous eye
-> looking out through the glass, endless scrolls pouring out of its frame onto the floor. About three and a half times
-> as tall as the skeleton, full body, standing, facing LEFT, centred with plenty of empty magenta around. Crisp pixels,
-> no anti-aliasing, no text.
+> Same pixel art style and level of detail as the boss sprites you made. A single huge ultra boss on a perfectly flat
+> solid magenta background (#FF00FF). Not humanoid. The Context Window, a giant floating oval frame of smooth pearly
+> white material like a curved porcelain mirror, holding a pane of liquid light with a single enormous eye looking out
+> of it, long flowing white tendrils trailing from the frame and ribbons of light pouring down from it. No metal, no
+> machine parts. Menacing and epic. About three and a half times as tall as the skeleton, full body, facing LEFT,
+> centred with plenty of empty magenta around. Crisp pixels, no anti-aliasing, no text.
 
 `ultra-devourer.jpeg`
 
-> Same style as the Lich King sprite. A single huge final boss on a perfectly flat solid magenta background (#FF00FF):
-> the Token Devourer, a colossal beast of living darkness with a huge open maw full of golden light, swallowing a
-> stream of glowing gold coins, many small glowing eyes, a jagged black crown, and the broken weapons of adventurers
-> stuck in its hide. The largest and most menacing of all, about four times as tall as the skeleton, full body, facing
-> LEFT, centred with plenty of empty magenta around. Crisp pixels, no anti-aliasing, no text.
+> Same pixel art style and level of detail as the boss sprites you made. A single huge final boss on a perfectly flat
+> solid magenta background (#FF00FF). Not humanoid. The Token Devourer, the creators' ultimate being: a colossal alien
+> beast with a seamless curved pearly white shell like porcelain, a huge open maw full of blinding light swallowing a
+> stream of small glowing cubes, many small pale cyan eyes, a halo of floating curved white blades, and the broken
+> weapons of adventurers stuck in its shell. No metal, no machine parts. The largest and most menacing of all, about
+> four times as tall as the skeleton, full body, facing LEFT, centred with plenty of empty magenta around. Crisp
+> pixels, no anti-aliasing, no text.

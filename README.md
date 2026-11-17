@@ -33,8 +33,9 @@ work your agents do while the app is closed is caught up when it opens.
 - **Floors and biomes.** Each floor holds four monsters and a boss, with health counted in damage. Every ten floors
   the dungeon changes biome (crypts, crystal caves, fungal forest, volcanic forge, abyss, frozen citadel, storm
   peaks, celestial palace, outer space, the void) and ends with a biome boss.
-- **The heart of the dungeon.** Below floor 100 wait five ultra bosses, one per floor, alone. When the fifth falls,
-  the dungeon is cleared, and the share line says how many days it took.
+- **Outside the simulation.** Past floor 100 the guild escapes: the dungeon was a simulation, and its makers, alien
+  beings in a white hall of flowing curves, send five ultra bosses, one per floor, alone. When the fifth falls, the
+  game is won, and the share line says how many days it took.
 - **Pace.** Each floor costs 10 % more than the last: about 5 M damage clears the crypts, 900 M the first six biomes,
   41 billion the last one and 67 billion the whole dungeon. For a heavy user of one agent at a time (some 75 M damage
   a day), that is under two weeks for the first six biomes, a year and a half to floor 100, two years to the end.

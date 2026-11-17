@@ -70,7 +70,7 @@ export default {
   "biome.storm": "Cimes de l'orage",
   "biome.space": "L'espace",
   "biome.void": "Le néant",
-  "biome.heart": "Cœur du donjon",
+  "biome.heart": "Hors de la simulation",
 
   "monster.champion": "{{name}} champion",
   "monster.skeleton": "Squelette",

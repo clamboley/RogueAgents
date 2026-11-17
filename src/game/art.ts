@@ -183,13 +183,6 @@ const OWN: Biome[] = [
   },
 ]
 
-/** A biome still waiting for its art: another biome's rooms and monsters, recoloured by `filter`. */
-const placeholder = (key: string, from: Biome, filter: string, light: string): Biome => ({
-  ...from,
-  key,
-  filter,
-  light,
-})
 const byKey = (key: string) => OWN.find((b) => b.key === key)!
 
 /** The ten biomes, one per ten floors: down to the abyss, then up through the ice and the storm to the celestial palace,
@@ -198,13 +191,17 @@ export const BIOMES: Biome[] = [
   ...["crypt", "crystal", "fungal", "forge", "abyss", "frost", "storm", "celestial", "space", "void"].map(byKey),
 ]
 
-/** Floors 101–105: the heart of the dungeon, where five ultra bosses wait alone, one per floor. TODO: their own art. */
+/** Floors 101–105: outside the simulation. The guild has escaped the dungeon and meets the alien beings who made it;
+ * five ultra bosses wait alone, one per floor. TODO: the last four still borrow a biome boss's sprite. */
 export const FINALE: Biome = {
-  ...placeholder("heart", byKey("celestial"), "hue-rotate(250deg) saturate(1.4) brightness(0.55)", "#ff6b9a"),
+  key: "heart",
+  art: "heart",
+  filter: "",
+  light: "#bff6ff",
   monsters: [],
   boss: { key: "devourer", sprite: "archon", scale: 1 },
   ultras: [
-    { key: "ratelimiter", sprite: "forgeking", scale: 1 },
+    { key: "ratelimiter", sprite: "ratelimiter", scale: 1 },
     { key: "hallucination", sprite: "mycelord", scale: 1 },
     { key: "infiniteloop", sprite: "leviathan", scale: 1 },
     { key: "contextwindow", sprite: "prism", scale: 1 },

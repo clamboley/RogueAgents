@@ -21,6 +21,7 @@ for n in 1 2; do
   $P raw/bg-storm-$n.jpeg processed/bg-storm-$n.png --width 480 --height 300 --colors 64 --floor 0.68 --floor-to 0.64
   $P raw/bg-space-$n.jpeg processed/bg-space-$n.png --width 480 --height 300 --colors 64 --floor 0.67 --floor-to 0.64
   $P raw/bg-void-$n.jpeg processed/bg-void-$n.png --width 480 --height 300 --colors 64 --floor 0.67 --floor-to 0.64
+  $P raw/bg-heart-$n.jpeg processed/bg-heart-$n.png --width 480 --height 300 --colors 64
 done
 
 # Adventurers and familiars.
@@ -62,6 +63,10 @@ $S raw/boss-space.jpeg processed/monsters-boss-space --grid 1x1 --scale 9.5 --co
   --names starweaver
 $S raw/boss-void.jpeg processed/monsters-boss-void --grid 1x1 --scale 9.5 --colors 48 --despill --flip --drop-far 40 \
   --names unmaker
+
+# Ultra bosses: one image each, a little taller than the biome bosses.
+$S raw/ultra-ratelimiter.jpeg processed/monsters-ultra-ratelimiter --grid 1x1 --scale 7.8 --colors 48 --despill \
+  --drop-far 40 --names ratelimiter
 
 # Props.
 $S raw/crown.jpeg processed/crown --grid 1x1 --scale 22 --colors 24 --names crown

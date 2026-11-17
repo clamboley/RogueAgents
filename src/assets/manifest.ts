@@ -13,6 +13,8 @@ import bg_frost_1 from "./bg/frost-1.png"
 import bg_frost_2 from "./bg/frost-2.png"
 import bg_fungal_1 from "./bg/fungal-1.png"
 import bg_fungal_2 from "./bg/fungal-2.png"
+import bg_heart_1 from "./bg/heart-1.png"
+import bg_heart_2 from "./bg/heart-2.png"
 import bg_space_1 from "./bg/space-1.png"
 import bg_space_2 from "./bg/space-2.png"
 import bg_storm_1 from "./bg/storm-1.png"
@@ -115,6 +117,7 @@ import monsters_storm_stormknight from "./monsters-storm/stormknight.png"
 import monsters_storm_tempestharpy from "./monsters-storm/tempestharpy.png"
 import monsters_storm_windwraith from "./monsters-storm/windwraith.png"
 import monsters_storm_thunderwyvern from "./monsters-storm/thunderwyvern.png"
+import monsters_ultra_ratelimiter_ratelimiter from "./monsters-ultra-ratelimiter/ratelimiter.png"
 import monsters_void_voidwalker from "./monsters-void/voidwalker.png"
 import monsters_void_riftcrawler from "./monsters-void/riftcrawler.png"
 import monsters_void_nulleye from "./monsters-void/nulleye.png"
@@ -159,6 +162,7 @@ export const BACKGROUNDS: Record<string, Background[]> = {
   forge: [{ url: bg_forge_1, torches: [[101, 104], [377, 103]] }, { url: bg_forge_2, torches: [[106, 105], [378, 103]] }],
   frost: [{ url: bg_frost_1, torches: [[80, 159], [398, 160]] }, { url: bg_frost_2, torches: [[81, 158], [399, 159]] }],
   fungal: [{ url: bg_fungal_1, torches: [[51, 118], [425, 115]] }, { url: bg_fungal_2, torches: [[52, 118], [425, 115]] }],
+  heart: [{ url: bg_heart_1, torches: [[94, 121], [385, 121]] }, { url: bg_heart_2, torches: [[94, 121], [385, 121]] }],
   space: [{ url: bg_space_1, torches: [[120, 114], [360, 114]] }, { url: bg_space_2, torches: [[120, 114], [361, 114]] }],
   storm: [{ url: bg_storm_1, torches: [[120, 112], [359, 112]] }, { url: bg_storm_2, torches: [[121, 112], [359, 112]] }],
   void: [{ url: bg_void_1, torches: [[141, 88], [347, 137]] }, { url: bg_void_2, torches: [[143, 95], [349, 138]] }],
@@ -261,6 +265,7 @@ export const SPRITES: Record<string, SpriteAsset> = {
   "tempestharpy": { url: monsters_storm_tempestharpy, w: 48, h: 60, ax: 24.0 },
   "windwraith": { url: monsters_storm_windwraith, w: 55, h: 68, ax: 27.5 },
   "thunderwyvern": { url: monsters_storm_thunderwyvern, w: 67, h: 72, ax: 33.5 },
+  "ratelimiter": { url: monsters_ultra_ratelimiter_ratelimiter, w: 285, h: 203, ax: 142.5 },
   "voidwalker": { url: monsters_void_voidwalker, w: 44, h: 75, ax: 22.0 },
   "riftcrawler": { url: monsters_void_riftcrawler, w: 73, h: 52, ax: 36.5 },
   "nulleye": { url: monsters_void_nulleye, w: 63, h: 63, ax: 31.5 },

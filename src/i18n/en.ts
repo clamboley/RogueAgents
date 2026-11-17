@@ -68,7 +68,7 @@ export default {
   "biome.storm": "Storm peaks",
   "biome.space": "Outer space",
   "biome.void": "The void",
-  "biome.heart": "Heart of the dungeon",
+  "biome.heart": "Outside the simulation",
 
   "monster.champion": "{{name}} champion",
   "monster.skeleton": "Skeleton",

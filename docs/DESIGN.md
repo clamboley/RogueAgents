@@ -26,9 +26,9 @@ seul ; toi, tu choisis de temps en temps des talents qui orientent la guilde sel
 - **Un biome tous les 10 étages**, chacun avec ses décors, ses monstres et son boss de biome à l'étage 10, 20, 30… :
   cryptes (Roi-Liche) · grottes de cristal (Colosse prismatique) · forêt fongique (Seigneur mycélien) · forge
   volcanique (Roi de la forge) · abysses (Léviathan) · citadelle gelée (Wyrm de givre) · cimes de l'orage (Roi des
-  tempêtes) · palais céleste (Archonte) · espace (Tisseuse d'étoiles) · néant. On descend jusqu'aux abysses, puis on
-  remonte par la glace et l'orage jusqu'au palais, aux étoiles et au néant. Sur les autres étages, le boss est un
-  monstre « champion », deux fois plus grand et couronné.
+  tempêtes) · palais céleste (Archonte) · espace (Tisseuse d'étoiles) · néant (Effaceur). On descend jusqu'aux
+  abysses, puis on remonte par la glace et l'orage jusqu'au palais, aux étoiles et au néant. Sur les autres étages, le
+  boss est un monstre « champion », deux fois plus grand et couronné.
 - **Le cœur du donjon (étages 101 à 105).** Cinq ultra boss, un par étage, seuls, avec toute la vie de l'étage : le
   Limiteur de débit, l'Hallucination, la Boucle infinie, la Fenêtre de contexte, puis le Dévoreur de tokens. Quand le
   dernier tombe, le donjon est vaincu : la guilde campe pour de bon, les tokens continuent d'être comptés, et la ligne
@@ -45,7 +45,7 @@ seul ; toi, tu choisis de temps en temps des talents qui orientent la guilde sel
   | Étage 50 : Léviathan       | ~350 M         |
   | Étage 60 : Wyrm de givre   | ~910 M         |
   | Étage 80 : Archonte        | ~6 milliards   |
-  | Étage 100 : boss du néant  | ~41 milliards  |
+  | Étage 100 : Effaceur       | ~41 milliards  |
   | Étage 105 : Dévoreur       | ~67 milliards  |
 
   Calibré sur un gros utilisateur d'un seul agent à la fois (~75 M de dégâts par jour) : les six premiers biomes en
@@ -125,6 +125,6 @@ Le bouton « Copier ma progression » copie par exemple :
   plugin.
 - La progression est sauvegardée par machine (stockage de l'app desktop) : sur un nouvel ordinateur, la guilde
   repart de l'étage 1.
-- Le néant et les ultra boss n'ont pas encore leur art : ils empruntent, recolorés, celui des
+- Le cœur du donjon et ses ultra boss n'ont pas encore leur art : ils empruntent, recolorés, celui des
   premiers biomes (`placeholder` dans `src/game/art.ts`).
 - L'estimation en direct est approximative ; seul le chiffre de fin d'étape fait foi.

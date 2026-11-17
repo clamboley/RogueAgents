@@ -168,6 +168,19 @@ const OWN: Biome[] = [
     ],
     boss: { key: "starweaver", sprite: "starweaver", scale: 1 },
   },
+  {
+    key: "void",
+    art: "void",
+    filter: "",
+    light: "#c69bff",
+    monsters: [
+      { key: "voidwalker", sprite: "voidwalker" },
+      { key: "riftcrawler", sprite: "riftcrawler" },
+      { key: "nulleye", sprite: "nulleye", hover: 18 },
+      { key: "stareater", sprite: "stareater", hover: 22 },
+    ],
+    boss: { key: "unmaker", sprite: "unmaker", scale: 1, hover: 8 },
+  },
 ]
 
 /** A biome still waiting for its art: another biome's rooms and monsters, recoloured by `filter`. */
@@ -180,10 +193,9 @@ const placeholder = (key: string, from: Biome, filter: string, light: string): B
 const byKey = (key: string) => OWN.find((b) => b.key === key)!
 
 /** The ten biomes, one per ten floors: down to the abyss, then up through the ice and the storm to the celestial palace,
- * out into space and the void. TODO: the void still borrows recoloured art. */
+ * out into space and the void. */
 export const BIOMES: Biome[] = [
-  ...["crypt", "crystal", "fungal", "forge", "abyss", "frost", "storm", "celestial", "space"].map(byKey),
-  placeholder("void", byKey("abyss"), "hue-rotate(80deg) saturate(0.8) brightness(0.65)", "#b77cff"),
+  ...["crypt", "crystal", "fungal", "forge", "abyss", "frost", "storm", "celestial", "space", "void"].map(byKey),
 ]
 
 /** Floors 101–105: the heart of the dungeon, where five ultra bosses wait alone, one per floor. TODO: their own art. */

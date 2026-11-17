@@ -17,6 +17,8 @@ import bg_space_1 from "./bg/space-1.png"
 import bg_space_2 from "./bg/space-2.png"
 import bg_storm_1 from "./bg/storm-1.png"
 import bg_storm_2 from "./bg/storm-2.png"
+import bg_void_1 from "./bg/void-1.png"
+import bg_void_2 from "./bg/void-2.png"
 import campfire_campfire_0 from "./campfire/campfire-0.png"
 import campfire_campfire_1 from "./campfire/campfire-1.png"
 import campfire_campfire_2 from "./campfire/campfire-2.png"
@@ -80,6 +82,7 @@ import monsters_boss_frost_frostwyrm from "./monsters-boss-frost/frostwyrm.png"
 import monsters_boss_fungal_mycelord from "./monsters-boss-fungal/mycelord.png"
 import monsters_boss_space_starweaver from "./monsters-boss-space/starweaver.png"
 import monsters_boss_storm_tempestking from "./monsters-boss-storm/tempestking.png"
+import monsters_boss_void_unmaker from "./monsters-boss-void/unmaker.png"
 import monsters_celestial_sentinel from "./monsters-celestial/sentinel.png"
 import monsters_celestial_griffin from "./monsters-celestial/griffin.png"
 import monsters_celestial_seraphling from "./monsters-celestial/seraphling.png"
@@ -112,6 +115,10 @@ import monsters_storm_stormknight from "./monsters-storm/stormknight.png"
 import monsters_storm_tempestharpy from "./monsters-storm/tempestharpy.png"
 import monsters_storm_windwraith from "./monsters-storm/windwraith.png"
 import monsters_storm_thunderwyvern from "./monsters-storm/thunderwyvern.png"
+import monsters_void_voidwalker from "./monsters-void/voidwalker.png"
+import monsters_void_riftcrawler from "./monsters-void/riftcrawler.png"
+import monsters_void_nulleye from "./monsters-void/nulleye.png"
+import monsters_void_stareater from "./monsters-void/stareater.png"
 import talents_talent_swarm from "./talents/talent-swarm.png"
 import talents_talent_legion from "./talents/talent-legion.png"
 import talents_talent_lone from "./talents/talent-lone.png"
@@ -154,6 +161,7 @@ export const BACKGROUNDS: Record<string, Background[]> = {
   fungal: [{ url: bg_fungal_1, torches: [[51, 118], [425, 115]] }, { url: bg_fungal_2, torches: [[52, 118], [425, 115]] }],
   space: [{ url: bg_space_1, torches: [[120, 114], [360, 114]] }, { url: bg_space_2, torches: [[120, 114], [361, 114]] }],
   storm: [{ url: bg_storm_1, torches: [[120, 112], [359, 112]] }, { url: bg_storm_2, torches: [[121, 112], [359, 112]] }],
+  void: [{ url: bg_void_1, torches: [[141, 88], [347, 137]] }, { url: bg_void_2, torches: [[143, 95], [349, 138]] }],
 }
 
 export const SPRITES: Record<string, SpriteAsset> = {
@@ -220,6 +228,7 @@ export const SPRITES: Record<string, SpriteAsset> = {
   "mycelord": { url: monsters_boss_fungal_mycelord, w: 190, h: 181, ax: 95.0 },
   "starweaver": { url: monsters_boss_space_starweaver, w: 266, h: 170, ax: 133.0 },
   "tempestking": { url: monsters_boss_storm_tempestking, w: 274, h: 177, ax: 137.0 },
+  "unmaker": { url: monsters_boss_void_unmaker, w: 239, h: 156, ax: 119.5 },
   "sentinel": { url: monsters_celestial_sentinel, w: 75, h: 61, ax: 37.5 },
   "griffin": { url: monsters_celestial_griffin, w: 56, h: 65, ax: 28.0 },
   "seraphling": { url: monsters_celestial_seraphling, w: 55, h: 56, ax: 27.5 },
@@ -252,6 +261,10 @@ export const SPRITES: Record<string, SpriteAsset> = {
   "tempestharpy": { url: monsters_storm_tempestharpy, w: 48, h: 60, ax: 24.0 },
   "windwraith": { url: monsters_storm_windwraith, w: 55, h: 68, ax: 27.5 },
   "thunderwyvern": { url: monsters_storm_thunderwyvern, w: 67, h: 72, ax: 33.5 },
+  "voidwalker": { url: monsters_void_voidwalker, w: 44, h: 75, ax: 22.0 },
+  "riftcrawler": { url: monsters_void_riftcrawler, w: 73, h: 52, ax: 36.5 },
+  "nulleye": { url: monsters_void_nulleye, w: 63, h: 63, ax: 31.5 },
+  "stareater": { url: monsters_void_stareater, w: 59, h: 69, ax: 29.5 },
   "talent-swarm": { url: talents_talent_swarm, w: 74, h: 74, ax: 36.4 },
   "talent-legion": { url: talents_talent_legion, w: 74, h: 74, ax: 36.5 },
   "talent-lone": { url: talents_talent_lone, w: 74, h: 74, ax: 36.5 },

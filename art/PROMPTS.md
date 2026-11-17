@@ -129,16 +129,19 @@ humanoid.
 
 ## 10. The void (floors 91–100)
 
+Done: `bg-void-1`, `bg-void-2`, `monsters-void`, `boss-void`. Gemini drew the rooms as the space observatory swallowed
+by the void, which makes a good transition.
+
 `bg-void-1.jpeg`
 
 > Same pixel art style, level of detail and camera as the empty rooms you made. Draw ONLY the empty room, with no
-> characters and no creatures. A broken hall floating in the void filling the entire 16:10 canvas edge to edge, with
-> no black bars. Seen slightly from above like a stage: the back wall fills the top 60% and a wide, deep, flat and
-> completely clear floor of cracked black obsidian with faint purple veins fills the bottom 40%, down to the bottom
-> edge. The wall crumbles into a starless purple-black emptiness, fragments of the earlier biomes (a crypt arch, a
-> crystal, an icicle, a marble column) float in it, a rift glowing violet in the horizontal center, two floating
-> shards of violet light at about 25% and 75% of the width and 30% of the height, drifting motes of dark matter. No
-> text, no UI, no watermark.
+> characters and no creatures. This is the last biome before the end: dark, menacing and epic, nothing cute. A broken
+> hall floating in the void filling the entire 16:10 canvas edge to edge, with no black bars. Seen slightly from above
+> like a stage: the back wall fills the top 60% and a wide, deep, flat and completely clear floor of cracked black
+> obsidian with faint violet veins fills the bottom 40%, down to the bottom edge. The wall crumbles into a starless
+> violet-black emptiness, fragments of the earlier biomes (a crypt arch, a crystal, an icicle, a marble column) float
+> in it, a rift glowing violet in the horizontal center, two floating shards of violet light at about 25% and 75% of
+> the width and 30% of the height, drifting motes of dark matter. No text, no UI, no watermark.
 
 `bg-void-2.jpeg`
 
@@ -148,19 +151,21 @@ humanoid.
 `monsters-void.jpeg`
 
 > Same style and scale as the crypt monster sheet you made. Perfectly flat solid magenta background (#FF00FF), one
-> row of 4 monsters, plenty of space between them, all facing LEFT. Avoid pink and magenta tones in the monsters
-> themselves: 1) void walker, a tall thin humanoid silhouette whose body shows a starfield, 2) rift crawler, a
-> many-legged crawling creature of black glass with violet cracks, 3) null eye, a floating eye surrounded by a ring of
-> dark tentacles, 4) star eater, a long eel-like flier of darkness with glowing violet spots, flying. Crisp pixels, no
-> anti-aliasing, no text.
+> row of 4 monsters, plenty of space between them, all facing LEFT. These are late-game monsters: menacing and
+> unsettling, nothing cute. Avoid pink and magenta tones in the monsters themselves: 1) void walker, a tall thin
+> humanoid silhouette whose body shows a starfield, with long clawed fingers, 2) rift crawler, a many-legged crawling
+> creature of black glass with violet cracks, 3) null eye, a floating eye surrounded by a ring of dark tentacles, 4)
+> star eater, a long eel-like flier of darkness with glowing violet spots and a jaw full of needles, flying. Crisp
+> pixels, no anti-aliasing, no text.
 
 `boss-void.jpeg`
 
-> Same style as the Lich King sprite. A single large boss on a perfectly flat solid magenta background (#FF00FF): the
-> Unmaker, a colossal faceless figure made of void and starlight, a cracked white mask, a cloak that dissolves into
-> darkness, long clawed hands trailing violet light. Avoid pink and magenta tones in the boss itself. About three
-> times as tall as the skeleton, full body, standing, facing LEFT, centred with plenty of empty magenta around. Crisp
-> pixels, no anti-aliasing, no text.
+> Same pixel art style and level of detail as the boss sprites you made. A single large boss on a perfectly flat solid
+> magenta background (#FF00FF): the Unmaker, a colossal faceless being made of void and starlight, a cracked white
+> mask floating where its face should be, a hooded cloak that dissolves into darkness, four long clawed arms trailing
+> violet light, its lower body fading into nothing. Menacing and epic. Avoid pink and magenta tones in the boss
+> itself. About three times as tall as the skeleton, full body, floating, facing LEFT, centred with plenty of empty
+> magenta around. Crisp pixels, no anti-aliasing, no text.
 
 ## The heart of the dungeon (floors 101–105)
 

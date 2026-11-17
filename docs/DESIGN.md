@@ -27,8 +27,8 @@ seul ; toi, tu choisis de temps en temps des talents qui orientent la guilde sel
   cryptes (Roi-Liche) · grottes de cristal (Colosse prismatique) · forêt fongique (Seigneur mycélien) · forge
   volcanique (Roi de la forge) · abysses (Léviathan) · citadelle gelée (Wyrm de givre) · cimes de l'orage (Roi des
   tempêtes) · palais céleste (Archonte) · espace (Tisseuse d'étoiles) · néant. On descend jusqu'aux abysses, puis on
-  remonte par la glace et l'orage jusqu'au palais, aux étoiles et au néant. Sur les autres étages, le boss est un monstre « champion », deux
-  fois plus grand et couronné.
+  remonte par la glace et l'orage jusqu'au palais, aux étoiles et au néant. Sur les autres étages, le boss est un
+  monstre « champion », deux fois plus grand et couronné.
 - **Le cœur du donjon (étages 101 à 105).** Cinq ultra boss, un par étage, seuls, avec toute la vie de l'étage : le
   Limiteur de débit, l'Hallucination, la Boucle infinie, la Fenêtre de contexte, puis le Dévoreur de tokens. Quand le
   dernier tombe, le donjon est vaincu : la guilde campe pour de bon, les tokens continuent d'être comptés, et la ligne

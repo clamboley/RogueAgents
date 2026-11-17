@@ -76,6 +76,7 @@ def main():
     p.add_argument("--despill", action="store_true", help="pull a pink-violet cast out of translucent parts")
     p.add_argument("--strict", action="store_true", help="key out only near-pure magenta")
     p.add_argument("--flip", action="store_true", help="mirror every sprite, for a sheet drawn facing the wrong way")
+    p.add_argument("--flip-only", default="", help="mirror only these sprites (comma-separated names)")
     p.add_argument("--drop-far", type=int, help="drop pieces farther than this (source pixels) from the largest one")
     args = p.parse_args()
     global STRICT
@@ -154,7 +155,7 @@ def main():
             ys, xs = np.nonzero(solid)
             out = out[ys.min() : ys.max() + 1, xs.min() : xs.max() + 1]
             solid = solid[ys.min() : ys.max() + 1, xs.min() : xs.max() + 1]
-            if args.flip:
+            if args.flip or name in args.flip_only.split(","):
                 out = out[:, ::-1]
                 solid = solid[:, ::-1]
             low = solid[int(solid.shape[0] * 0.88) :]

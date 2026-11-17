@@ -130,6 +130,19 @@ const OWN: Biome[] = [
     boss: { key: "frostwyrm", sprite: "frostwyrm", scale: 1 },
   },
   {
+    key: "storm",
+    art: "storm",
+    filter: "",
+    light: "#9fc8ff",
+    monsters: [
+      { key: "stormknight", sprite: "stormknight" },
+      { key: "tempestharpy", sprite: "tempestharpy", hover: 8 },
+      { key: "windwraith", sprite: "windwraith" },
+      { key: "thunderwyvern", sprite: "thunderwyvern", hover: 26 },
+    ],
+    boss: { key: "tempestking", sprite: "tempestking", scale: 1 },
+  },
+  {
     key: "celestial",
     art: "celestial",
     filter: "",
@@ -153,12 +166,10 @@ const placeholder = (key: string, from: Biome, filter: string, light: string): B
 })
 const byKey = (key: string) => OWN.find((b) => b.key === key)!
 
-/** The ten biomes, one per ten floors: down to the abyss, then up through the ice and the sky, out into space and the
- * void. TODO: the clouds, space and the void still borrow recoloured art. */
+/** The ten biomes, one per ten floors: down to the abyss, then up through the ice and the storm to the celestial palace,
+ * out into space and the void. TODO: space and the void still borrow recoloured art. */
 export const BIOMES: Biome[] = [
-  ...["crypt", "crystal", "fungal", "forge", "abyss", "frost"].map(byKey),
-  placeholder("clouds", byKey("celestial"), "saturate(0.6) brightness(1.15) hue-rotate(-25deg)", "#fff4d6"),
-  byKey("celestial"),
+  ...["crypt", "crystal", "fungal", "forge", "abyss", "frost", "storm", "celestial"].map(byKey),
   placeholder("space", byKey("abyss"), "hue-rotate(50deg) saturate(0.7) brightness(0.8)", "#9fb8ff"),
   placeholder("void", byKey("abyss"), "hue-rotate(80deg) saturate(0.8) brightness(0.65)", "#b77cff"),
 ]

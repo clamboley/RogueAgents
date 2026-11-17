@@ -33,7 +33,7 @@ python3 -c "from PIL import features; print(features.check('libimagequant'))"
 
 `build.sh` lists the exact options for every image: grid, scale, palette size, and fixes such as `--strict` (only
 pure magenta is background, for sprites with pink glows), `--despill` (removes the pink cast from translucent parts),
-`--flip` and `--drop-far`.
+`--flip` (mirrors a whole sheet), `--flip-only` (mirrors the sprites it names) and `--drop-far`.
 
 ## Adding art
 

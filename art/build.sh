@@ -18,6 +18,7 @@ for n in 1 2; do
   $P raw/bg-abyss-$n.jpeg processed/bg-abyss-$n.png --width 480 --height 300 --colors 64
   $P raw/bg-celestial-$n.jpeg processed/bg-celestial-$n.png --width 480 --height 300 --colors 64 --floor 0.66 --floor-to 0.62
   $P raw/bg-frost-$n.jpeg processed/bg-frost-$n.png --width 480 --height 300 --colors 64 --floor 0.69 --floor-to 0.64
+  $P raw/bg-storm-$n.jpeg processed/bg-storm-$n.png --width 480 --height 300 --colors 64 --floor 0.68 --floor-to 0.64
 done
 
 # Adventurers and familiars.
@@ -40,6 +41,8 @@ $S raw/monsters-celestial-facing-right.jpeg processed/monsters-celestial --grid 
   --names sentinel,griffin,seraphling,starbat
 $S raw/monsters-frost.jpeg processed/monsters-frost --grid 1x4 --scale 10 --flip --despill \
   --names icebound,frostwolf,rimewisp,snowowl
+$S raw/monsters-storm.jpeg processed/monsters-storm --grid 1x4 --scale 10 --despill \
+  --flip-only stormknight,tempestharpy,windwraith --names stormknight,tempestharpy,windwraith,thunderwyvern
 $S raw/boss-crypt.jpeg processed/monsters-boss-crypt --grid 1x1 --scale 8 --colors 48 --names lich
 $S raw/boss-crystal.jpeg processed/monsters-boss-crystal --grid 1x1 --scale 8.8 --colors 48 --strict --names prism
 $S raw/boss-fungal.jpeg processed/monsters-boss-fungal --grid 1x1 --scale 8.6 --colors 48 --drop-far 60 --names mycelord
@@ -47,6 +50,8 @@ $S raw/boss-forge.jpeg processed/monsters-boss-forge --grid 1x1 --scale 8.6 --co
 $S raw/boss-abyss.jpeg processed/monsters-boss-abyss --grid 1x1 --scale 9.5 --colors 48 --strict --names leviathan
 $S raw/boss-celestial.jpeg processed/monsters-boss-celestial --grid 1x1 --scale 10.5 --colors 48 --strict --names archon
 $S raw/boss-frost.jpeg processed/monsters-boss-frost --grid 1x1 --scale 8.4 --colors 48 --despill --names frostwyrm
+$S raw/boss-storm.jpeg processed/monsters-boss-storm --grid 1x1 --scale 9 --colors 48 --despill --flip --drop-far 40 \
+  --names tempestking
 
 # Props.
 $S raw/crown.jpeg processed/crown --grid 1x1 --scale 22 --colors 24 --names crown

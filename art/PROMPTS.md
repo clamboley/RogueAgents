@@ -42,38 +42,45 @@ Done: `bg-frost-1`, `bg-frost-2`, `monsters-frost`, `boss-frost`.
 > icicle horns and glowing white eyes, rearing up. About three times as tall as the skeleton, full body, facing LEFT,
 > centred with plenty of empty magenta around. Crisp pixels, no anti-aliasing, no text.
 
-## 7. Cloud kingdom (floors 61–70)
+## 7. Storm peaks (floors 61–70)
 
-`bg-clouds-1.jpeg`
+Done: `bg-storm-1`, `bg-storm-2`, `monsters-storm`, `boss-storm`. A first, cloud-kingdom take came out too cute for a
+late level; the tone line at the start of each prompt fixed it.
+
+`bg-storm-1.jpeg`
 
 > Same pixel art style, level of detail and camera as the empty rooms you made. Draw ONLY the empty room, with no
-> characters and no creatures. An open-air temple terrace high in the sky filling the entire 16:10 canvas edge to edge,
-> with no black bars. Seen slightly from above like a stage: the back wall fills the top 60% and a wide, deep, flat
-> and completely clear floor of pale blue and white stone tiles fills the bottom 40%, down to the bottom edge. Broken
-> columns and wind-torn blue banners, a sea of clouds and floating islands with waterfalls under a bright blue morning
-> sky, a stone archway with a bronze wind bell in the horizontal center, two bronze braziers with warm golden flames at
-> about 25% and 75% of the width and 30% of the height, birds far away and drifting wisps of cloud. No text, no UI, no
-> watermark.
+> characters and no creatures. This is a late, dangerous level: dark, menacing and epic, nothing cute. The battlements
+> of a black stone fortress on a mountain summit, inside a perpetual thunderstorm, filling the entire 16:10 canvas edge
+> to edge, with no black bars. Seen slightly from above like a stage: the back wall fills the top 60% and a wide, deep,
+> flat and completely clear floor of wet dark slate with faint glowing blue lightning runes fills the bottom 40%, down
+> to the bottom edge. Shattered battlements and torn war banners, swirling purple-grey storm clouds, lightning bolts
+> striking in the distance, rain driven sideways by the wind, a huge bronze gate engraved with storm runes in the
+> horizontal center, two iron lightning rods crackling with blue-white electricity at about 25% and 75% of the width
+> and 30% of the height. No text, no UI, no watermark.
 
-`bg-clouds-2.jpeg`
+`bg-storm-2.jpeg`
 
-> Now same but make it different from the first one: a huge rainbow behind the columns, a stone bridge leading to a
-> distant floating castle, a weathervane and a statue of an eagle at the very base of the wall.
+> Now same but make it different from the first one: a colossal tornado behind the ruins with rocks and debris caught
+> in it, the wreck of an airship impaled on the battlements, chained floating boulders at the very base of the wall.
 
-`monsters-clouds.jpeg`
+`monsters-storm.jpeg`
 
 > Same style and scale as the crypt monster sheet you made. Perfectly flat solid magenta background (#FF00FF), one
-> row of 4 monsters, plenty of space between them, all facing LEFT: 1) harpy, a woman-bird with grey-blue feathers and
-> sharp talons, standing, 2) cloud ram, a woolly ram whose fleece is a white cloud, with curled golden horns, 3) storm
-> sprite, a small floating grey cloud with angry eyes crackling with yellow lightning, 4) thunderbird, a large blue
-> eagle with lightning running along its wings, flying. Crisp pixels, no anti-aliasing, no text.
+> row of 4 monsters, plenty of space between them, all facing LEFT. These are late-game monsters: menacing and
+> battle-worn, nothing cute. 1) storm knight, a warrior in dark bronze plate armour crackling with lightning, holding
+> a halberd, 2) tempest harpy, a gaunt fierce harpy with tattered black-grey feathers, lightning in its eyes, screaming
+> with its talons out, 3) wind wraith, a vortex of grey wind and debris with a skull-like face inside, floating, 4)
+> thunder wyvern, a dark slate wyvern with glowing blue veins and a barbed tail, flying. Crisp pixels, no
+> anti-aliasing, no text.
 
-`boss-clouds.jpeg`
+`boss-storm.jpeg`
 
 > Same style as the Lich King sprite. A single large boss on a perfectly flat solid magenta background (#FF00FF): the
-> Storm Giant, a towering giant made of dark thunderclouds, with glowing yellow eyes, a beard of rain, lightning
-> crackling across his body and a spear of lightning in one hand. About three times as tall as the skeleton, full
-> body, standing, facing LEFT, centred with plenty of empty magenta around. Crisp pixels, no anti-aliasing, no text.
+> Tempest King, a colossal giant in dark bronze armour fused with black storm clouds, a crown of crackling lightning,
+> eyes of white fire, a cloak torn by the wind, wielding a huge war hammer glowing with electricity. Menacing and epic.
+> About three times as tall as the skeleton, full body, standing, facing LEFT, centred with plenty of empty magenta
+> around. Crisp pixels, no anti-aliasing, no text.
 
 ## 8. Celestial palace (floors 71–80)
 

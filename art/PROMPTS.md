@@ -254,8 +254,7 @@ the image shows it alone.
 
 > Same pixel art style. Perfectly flat solid magenta background (#FF00FF), a grid of 2 rows and 5 columns, ten small
 > floating fragments, plenty of space between them, each a tiny chunk of rock floating like a miniature island and
-> carrying a piece of one world: 1) a crypt with a tiny tombstone and a skull, 2) a cluster of blue crystals,
-> 3) glowing mushrooms, 4) a tiny anvil glowing with lava, 5) coral and a shell from the deep sea, 6) a block of ice
+> carrying a piece of one world: 1) a crypt with a tiny tombstone and a skull, 2) a cluster of blue crystals, 3) glowing mushrooms, 4) a tiny anvil glowing with lava, 5) coral and a shell from the deep sea, 6) a block of ice
 > with a frozen spire, 7) a tiny storm cloud with lightning, 8) a small golden temple column, 9) a tiny planet with a
 > ring, 10) a small black cube of nothingness with a violet glow. Each wrapped in a faint thread of pale cyan light.
 > Avoid pink and magenta tones. Crisp pixels, no anti-aliasing, no text.

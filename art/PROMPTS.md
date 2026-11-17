@@ -238,17 +238,19 @@ a warden or a sentinel, likely as too close to existing creatures.)
 > with plenty of empty magenta around. Crisp pixels, no anti-aliasing, no text.
 
 `ultra-architect.jpeg`: the final boss, the alien who made the simulation. A first take, the Token Devourer, was
-dropped: a beast did not feel like the end. The game makes it float, glow, and circle it with the fragments below, so
+dropped: a beast did not feel like the end. A slender, petal-armed first Architect looked too frail. The game makes it float, glow, and circle it with the fragments below, so
 the image shows it alone.
 
 > Same pixel art style and level of detail as the boss sprites you made. A single huge final boss on a perfectly flat
-> solid magenta background (#FF00FF). Not a beast, not humanoid. The Architect, the original alien being who created
-> the simulation: a tall, serene, floating presence with a seamless smooth pearly white body of flowing curves like
-> porcelain and mother-of-pearl, no legs, its long body tapering into flowing ribbons below it. A smooth elongated head
-> without a face, crowned by a great curved halo of pale cyan light. Many long slender curved arms fan out around it
-> like the petals of a flower, their fingertips spinning fine threads of pale cyan light. Calm, immensely powerful
-> and epic. Nothing floating around it, no separate objects. About four times as tall as the skeleton, full body,
-> facing LEFT, centred with plenty of empty magenta around. Crisp pixels, no anti-aliasing, no text.
+> solid magenta background (#FF00FF). Not a beast, not human. The Architect, the original alien being who created the
+> simulation: a colossal, massive, imposing floating being, broad and heavy, like a living cathedral of seamless
+> pearly white porcelain and mother-of-pearl. Huge rounded shoulders, a vast mantle of great curved plates opening
+> behind it like folded wings, four massive arms: the upper two raised, holding a blazing sphere of pale cyan light
+> between them, the lower two spread wide with long curved fingers. A smooth faceless head under a great crown of
+> curved blades of pale cyan light, and a blazing cyan core in its chest. Its lower body is a heavy spiral of curved
+> plates ending in flowing ribbons, no legs. Overwhelming power, authority, epic. No metal, no machine parts. Nothing
+> floating around it, no separate objects. About four and a half times as tall as the skeleton, and very wide, full
+> body, facing LEFT, centred with plenty of empty magenta around. Crisp pixels, no anti-aliasing, no text.
 
 `fragments.jpeg`: the worlds the Architect built, circling it.
 
